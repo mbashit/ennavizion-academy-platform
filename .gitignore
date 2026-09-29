@@ -1,0 +1,7 @@
+# Local Claude Code session settings — not project code, not meant to be shared.
+.claude/
+
+# OS junk
+.DS_Store
+Thumbs.db
+Desktop.ini

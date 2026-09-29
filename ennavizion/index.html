@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ennavizion — Youth Football Academy</title>
+  <meta name="description" content="Ennavizion is a youth football academy offering coaching for ages 6–18, a competitive youth league and scouting pathways to professional clubs.">
+  <meta name="theme-color" content="#0F3D2E">
+  <meta property="og:title" content="Ennavizion — Youth Football Academy">
+  <meta property="og:description" content="Ennavizion is a youth football academy offering coaching for ages 6–18, a competitive youth league and scouting pathways to professional clubs.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="home">
+<main id="main">
+
+  <section class="hero on-dark">
+    <svg class="hero-pitch" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <line x1="820" y1="-10" x2="820" y2="710"/>
+      <circle cx="820" cy="350" r="150"/>
+      <circle class="spot" cx="820" cy="350" r="6"/>
+      <rect x="1060" y="130" width="160" height="440"/>
+      <rect x="1140" y="245" width="80" height="210"/>
+      <path d="M1060 270 A 110 110 0 0 0 1060 430"/>
+      <circle class="spot" cx="1110" cy="350" r="5"/>
+    </svg>
+    <div class="wrap hero-inner hero-grid">
+      <div class="hero-copy">
+        <p class="hero-eyebrow">Youth football academy — Nigeria</p>
+        <h1><span>Talent seen early.</span><span>Talent built right.</span></h1>
+        <p class="lead">Coaching for players aged 6 to 18, a weekly youth league, and a scouting profile that follows every player from their first trial.</p>
+        <div class="hero-actions">
+          <a class="btn btn-gold" href="enroll.html">Enrol a player</a>
+          <a class="btn btn-line" href="programs.html">Explore academy programs</a>
+        </div>
+      </div>
+      <!-- Hero image: young African footballer mid-dribble on a grassroots training pitch,
+           sourced from Unsplash as a stand-in — replace with real academy training
+           photography. Not lazy-loaded since it's above the fold. -->
+      <div class="hero-media">
+        <img class="hero-photo" src="https://images.unsplash.com/photo-1751394210161-fb7e64c0ea1a?auto=format&fit=crop&w=1200&q=80" alt="Young footballer controlling the ball mid-turn on a grassroots training pitch" fetchpriority="high">
+      </div>
+      <!-- Full-width beneath both columns (not squeezed into hero-copy) so the three stats
+           get proper breathing room instead of wrapping awkwardly. Values are read from
+           CENTERS/PROGRAMS in js/data.js (see pages.home() in main.js) so this strip can't
+           drift out of sync with the centres/programs pages. -->
+      <div class="hero-strip">
+        <div><strong id="stat-centres"></strong><span id="stat-cities"></span></div>
+        <div><strong>Ages 6–18</strong><span><span id="stat-programs"></span> programs, grouped by age and level</span></div>
+        <div><strong>Every Saturday</strong><span>Filmed league fixtures from September to March</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split">
+      <div>
+        <h2>An academy built around the player, not the trophy cabinet.</h2>
+        <p class="lead">We coach the whole player: technique, decision-making, fitness, schoolwork and character. Results follow.</p>
+        <!-- "Recognised licences" and safeguarding-lead coverage describe the intended
+             standard of coaching. Confirm actual licensing body/coverage before launch. -->
+        <p>Every player gets a development plan, termly progress reports for parents, and match footage they can share with clubs. Our coaches hold recognised licences and every session has a safeguarding lead on site.</p>
+        <a class="btn btn-line" href="about.html">About the academy</a>
+        <ul class="trust-strip">
+          <li>Licensed coaches</li>
+          <li>Safeguarding first</li>
+          <li>Structured player development</li>
+          <li>Match &amp; training analysis</li>
+        </ul>
+      </div>
+      <!-- Sourced from Unsplash as a stand-in — replace with a real photo of an Ennavizion
+           coach at training once available. -->
+      <div class="photo tall"><img src="https://images.unsplash.com/photo-1529932398402-e0b30f66a559?auto=format&fit=crop&w=1200&q=80" alt="Coach kneeling beside a young player, explaining tactics during a coaching session" loading="lazy" onerror="this.remove()"><span class="ph-label">Coach with players at training</span></div>
+    </div>
+  </section>
+
+  <section class="section on-paper">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>From first trial to first contract</h2>
+        <p>The pathway every Ennavizion player follows. Players move at their own pace, and families see where they are at each stage.</p>
+      </div>
+      <!-- Numbered nodes (via CSS counter()) connected by a single gold top-border line —
+           kept to one clear progression system rather than adding separate arrows. -->
+      <ol class="pathway">
+        <li><h3>Trial</h3><p>A free session with our coaches. You get written feedback within a week.</p></li>
+        <li><h3>Develop</h3><p>Join the program for your age. Train three to five times a week with a personal plan.</p></li>
+        <li><h3>Compete</h3><p>Play in the Ennavizion League. Every match is filmed and added to your profile.</p></li>
+        <!-- "Partner clubs at home and abroad" — confirm actual partner clubs/agreements before launch. -->
+        <li><h3>Get seen</h3><p>Showcase days and a scouting profile shared with partner clubs at home and abroad.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section on-dark">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Ennavizion League</h2>
+        <p><span id="home-season"></span>. Top five after the latest matchday.</p>
+      </div>
+      <div class="split" style="align-items:start">
+        <div class="table-scroll"><table class="league-table" id="home-table"><caption class="visually-hidden">League table, top five</caption></table></div>
+        <div>
+          <h3>Next fixtures</h3>
+          <ul class="match-list" id="home-fixtures"></ul>
+          <a class="btn btn-line mt-2" href="league.html">Full table and results</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section on-paper">
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <h2>More than a football academy</h2>
+          <p class="lead">Ennavizion also runs a community and social impact side: scholarships, kit and equipment support, and coaching access for talented players from backgrounds that couldn't otherwise afford it.</p>
+          <div class="btn-row">
+            <a class="btn btn-green" href="community.html">Our community work</a>
+            <a class="btn btn-line" href="donate.html">Support a player</a>
+          </div>
+        </div>
+        <!-- Sourced from Unsplash as a stand-in (same photo used on community.html) —
+             replace with a real photo of Ennavizion's own outreach/coaching work: youth
+             football outreach, players receiving kit or coaching, in an African/Nigerian
+             context. Keep the tone dignified — opportunity and progress, not hardship. -->
+        <div class="photo"><img src="https://images.unsplash.com/photo-1632215861513-130b66fe97f4?auto=format&fit=crop&w=1000&q=80" alt="A mentor guiding students through a lesson at a community school" loading="lazy" onerror="this.remove()"><span class="ph-label">Community outreach session</span></div>
+      </div>
+      <!-- Placeholder stats (IMPACT in js/data.js). Rendered as "XX+"/"₦X.XM"/"XXX+" on
+           purpose — unmistakably placeholder until the client confirms real figures. -->
+      <div class="impact-grid" id="home-impact" style="margin-top:3rem"></div>
+      <p class="impact-note">Figures above are placeholders pending confirmed, client-approved data — do not treat as factual.</p>
+    </div>
+  </section>
+
+  <!-- Testimonial: placeholder/test content only (see TESTIMONIALS in js/data.js). This is
+       NOT a verified or consented quote — must be confirmed, or replaced, before launch. -->
+  <section class="section on-dark testimonial-section" style="background:var(--grass)">
+    <svg class="testimonial-arc" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path d="M-60,360 Q400,-60 860,360"/>
+      <circle cx="700" cy="70" r="55"/>
+    </svg>
+    <div class="wrap" id="home-testimonial"></div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Latest news</h2>
+        <a class="btn btn-line" href="blog.html">All news</a>
+      </div>
+      <div class="grid grid-3" id="home-posts"></div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="wrap">
+      <div>
+        <h2>Ready to take the first step?</h2>
+        <p style="margin:.35em 0 0;font-weight:600">Trials run every month. Book your place.</p>
+      </div>
+      <a class="btn btn-green" href="enroll.html">Enrol a player</a>
+    </div>
+  </section>
+</main>
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gallery | Ennavizion</title>
+  <meta name="description" content="Photos from Ennavizion training sessions, league matches and academy events.">
+  <meta name="theme-color" content="#0F3D2E">
+  <meta property="og:title" content="Gallery | Ennavizion">
+  <meta property="og:description" content="Photos from Ennavizion training sessions, league matches and academy events.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="gallery">
+<main id="main">
+
+  <section class="page-hero on-dark">
+    <div class="wrap">
+      <div class="crumbs"><a href="index.html">Home</a> / Gallery</div>
+      <h1>Gallery</h1>
+      <p>Training, match days and academy events.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <!-- Filter toggles, not tabs: they narrow the grid below rather than switching between
+           panels, so aria-pressed (not aria-selected) is the correct state here. -->
+      <div class="tabs" role="group" aria-label="Filter photos">
+        <button class="tab" type="button" data-filter="all" aria-pressed="true">All</button>
+        <button class="tab" type="button" data-filter="training" aria-pressed="false">Training</button>
+        <button class="tab" type="button" data-filter="matches" aria-pressed="false">Matches</button>
+        <button class="tab" type="button" data-filter="events" aria-pressed="false">Events</button>
+      </div>
+      <div class="gallery" id="gallery-grid"></div>
+    </div>
+  </section>
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <button class="lightbox-close" type="button" aria-label="Close">×</button>
+    <button class="lightbox-prev" type="button" aria-label="Previous photo">‹</button>
+    <div class="lb-photo" style="width:min(900px,100%)"></div>
+    <p></p>
+    <button class="lightbox-next" type="button" aria-label="Next photo">›</button>
+  </div>
+</main>
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

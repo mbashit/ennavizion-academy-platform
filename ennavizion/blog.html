@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>News | Ennavizion</title>
+  <meta name="description" content="News, coaching advice and league updates from Ennavizion football academy.">
+  <meta name="theme-color" content="#0F3D2E">
+  <meta property="og:title" content="News | Ennavizion">
+  <meta property="og:description" content="News, coaching advice and league updates from Ennavizion football academy.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="blog">
+<main id="main">
+
+  <section class="page-hero on-dark">
+    <div class="wrap">
+      <div class="crumbs"><a href="index.html">Home</a> / News</div>
+      <h1>News</h1>
+      <!-- Categories are examples, not a fixed list — they come from each post's "category"
+           field in POSTS (js/data.js). Typical categories: Academy, Matches, Community,
+           Coaching, Player Development, Announcements. -->
+      <p>Academy news, coaching advice for players and parents, and league updates.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head" style="margin-bottom:1.5rem">
+        <div class="tabs" id="post-cats" role="group" aria-label="Filter by category" style="margin:0"></div>
+        <div style="min-width:min(320px,100%)"><label class="visually-hidden" for="post-search">Search news</label><input type="text" id="post-search" placeholder="Search news"></div>
+      </div>
+      <div class="grid grid-3" id="post-grid"></div>
+    </div>
+  </section>
+</main>
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

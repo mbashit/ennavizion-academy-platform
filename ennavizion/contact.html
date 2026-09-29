@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact | Ennavizion</title>
+  <meta name="description" content="Contact Ennavizion football academy: enrolment questions, partnerships, scouting and visits.">
+  <meta name="theme-color" content="#0F3D2E">
+  <meta property="og:title" content="Contact | Ennavizion">
+  <meta property="og:description" content="Contact Ennavizion football academy: enrolment questions, partnerships, scouting and visits.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="contact">
+<main id="main">
+
+  <section class="page-hero on-dark">
+    <div class="wrap">
+      <div class="crumbs"><a href="index.html">Home</a> / Contact</div>
+      <h1>Contact us</h1>
+      <p>Questions about programs, partnerships, scouting or a visit. We reply within one working day.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split" style="align-items:start">
+      <div>
+        <ul class="contact-list">
+          <li><span>Email</span><a data-href="email" data-site="email"></a></li>
+          <li><span>Phone</span><a data-href="phone" data-site="phone"></a></li>
+          <li><span>WhatsApp</span><a data-href="wa" target="_blank" rel="noopener">Chat with us</a></li>
+          <li><span>Main centre</span><strong data-site="address"></strong></li>
+          <li><span>Office hours</span><strong data-site="hours"></strong></li>
+        </ul>
+        <iframe class="map" title="Map of the main training centre" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=Surulere%2C%20Lagos&output=embed"></iframe>
+      </div>
+      <form class="form panel" data-form="contact" novalidate>
+        <h2 style="font-size:2.25rem">Send a message</h2>
+        <div class="form-row">
+          <div class="field"><label for="c-name">Your name</label><input id="c-name" name="name" type="text" required autocomplete="name"><p class="error-msg">Enter your name.</p></div>
+          <div class="field"><label for="c-email">Email</label><input id="c-email" name="email" type="email" required autocomplete="email"><p class="error-msg">Enter an email address like name@example.com.</p></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label for="c-phone">Phone <span class="hint">Optional</span></label><input id="c-phone" name="phone" type="tel" autocomplete="tel"></div>
+          <div class="field"><label for="c-topic">What's it about?</label>
+            <select id="c-topic" name="topic" required>
+              <option value="">Choose a topic</option>
+              <option value="enrolment">Enrolment and programs</option>
+              <option value="visit">Visiting a centre</option>
+              <option value="league">Entering the league</option>
+              <option value="scout">Scouting request</option>
+              <option value="community">Community and donations</option>
+              <option value="partner">Partnership or sponsorship</option>
+              <option value="services">Camps and private coaching</option>
+              <option value="other">Something else</option>
+            </select><p class="error-msg">Choose a topic so the right person replies.</p></div>
+        </div>
+        <div class="field"><label for="c-message">Message</label><textarea id="c-message" name="message" required minlength="10"></textarea><p class="error-msg">Write at least 10 characters.</p></div>
+        <button class="btn btn-green" type="submit">Send message</button>
+        <div class="form-status" role="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </section>
+</main>
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

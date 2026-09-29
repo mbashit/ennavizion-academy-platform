@@ -1,0 +1,96 @@
+let<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Donate | Ennavizion</title>
+  <meta name="description" content="Support a player at Ennavizion: fund scholarships, equipment, transport, education and community projects.">
+  <meta name="theme-color" content="#0F3D2E">
+  <meta property="og:title" content="Donate | Ennavizion">
+  <meta property="og:description" content="Support a player at Ennavizion: fund scholarships, equipment, transport, education and community projects.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="donate">
+<main id="main">
+
+  <section class="page-hero on-dark">
+    <div class="wrap">
+      <div class="crumbs"><a href="index.html">Home</a> / Donate</div>
+      <h1>Support a player</h1>
+      <p>Your donation helps fund scholarships, kit, transport and community coaching for players who couldn't otherwise afford it.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split" style="align-items:start">
+      <div>
+        <h2>What your donation supports</h2>
+        <p class="lead">Every pledge goes toward one or more of the following, prioritised by need.</p>
+        <div class="grid grid-2">
+          <div class="panel"><h3>Scholarship support</h3><p>Covers academy program fees for a player whose family can't afford them.</p></div>
+          <div class="panel"><h3>Equipment</h3><p>Boots, shin pads, training wear and match kit.</p></div>
+          <div class="panel"><h3>Transport</h3><p>Getting players to training sessions and match days.</p></div>
+          <div class="panel"><h3>Education</h3><p>Supporting schoolwork alongside football, in line with our player-first approach.</p></div>
+          <div class="panel"><h3>Community projects</h3><p>Outreach sessions and coaching access in underserved communities.</p></div>
+        </div>
+        <h2 class="mt-2" style="font-size:1.9rem">What happens after you donate</h2>
+        <ol class="pathway pathway-compact cols-3">
+          <li><h3>Submit</h3><p>Choose an amount and send your details below.</p></li>
+          <li><h3>Pay securely</h3><p>You're taken to Paystack's own checkout page to complete payment.</p></li>
+          <li><h3>Confirmation</h3><p>You're brought back here with a confirmation once payment is verified.</p></li>
+        </ol>
+        <ul class="trust-strip">
+          <li>No card details collected here</li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="contact.html?topic=community">Contact us</a></li>
+        </ul>
+        <!-- Paystack IS integrated (backend/app/Services/PaystackService.php + the
+             /api/donations/* routes) — this note only applies until PAYSTACK_SECRET_KEY is
+             set in the backend's .env. Remove this whole <p> once a real donation has been
+             tested end-to-end. Until then, submitting shows an honest error rather than a
+             fake success — see initDonate() in js/main.js. -->
+        <p class="dev-status-note mt-2"><strong>Development status:</strong> the payment connection is built but not yet switched on with live keys — donating right now will show an error, not a fake confirmation.</p>
+      </div>
+      <div>
+        <form class="form panel" id="donate-form" data-form="donate" novalidate>
+          <h2 style="font-size:2.25rem">Donate now</h2>
+          <!-- Monthly giving is intentionally disabled, not hidden: it's honest about what's
+               not built yet rather than faking a working recurring-payment toggle. -->
+          <fieldset class="field">
+            <legend>Donation type</legend>
+            <div class="radio-cards">
+              <div class="radio-card"><input type="radio" id="type-once" name="donation_type" value="once" checked><label for="type-once"><strong>One-time</strong></label></div>
+              <div class="radio-card"><input type="radio" id="type-monthly" name="donation_type" value="monthly" disabled><label for="type-monthly"><strong>Monthly</strong><br><small>Coming soon</small></label></div>
+            </div>
+          </fieldset>
+          <fieldset class="field">
+            <legend>Amount</legend>
+            <div class="radio-cards" id="amount-options"></div>
+            <p class="error-msg">Choose an amount, or Custom amount.</p>
+          </fieldset>
+          <div class="field" id="custom-amount-field" hidden>
+            <label for="custom-amount">Custom amount (₦)</label>
+            <input id="custom-amount" name="custom_amount" type="number" min="500" step="1" inputmode="numeric">
+            <p class="error-msg">Enter a custom amount.</p>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="d-name">Your name</label><input id="d-name" name="donor_name" type="text" required autocomplete="name"><p class="error-msg">Enter your name.</p></div>
+            <div class="field"><label for="d-email">Email</label><input id="d-email" name="donor_email" type="email" required autocomplete="email"><p class="error-msg">Enter an email address like name@example.com.</p></div>
+          </div>
+          <div class="field"><label for="d-message">Message <span class="hint">Optional</span></label><textarea id="d-message" name="message"></textarea></div>
+          <button class="btn btn-gold" type="submit">Donate now</button>
+        </form>
+        <div id="donate-status" class="form-status" role="status" aria-live="polite" tabindex="-1"></div>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
