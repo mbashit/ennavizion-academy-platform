@@ -1,13 +1,17 @@
 /* =========================================================
    ENNAVIZION — stylesheet
-   Palette: pitch green, grass, chalk white, kit gold, ink.
+   Palette: bright lemon-green pitch (with a deep forest-green variant for
+   surfaces that still need light text, e.g. the footer), grass accent,
+   chalk white, kit gold, ink. Because --pitch is now light, anything using
+   it as a background pairs with --ink text, not --chalk — only
+   --pitch-deep stays dark enough for --chalk/--gold on top.
    Type: Big Shoulders Display (headlines, stadium-board feel) + Barlow (body).
    ========================================================= */
 
 :root {
-  --pitch: #0F3D2E;
-  --pitch-deep: #0A2C21;
-  --grass: #1E6B47;
+  --pitch: #5FB93A;
+  --pitch-deep: #1F4D16;
+  --grass: #3C7A28;
   --chalk: #F4F6F1;
   --paper: #FFFFFF;
   --gold: #E8B21E;
@@ -16,6 +20,9 @@
   --muted: #56665D;
   --rule: #D9DFD7;
   --chalk-line: rgba(244, 246, 241, 0.28);
+  /* Dark-on-light counterpart to --chalk-line, for hairlines/dividers sitting on the now-bright
+     --pitch surfaces (header, hero, .on-dark sections) where a light-tinted line would vanish. */
+  --ink-line: rgba(20, 35, 28, 0.25);
   --danger: #B3261E;
 
   --font-display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
@@ -41,8 +48,13 @@ body {
 }
 img { max-width: 100%; display: block; }
 a { color: var(--grass); text-underline-offset: 3px; }
-a:hover { color: var(--pitch); }
+a:hover { color: var(--pitch-deep); }
 :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; border-radius: 2px; }
+/* Gold barely registers against the bright --pitch lemon-green used by the header, hero, and
+   .on-dark sections — swap the keyboard-focus ring to ink there so it stays clearly visible. */
+.site-header :focus-visible, .hero :focus-visible, .page-hero :focus-visible, .on-dark :focus-visible {
+  outline-color: var(--ink);
+}
 button { font: inherit; cursor: pointer; }
 
 .wrap { width: 100%; max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter); }
@@ -67,7 +79,7 @@ h3 { font-size: clamp(1.5rem, 2.4vw, 1.9rem); line-height: 1.05; }
 h4 { font-size: 1.25rem; }
 p { margin: 0 0 1em; max-width: 68ch; }
 .lead { font-size: clamp(1.125rem, 1.6vw, 1.3rem); line-height: 1.55; color: var(--muted); }
-.on-dark .lead, .on-dark p { color: rgba(244,246,241,.82); }
+.on-dark .lead, .on-dark p { color: rgba(20,35,28,.8); }
 
 /* ---------- Buttons ---------- */
 .btn {
@@ -79,12 +91,12 @@ p { margin: 0 0 1em; max-width: 68ch; }
 }
 .btn-gold { background: var(--gold); color: var(--ink); }
 .btn-gold:hover { background: var(--gold-deep); color: var(--ink); }
-.btn-green { background: var(--pitch); color: var(--chalk); }
+.btn-green { background: var(--pitch); color: var(--ink); }
 .btn-green:hover { background: var(--grass); color: var(--chalk); }
-.btn-line { border-color: currentColor; color: var(--pitch); background: transparent; }
-.btn-line:hover { background: var(--pitch); color: var(--chalk); border-color: var(--pitch); }
-.on-dark .btn-line { color: var(--chalk); }
-.on-dark .btn-line:hover { background: var(--chalk); color: var(--pitch); border-color: var(--chalk); }
+.btn-line { border-color: currentColor; color: var(--grass); background: transparent; }
+.btn-line:hover { background: var(--pitch); color: var(--ink); border-color: var(--pitch); }
+.on-dark .btn-line { color: var(--ink); }
+.on-dark .btn-line:hover { background: var(--ink); color: var(--chalk); border-color: var(--ink); }
 .btn-sm { min-height: 40px; padding: .45rem 1rem; font-size: 1.05rem; }
 .btn-block { width: 100%; }
 .btn:disabled { opacity: .5; cursor: not-allowed; pointer-events: none; }
@@ -92,31 +104,31 @@ p { margin: 0 0 1em; max-width: 68ch; }
 /* ---------- Header ---------- */
 .site-header {
   position: sticky; top: 0; z-index: 100;
-  background: var(--pitch); color: var(--chalk);
-  border-bottom: 1px solid var(--chalk-line);
+  background: var(--pitch); color: var(--ink);
+  border-bottom: 1px solid var(--ink-line);
 }
 .header-inner { display: flex; align-items: center; gap: 1.5rem; height: var(--header-h); }
 .brand {
   display: flex; align-items: center; gap: .6rem;
-  color: var(--chalk); text-decoration: none;
+  color: var(--ink); text-decoration: none;
   font-family: var(--font-display); font-weight: 900; font-size: 1.85rem; letter-spacing: .01em;
 }
-.brand:hover { color: var(--chalk); }
+.brand:hover { color: var(--ink); }
 .brand svg { width: 34px; height: 34px; flex: none; }
 .main-nav { margin-left: auto; }
 .main-nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: .25rem; }
 .main-nav a {
-  display: block; padding: .5rem .7rem; color: rgba(244,246,241,.7);
+  display: block; padding: .5rem .7rem; color: rgba(20,35,28,.7);
   text-decoration: none; font-weight: 400; border-radius: var(--radius-sm);
 }
-.main-nav a:hover { color: var(--chalk); background: rgba(255,255,255,.06); }
-.main-nav a[aria-current="page"] { color: var(--gold); }
+.main-nav a:hover { color: var(--ink); background: rgba(0,0,0,.06); }
+.main-nav a[aria-current="page"] { color: var(--pitch-deep); }
 .header-actions { display: flex; align-items: center; gap: .5rem; }
 .cart-btn {
   position: relative; width: 44px; height: 44px; display: grid; place-items: center;
-  background: transparent; border: 1px solid var(--chalk-line); border-radius: var(--radius-sm); color: var(--chalk);
+  background: transparent; border: 1px solid var(--ink-line); border-radius: var(--radius-sm); color: var(--ink);
 }
-.cart-btn:hover { border-color: var(--chalk); }
+.cart-btn:hover { border-color: var(--ink); }
 .cart-count {
   position: absolute; top: -7px; right: -7px; min-width: 20px; height: 20px; padding: 0 5px;
   background: var(--gold); color: var(--ink); border-radius: 10px;
@@ -125,12 +137,12 @@ p { margin: 0 0 1em; max-width: 68ch; }
 .cart-count[data-count="0"] { display: none; }
 .menu-toggle {
   display: none; width: 44px; height: 44px; background: transparent;
-  border: 1px solid var(--chalk-line); border-radius: var(--radius-sm); color: var(--chalk);
+  border: 1px solid var(--ink-line); border-radius: var(--radius-sm); color: var(--ink);
 }
-/* .btn-line's default colours assume a light background — the header is dark, so give the
-   "Support us" button the same light-on-dark treatment .on-dark sections get elsewhere. */
-.header-actions .btn-line { color: var(--chalk); border-color: var(--chalk-line); }
-.header-actions .btn-line:hover, .header-actions .btn-line:focus-visible { background: var(--chalk); color: var(--pitch); border-color: var(--chalk); }
+/* The header sits on the bright --pitch lemon-green now, so its outlined "Support us" button
+   needs dark ink, not the chalk-on-dark treatment .on-dark sections elsewhere still use. */
+.header-actions .btn-line { color: var(--ink); border-color: var(--ink-line); }
+.header-actions .btn-line:hover, .header-actions .btn-line:focus-visible { background: var(--ink); color: var(--chalk); border-color: var(--ink); }
 
 @media (max-width: 1140px) {
   .menu-toggle { display: grid; place-items: center; }
@@ -142,7 +154,11 @@ p { margin: 0 0 1em; max-width: 68ch; }
   }
   .main-nav.open { transform: none; }
   .main-nav ul { flex-direction: column; gap: 0; }
-  .main-nav a { font-family: var(--font-display); font-size: 2rem; font-weight: 800; padding: .6rem 0; border-bottom: 1px solid var(--chalk-line); border-radius: 0; }
+  /* This flyout panel keeps the dark --pitch-deep background (unlike the now-bright header
+     bar), so its links go back to light-on-dark colours regardless of the desktop-header rules above. */
+  .main-nav a { font-family: var(--font-display); font-size: 2rem; font-weight: 800; padding: .6rem 0; border-bottom: 1px solid var(--chalk-line); border-radius: 0; color: rgba(244,246,241,.7); }
+  .main-nav a:hover { color: var(--chalk); background: rgba(255,255,255,.06); }
+  .main-nav a[aria-current="page"] { color: var(--gold); }
   .main-nav a.nav-cta { display: flex; margin-top: 1.5rem; padding: .75rem 1.5rem; color: var(--ink); border-bottom: 0; border-radius: var(--radius-sm); font-size: 1.5rem; }
   .main-nav a.nav-cta-secondary { display: flex; margin-top: .75rem; padding: .7rem 1.5rem; color: var(--chalk); border: 2px solid var(--chalk-line); border-bottom: 2px solid var(--chalk-line); border-radius: var(--radius-sm); font-size: 1.25rem; }
   .header-actions { margin-left: auto; }
@@ -150,14 +166,16 @@ p { margin: 0 0 1em; max-width: 68ch; }
 @media (min-width: 1141px) { .main-nav .nav-cta, .main-nav .nav-cta-secondary { display: none; } }
 /* Underline sweep on hover/focus makes the active nav state easier to scan at a glance. */
 .main-nav a { position: relative; }
-.main-nav a::after { content: ""; position: absolute; left: .7rem; right: .7rem; bottom: .3rem; height: 2px; background: var(--gold); transform: scaleX(0); transition: transform .15s ease; }
+.main-nav a::after { content: ""; position: absolute; left: .7rem; right: .7rem; bottom: .3rem; height: 2px; background: var(--pitch-deep); transform: scaleX(0); transition: transform .15s ease; }
 .main-nav a:hover::after, .main-nav a:focus-visible::after, .main-nav a[aria-current="page"]::after { transform: scaleX(1); }
-@media (max-width: 1140px) { .main-nav a::after { left: 0; right: 0; bottom: .1rem; } }
+/* Gold reads fine against the mobile flyout's dark background but disappears against the
+   bright header bar, so this breakpoint keeps the original gold sweep only where the panel is dark. */
+@media (max-width: 1140px) { .main-nav a::after { left: 0; right: 0; bottom: .1rem; background: var(--gold); } }
 
 /* ---------- Sections ---------- */
 .section { padding: clamp(4rem, 9vw, 7rem) 0; }
 .section-tight { padding: clamp(2.5rem, 5vw, 4rem) 0; }
-.on-dark { background: var(--pitch); color: var(--chalk); }
+.on-dark { background: var(--pitch); color: var(--ink); }
 .on-paper { background: var(--paper); }
 .section-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 1rem 2rem; margin-bottom: 2.5rem; }
 .section-head h2 { margin: 0; max-width: 16ch; }
@@ -166,47 +184,47 @@ p { margin: 0 0 1em; max-width: 68ch; }
 /* ---------- Hero (home) ---------- */
 .hero {
   position: relative; overflow: hidden;
-  background: var(--pitch); color: var(--chalk);
+  background: var(--pitch); color: var(--ink);
   /* Trimmed ~10% from the original clamp(4rem,10vw,8rem)/clamp(3rem,7vw,5rem) so the
      headline, copy, CTAs and stats fit on common laptop screens with less scrolling. */
   padding: clamp(3.5rem, 9vw, 7rem) 0 clamp(2.5rem, 6vw, 4.5rem);
 }
 .hero-pitch { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .hero-pitch path, .hero-pitch circle, .hero-pitch line, .hero-pitch rect {
-  fill: none; stroke: var(--chalk-line); stroke-width: 2;
+  fill: none; stroke: var(--ink-line); stroke-width: 2;
   stroke-dasharray: 3000; stroke-dashoffset: 3000;
   animation: chalk 2.2s ease-out forwards;
 }
-.hero-pitch .spot { fill: var(--chalk-line); stroke: none; animation: none; }
+.hero-pitch .spot { fill: var(--ink-line); stroke: none; animation: none; }
 @keyframes chalk { to { stroke-dashoffset: 0; } }
 .hero-inner { position: relative; }
 .hero h1 { max-width: 11ch; margin-bottom: .35em; }
 .hero h1 span { display: block; }
-.hero h1 span:last-child { color: var(--gold); }
+.hero h1 span:last-child { color: var(--pitch-deep); }
 .hero .lead { max-width: 44ch; margin-bottom: 2rem; }
 .hero-actions, .btn-row { display: flex; flex-wrap: wrap; gap: .75rem; }
 .hero-strip {
   grid-column: 1 / -1; /* full hero width, not confined to the .hero-copy column */
   position: relative; margin-top: clamp(2rem, 5.5vw, 3.75rem);
   display: grid; grid-template-columns: repeat(3, 1fr);
-  border-top: 1px solid var(--chalk-line);
+  border-top: 1px solid var(--ink-line);
 }
 .hero-strip div { padding: 1.25rem 1.25rem 0 0; }
-.hero-strip div + div { padding-left: 1.25rem; border-left: 1px solid var(--chalk-line); }
-.hero-strip strong { display: block; font-family: var(--font-display); font-size: 2.5rem; line-height: 1; color: var(--chalk); }
-.hero-strip span { color: rgba(244,246,241,.7); font-size: .95rem; }
+.hero-strip div + div { padding-left: 1.25rem; border-left: 1px solid var(--ink-line); }
+.hero-strip strong { display: block; font-family: var(--font-display); font-size: 2.5rem; line-height: 1; color: var(--ink); }
+.hero-strip span { color: rgba(20,35,28,.7); font-size: .95rem; }
 @media (max-width: 900px) {
   /* Matches the .hero-grid stacking breakpoint below, so the strip never ends up
      squeezed into a narrow two-column hero before the layout itself has stacked. */
   .hero-strip { grid-template-columns: 1fr; }
-  .hero-strip div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--chalk-line); }
+  .hero-strip div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--ink-line); }
   .hero-strip div { padding: 1rem 0; }
 }
 
 /* ---------- Hero: eyebrow + supporting photo ---------- */
 .hero-eyebrow {
   font-family: var(--font-display); font-weight: 700; font-size: .95rem; letter-spacing: .12em;
-  text-transform: uppercase; color: var(--gold); margin: 0 0 .9rem;
+  text-transform: uppercase; color: var(--pitch-deep); margin: 0 0 .9rem;
 }
 /* row-gap:0 because .hero-strip (a grid sibling, spanning both columns below) already
    controls its own spacing via margin-top — a row-gap here would stack on top of that. */
@@ -238,11 +256,11 @@ p { margin: 0 0 1em; max-width: 68ch; }
 /* Belt-and-suspenders alongside html{scroll-padding-top} above: if a future in-page anchor
    (e.g. a footer link with a #hash) targets a section directly, it still clears the sticky header. */
 #main, .page-hero, section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
-.page-hero { background: var(--pitch); color: var(--chalk); padding: clamp(3rem, 7vw, 5rem) 0 clamp(2.5rem, 5vw, 3.5rem); border-bottom: 6px solid var(--gold); }
+.page-hero { background: var(--pitch); color: var(--ink); padding: clamp(3rem, 7vw, 5rem) 0 clamp(2.5rem, 5vw, 3.5rem); border-bottom: 6px solid var(--gold); }
 .page-hero h1 { font-size: clamp(3rem, 8vw, 5.5rem); margin-bottom: .2em; }
-.page-hero p { color: rgba(244,246,241,.82); font-size: 1.2rem; max-width: 52ch; margin: 0; }
-.crumbs { font-size: .9rem; margin-bottom: 1rem; color: rgba(244,246,241,.65); }
-.crumbs a { color: rgba(244,246,241,.85); }
+.page-hero p { color: rgba(20,35,28,.82); font-size: 1.2rem; max-width: 52ch; margin: 0; }
+.crumbs { font-size: .9rem; margin-bottom: 1rem; color: rgba(20,35,28,.65); }
+.crumbs a { color: rgba(20,35,28,.85); }
 
 /* ---------- Split / media ---------- */
 .split { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(2rem, 6vw, 5rem); align-items: center; }
@@ -259,6 +277,7 @@ p { margin: 0 0 1em; max-width: 68ch; }
 .photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
 .photo .ph-label {
   position: absolute; left: 1rem; bottom: .8rem; color: rgba(244,246,241,.75); font-size: .85rem;
+  text-shadow: 0 1px 3px rgba(0,0,0,.4);
 }
 .photo.tall { aspect-ratio: 4 / 5; }
 
@@ -290,7 +309,7 @@ p { margin: 0 0 1em; max-width: 68ch; }
    its own neutral tint rather than borrowing .form-status's red/green meaning. */
 .dev-status-note {
   margin-top: 1.5rem; padding: 1rem 1.2rem; border-radius: var(--radius-sm);
-  background: rgba(30,107,71,.08); border-left: 4px solid var(--grass); font-size: .95rem;
+  background: rgba(60,122,40,.08); border-left: 4px solid var(--grass); font-size: .95rem;
 }
 
 /* ---------- Programs ---------- */
@@ -326,7 +345,7 @@ p { margin: 0 0 1em; max-width: 68ch; }
 /* ---------- Quote ---------- */
 .quote { max-width: 980px; margin: 0 auto; text-align: center; }
 .quote blockquote { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: clamp(2rem, 4.5vw, 3.25rem); line-height: 1.05; }
-.quote figcaption { margin-top: 1.25rem; color: rgba(244,246,241,.75); }
+.quote figcaption { margin-top: 1.25rem; color: rgba(20,35,28,.75); }
 
 /* ---------- League ---------- */
 .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -338,8 +357,8 @@ p { margin: 0 0 1em; max-width: 68ch; }
 .league-table td.pts { font-family: var(--font-display); font-weight: 900; font-size: 1.35rem; }
 .league-table tr.us td { background: rgba(232,178,30,.14); }
 .league-table td.pos { width: 2.5rem; color: var(--muted); }
-.on-dark .league-table th, .on-dark .league-table td { border-color: var(--chalk-line); }
-.on-dark .league-table th, .on-dark .league-table td.pos { color: rgba(244,246,241,.65); }
+.on-dark .league-table th, .on-dark .league-table td { border-color: var(--ink-line); }
+.on-dark .league-table th, .on-dark .league-table td.pos { color: rgba(20,35,28,.65); }
 
 .match-list { list-style: none; margin: 0; padding: 0; }
 .match {
@@ -351,7 +370,7 @@ p { margin: 0 0 1em; max-width: 68ch; }
 .match .away { font-weight: 600; }
 .match .score, .match .vs {
   font-family: var(--font-display); font-weight: 900; font-size: 1.5rem; min-width: 4.5rem; text-align: center;
-  background: var(--pitch); color: var(--chalk); border-radius: var(--radius-sm); padding: .1rem .5rem;
+  background: var(--pitch); color: var(--ink); border-radius: var(--radius-sm); padding: .1rem .5rem;
 }
 .match .vs { background: transparent; color: var(--muted); font-size: 1.2rem; }
 @media (max-width: 560px) {
@@ -361,10 +380,10 @@ p { margin: 0 0 1em; max-width: 68ch; }
 
 .tabs { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
 .tab {
-  padding: .5rem 1.1rem; border: 2px solid var(--pitch); background: transparent; color: var(--pitch);
+  padding: .5rem 1.1rem; border: 2px solid var(--grass); background: transparent; color: var(--grass);
   border-radius: var(--radius-sm); font-family: var(--font-display); font-weight: 800; font-size: 1.15rem;
 }
-.tab[aria-selected="true"], .tab[aria-pressed="true"] { background: var(--pitch); color: var(--chalk); }
+.tab[aria-selected="true"], .tab[aria-pressed="true"] { background: var(--pitch); color: var(--ink); }
 [role="tabpanel"][hidden] { display: none; }
 
 /* ---------- Gallery ---------- */
@@ -453,7 +472,7 @@ p { margin: 0 0 1em; max-width: 68ch; }
   color: var(--grass); font: inherit; font-weight: 600; text-align: center; text-decoration: underline;
   text-underline-offset: 3px; min-height: 44px;
 }
-.btn-link-block:hover, .btn-link-block:focus-visible { color: var(--pitch); }
+.btn-link-block:hover, .btn-link-block:focus-visible { color: var(--pitch-deep); }
 
 /* ---------- Forms ---------- */
 .form { display: grid; gap: 1.1rem; }
@@ -467,7 +486,7 @@ input[type="text"], input[type="email"], input[type="tel"], input[type="date"], 
   border: 1.5px solid #B9C4BC; border-radius: var(--radius-sm);
 }
 textarea { min-height: 140px; resize: vertical; }
-input:focus, select:focus, textarea:focus { outline: none; border-color: var(--grass); box-shadow: 0 0 0 3px rgba(30,107,71,.25); }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--grass); box-shadow: 0 0 0 3px rgba(60,122,40,.25); }
 .field.invalid input, .field.invalid select, .field.invalid textarea { border-color: var(--danger); }
 .error-msg { color: var(--danger); font-size: .9rem; margin-top: .3rem; display: none; }
 .field.invalid .error-msg { display: block; }
@@ -484,12 +503,12 @@ fieldset { border: 0; padding: 0; margin: 0; }
 }
 .radio-card label strong { display: block; font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; }
 .radio-card label small { display: block; color: var(--muted); font-weight: 400; }
-.radio-card input:checked + label { border-color: var(--pitch); box-shadow: inset 0 0 0 1.5px var(--pitch); background: rgba(30,107,71,.06); }
+.radio-card input:checked + label { border-color: var(--pitch-deep); box-shadow: inset 0 0 0 1.5px var(--pitch-deep); background: rgba(60,122,40,.06); }
 .radio-card input:focus-visible + label { outline: 3px solid var(--gold); outline-offset: 2px; }
 .radio-card input:disabled + label { opacity: .5; cursor: not-allowed; }
 
 .form-status { padding: 1rem 1.2rem; border-radius: var(--radius-sm); display: none; }
-.form-status.ok { display: block; background: rgba(30,107,71,.1); border-left: 4px solid var(--grass); }
+.form-status.ok { display: block; background: rgba(60,122,40,.1); border-left: 4px solid var(--grass); }
 .form-status.err { display: block; background: rgba(179,38,30,.08); border-left: 4px solid var(--danger); }
 
 /* Multi-step enrolment */
@@ -550,7 +569,7 @@ fieldset { border: 0; padding: 0; margin: 0; }
   position: fixed; right: 1.25rem; z-index: 90; width: 50px; height: 50px; border-radius: 50%;
   display: grid; place-items: center; border: 0;
 }
-.to-top { bottom: 5.5rem; background: var(--pitch); color: var(--chalk); opacity: 0; pointer-events: none; transition: opacity .2s; }
+.to-top { bottom: 5.5rem; background: var(--pitch); color: var(--ink); opacity: 0; pointer-events: none; transition: opacity .2s; }
 .to-top.show { opacity: 1; pointer-events: auto; }
 .wa-float { bottom: 1.25rem; background: #25D366; color: #fff; }
 .wa-float svg { width: 26px; height: 26px; fill: currentColor; }
@@ -577,10 +596,10 @@ fieldset { border: 0; padding: 0; margin: 0; }
 
 /* ---------- Fixes: dark-section match list, photo labels ---------- */
 .photo img + .ph-label { display: none; }
-.on-dark .match { border-color: var(--chalk-line); }
-.on-dark .match .when { color: rgba(244,246,241,.7); }
+.on-dark .match { border-color: var(--ink-line); }
+.on-dark .match .when { color: rgba(20,35,28,.7); }
 .on-dark .match .score { background: var(--gold); color: var(--ink); }
-.on-dark .match .vs { color: rgba(244,246,241,.7); }
+.on-dark .match .vs { color: rgba(20,35,28,.7); }
 .admin-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
 .admin-table th, .admin-table td { text-align: left; padding: .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
 
@@ -588,17 +607,17 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .trust-strip { list-style: none; margin: 2rem 0 0; padding: 1.5rem 0 0; border-top: 1px solid var(--rule); display: flex; flex-wrap: wrap; gap: .9rem 2rem; }
 .trust-strip li { display: flex; align-items: center; gap: .5rem; color: var(--muted); font-size: .95rem; font-weight: 600; }
 .trust-strip li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--grass); flex: none; }
-.on-dark .trust-strip { border-color: var(--chalk-line); }
-.on-dark .trust-strip li { color: rgba(244,246,241,.8); }
+.on-dark .trust-strip { border-color: var(--ink-line); }
+.on-dark .trust-strip li { color: rgba(20,35,28,.8); }
 
 /* ---------- Community / impact stats ---------- */
 .impact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin: 2rem 0; }
 .impact-stat { padding: 1.5rem 1.25rem; text-align: center; border: 1px solid var(--rule); border-radius: var(--radius-md); background: var(--paper); }
-.impact-stat strong { display: block; font-family: var(--font-display); font-weight: 900; font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1; color: var(--pitch); }
+.impact-stat strong { display: block; font-family: var(--font-display); font-weight: 900; font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1; color: var(--pitch-deep); }
 .impact-stat span { color: var(--muted); font-size: .92rem; }
-.on-dark .impact-stat { background: transparent; border-color: var(--chalk-line); }
-.on-dark .impact-stat strong { color: var(--gold); }
-.on-dark .impact-stat span { color: rgba(244,246,241,.75); }
+.on-dark .impact-stat { background: transparent; border-color: var(--ink-line); }
+.on-dark .impact-stat strong { color: var(--pitch-deep); }
+.on-dark .impact-stat span { color: rgba(20,35,28,.75); }
 .impact-note { font-size: .88rem; color: var(--muted); font-style: italic; margin-top: -.75rem; }
 @media (max-width: 760px) { .impact-grid { grid-template-columns: 1fr; } }
 
@@ -610,7 +629,7 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .quote blockquote { position: relative; }
 .quote blockquote::before {
   content: "“"; display: block; font-family: var(--font-display); font-weight: 900;
-  font-size: 4.5rem; line-height: 1; color: var(--gold); margin-bottom: -.5rem;
+  font-size: 4.5rem; line-height: 1; color: var(--pitch-deep); margin-bottom: -.5rem;
 }
 
 /* ---------- Donation amounts ---------- */
@@ -626,7 +645,7 @@ fieldset { border: 0; padding: 0; margin: 0; }
 /* ---------- Card hover: subtle lift, no glow/gradient ---------- */
 .post-card, .product, .panel { transition: transform .15s ease, box-shadow .15s ease; }
 .post-card:hover, .post-card:focus-visible { transform: translateY(-3px); }
-.section:not(.on-dark) .panel:hover, .product:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(15,61,46,.12); }
+.section:not(.on-dark) .panel:hover, .product:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(31,77,22,.12); }
 
 /* ---------- League table: keep the team column readable while scrolling ---------- */
 @media (max-width: 640px) {
@@ -634,7 +653,7 @@ fieldset { border: 0; padding: 0; margin: 0; }
   .on-dark .league-table td.team, .on-dark .league-table th.team { background: var(--pitch); }
   .on-paper .league-table td.team, .on-paper .league-table th.team { background: var(--paper); }
 }
-.league-table tbody tr:not(.us):hover td { background: rgba(30,107,71,.07); }
+.league-table tbody tr:not(.us):hover td { background: rgba(60,122,40,.07); }
 .on-dark .league-table tbody tr:not(.us):hover td { background: rgba(255,255,255,.05); }
 
 /* ---------- Scroll reveal ---------- */
