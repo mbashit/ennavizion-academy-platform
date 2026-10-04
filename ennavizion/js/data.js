@@ -43,10 +43,13 @@ const SITE = {
   // Paste a Formspree (or similar) endpoint here to receive form submissions by email,
   // e.g. "https://formspree.io/f/abcdwxyz". Leave empty to store submissions in the browser (demo mode).
   formEndpoint: "",
-  // The Laravel backend's API base (see /backend). Only the Donate page uses this so far —
-  // everything else on the site still reads from this data.js file. Update this to the real
-  // backend URL (e.g. "https://api.ennavizion.com/api") once it's deployed.
-  apiBase: "http://127.0.0.1:8000/api"
+  // The Laravel backend's API base (see /backend). When set, main.js loads all content from
+  // it (the admin panel's data replaces everything below), sends the contact/enrolment/
+  // newsletter forms to it, and runs donations through it. If the API can't be reached, the
+  // site falls back to the content in this file. Locally it points at `php artisan serve`;
+  // replace the "" with the real backend URL (e.g. "https://api.ennavizion.com/api") once
+  // it's deployed — until then the public site runs on this file's content alone.
+  apiBase: ["localhost", "127.0.0.1"].includes(location.hostname) ? "http://127.0.0.1:8000/api" : ""
 };
 
 const PROGRAMS = [

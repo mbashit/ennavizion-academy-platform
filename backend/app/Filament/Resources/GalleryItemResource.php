@@ -23,6 +23,7 @@ class GalleryItemResource extends Resource
             Forms\Components\FileUpload::make('image_path')
                 ->label('Photo')
                 ->image()
+                ->disk('public') // served to the static site via the /storage symlink
                 ->directory('gallery')
                 ->imageEditor()
                 ->imageCropAspectRatio('1:1')

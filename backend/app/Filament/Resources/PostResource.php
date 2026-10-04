@@ -42,6 +42,7 @@ class PostResource extends Resource
                 Forms\Components\FileUpload::make('image_path')
                     ->label('Image')
                     ->image()
+                    ->disk('public') // served to the static site via the /storage symlink
                     ->directory('news')
                     ->imageEditor()
                     ->imageCropAspectRatio('16:10')

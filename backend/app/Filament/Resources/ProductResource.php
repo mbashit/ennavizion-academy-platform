@@ -33,6 +33,7 @@ class ProductResource extends Resource
             Forms\Components\FileUpload::make('image_path')
                 ->label('Product photo')
                 ->image()
+                ->disk('public') // served to the static site via the /storage symlink
                 ->directory('products')
                 ->imageEditor()
                 ->imageCropAspectRatio('1:1'),

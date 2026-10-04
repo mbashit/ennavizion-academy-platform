@@ -20,6 +20,32 @@
     set(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch { /* storage unavailable */ } }
   };
 
+  /* ---------- Content from the backend ---------- */
+  // Fetches GET /content (backend ContentController) and overwrites the data.js globals in
+  // place, so every renderer below works unchanged whichever source the data came from.
+  // Started immediately (not on DOMContentLoaded) so the request overlaps HTML parsing. Any
+  // failure — no apiBase, backend down, slow network — leaves data.js's content in use.
+  const contentReady = (async function loadContent() {
+    if (!SITE.apiBase) return;
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 4000);
+    try {
+      const res = await fetch(`${SITE.apiBase}/content`, { headers: { Accept: "application/json" }, signal: ctrl.signal });
+      if (!res.ok) throw new Error("Server responded " + res.status);
+      const c = await res.json();
+      const swap = (arr, next) => { if (Array.isArray(next)) arr.splice(0, arr.length, ...next); };
+      if (c.SITE) Object.assign(SITE, c.SITE, { socials: { ...SITE.socials, ...c.SITE.socials } });
+      swap(PROGRAMS, c.PROGRAMS); swap(CENTERS, c.CENTERS); swap(IMPACT, c.IMPACT);
+      swap(TESTIMONIALS, c.TESTIMONIALS); swap(GALLERY, c.GALLERY); swap(PRODUCTS, c.PRODUCTS); swap(POSTS, c.POSTS);
+      if (c.LEAGUE) {
+        if (c.LEAGUE.season) LEAGUE.season = c.LEAGUE.season;
+        swap(LEAGUE.table, c.LEAGUE.table); swap(LEAGUE.fixtures, c.LEAGUE.fixtures); swap(LEAGUE.results, c.LEAGUE.results);
+      }
+    } catch (err) {
+      console.warn("Using bundled content from data.js — backend unavailable:", err.message);
+    } finally { clearTimeout(timer); }
+  })();
+
   /* ---------- Icons ---------- */
   const ICON = {
     logo: '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="none" stroke="#E8B21E" stroke-width="3"/><circle cx="20" cy="20" r="6" fill="#E8B21E"/><path d="M2 20h36" stroke="#F4F6F1" stroke-width="2"/></svg>',
@@ -231,6 +257,10 @@
   }
 
   function initCart() {
+    // Drop saved items whose product no longer exists (removed in the admin, or saved under
+    // data.js's ids before the backend's SKU-based ids took over).
+    const known = cart.items.filter((i) => PRODUCTS.some((p) => p.id === i.id));
+    if (known.length !== cart.items.length) { cart.items = known; store.set(CART_KEY, known); }
     const drawer = $("#cart-drawer"), backdrop = $(".drawer-backdrop");
     const open = () => { drawer.classList.add("open"); backdrop.classList.add("open"); drawer.setAttribute("aria-hidden", "false"); $(".icon-btn", drawer).focus(); };
     const close = () => { drawer.classList.remove("open"); backdrop.classList.remove("open"); drawer.setAttribute("aria-hidden", "true"); };
@@ -266,6 +296,15 @@
 
   async function submitForm(form, type) {
     const data = Object.fromEntries(new FormData(form).entries());
+    if (SITE.apiBase) {
+      // Stored as a Submission in the backend — see the admin panel's Submissions page.
+      const res = await fetch(`${SITE.apiBase}/submissions`, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify({ type, ...data }) });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(res.status === 429 ? "too many attempts, wait a minute" : body.message || "Server responded " + res.status);
+      }
+      return data;
+    }
     data._type = type; data._submitted = new Date().toISOString();
     if (SITE.formEndpoint) {
       const res = await fetch(SITE.formEndpoint, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(data) });
@@ -313,10 +352,11 @@
   }
 
   function leagueRows(limit) {
-    const rows = LEAGUE.table.map(([team, p, w, d, l, gf, ga]) => ({ team, p, w, d, l, gf, ga, gd: gf - ga, pts: w * 3 + d }))
+    // The backend appends an explicit "is Ennavizion" flag; data.js rows fall back to the name.
+    const rows = LEAGUE.table.map(([team, p, w, d, l, gf, ga, us]) => ({ team, p, w, d, l, gf, ga, gd: gf - ga, pts: w * 3 + d, us: us ?? team.startsWith(SITE.name) }))
       .sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
     return (limit ? rows.slice(0, limit) : rows).map((r, i) => `
-      <tr class="${r.team.startsWith(SITE.name) ? "us" : ""}">
+      <tr class="${r.us ? "us" : ""}">
         <td class="pos">${i + 1}</td><td class="team">${esc(r.team)}</td>
         <td>${r.p}</td><td>${r.w}</td><td>${r.d}</td><td>${r.l}</td><td>${r.gd > 0 ? "+" : ""}${r.gd}</td><td class="pts">${r.pts}</td>
       </tr>`).join("");
@@ -361,7 +401,7 @@
       const b = $("#home-posts"); if (b) b.innerHTML = POSTS.slice(0, 3).map(postCard).join("");
       const s = $("#home-season"); if (s) s.textContent = LEAGUE.season;
       const im = $("#home-impact"); if (im) im.innerHTML = impactHTML();
-      const tm = $("#home-testimonial"); if (tm) tm.outerHTML = testimonialHTML(TESTIMONIALS[0]);
+      const tm = $("#home-testimonial"); if (tm) { if (TESTIMONIALS.length) tm.outerHTML = testimonialHTML(TESTIMONIALS[0]); else tm.remove(); }
       // Derived from CENTERS/PROGRAMS (js/data.js) so the hero strip never drifts out of
       // sync with the actual centre count/cities or program count.
       const hc = $("#stat-centres"); if (hc) hc.textContent = CENTERS.length + " centres";
@@ -455,7 +495,9 @@
       document.title = `${p.title} | ${SITE.name}`;
       $("#post-title").textContent = p.title;
       $("#post-meta").textContent = `${fmtDate(p.date)} | ${p.category} | ${p.minutes} min read`;
-      $("#post-body").innerHTML = p.body.map((para) => `<p>${esc(para)}</p>`).join("");
+      // bodyHtml comes from the admin panel's rich-text editor (trusted, admin-written HTML);
+      // data.js posts are plain paragraphs and get escaped.
+      $("#post-body").innerHTML = p.bodyHtml || p.body.map((para) => `<p>${esc(para)}</p>`).join("");
       $("#post-more").innerHTML = POSTS.filter((x) => x.id !== p.id).slice(0, 3).map(postCard).join("");
     },
 
@@ -619,6 +661,7 @@
       btn.disabled = true; btn.textContent = "Redirecting to secure checkout…";
       status.className = "form-status"; status.textContent = "";
       try {
+        if (!SITE.apiBase) throw new Error("Online donations aren't open yet.");
         const payload = Object.fromEntries(new FormData(form).entries());
         const res = await fetch(`${SITE.apiBase}/donations/initialize`, {
           method: "POST",
@@ -684,7 +727,8 @@
   }
 
   /* ---------- Boot ---------- */
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", async () => {
+    await contentReady;
     renderLayout();
     initChrome();
     initCart();
