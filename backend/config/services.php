@@ -44,4 +44,10 @@ return [
         'url' => env('FRONTEND_URL', 'http://localhost:5500'),
     ],
 
+    // Inbox that gets an email for every new form submission. Leave blank to only record
+    // them in the admin panel.
+    'notify' => [
+        'email' => env('NOTIFY_EMAIL'),
+    ],
+
 ];

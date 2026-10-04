@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Submission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 
 /**
@@ -56,8 +58,42 @@ class SubmissionController extends Controller
             return response()->json(['ok' => true], 201);
         }
 
-        Submission::create(['type' => $type, 'data' => $data, 'status' => 'new']);
+        $submission = Submission::create(['type' => $type, 'data' => $data, 'status' => 'new']);
+
+        $this->notify($submission);
 
         return response()->json(['ok' => true], 201);
+    }
+
+    /**
+     * Emails NOTIFY_EMAIL about the new submission. The row is already saved, so a mail
+     * failure (wrong SMTP password, server down) is logged rather than shown to the visitor.
+     */
+    private function notify(Submission $submission): void
+    {
+        $to = config('services.notify.email');
+        if (blank($to) || $submission->type === 'newsletter') {
+            return;
+        }
+
+        $lines = collect($submission->data)
+            ->map(fn ($value, $field) => str_pad(str_replace('_', ' ', ucfirst($field)).':', 16).$value)
+            ->implode("\n");
+        $replyTo = $submission->data['email'] ?? $submission->data['guardian_email'] ?? null;
+
+        try {
+            Mail::raw(
+                "New {$submission->type} submission from the website:\n\n{$lines}\n\n".
+                'Manage it in the admin panel: '.url('/admin/submissions'),
+                function ($message) use ($to, $submission, $replyTo) {
+                    $message->to($to)->subject('New '.$submission->type.' — '.config('app.name'));
+                    if ($replyTo) {
+                        $message->replyTo($replyTo);
+                    }
+                },
+            );
+        } catch (\Throwable $e) {
+            Log::warning('Submission notification email failed', ['submission' => $submission->id, 'error' => $e->getMessage()]);
+        }
     }
 }

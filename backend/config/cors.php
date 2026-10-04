@@ -19,13 +19,13 @@ return [
 
     'allowed_methods' => ['*'],
 
-    // Scoped to the actual static-site origin (FRONTEND_URL in .env) rather than '*', since
-    // this API isn't meant to be callable from arbitrary third-party sites. Add the real
-    // production domain here (or via FRONTEND_URL) once the site is deployed.
-    'allowed_origins' => [
+    // Scoped to the actual static-site origin(s) rather than '*', since this API isn't meant
+    // to be callable from arbitrary third-party sites: FRONTEND_URL plus any comma-separated
+    // CORS_EXTRA_ORIGINS (in production: the www. variant of the domain).
+    'allowed_origins' => array_values(array_filter([
         env('FRONTEND_URL', 'http://localhost:5500'),
-        'http://127.0.0.1:5500',
-    ],
+        ...explode(',', env('CORS_EXTRA_ORIGINS', 'http://127.0.0.1:5500')),
+    ])),
 
     'allowed_origins_patterns' => [],
 

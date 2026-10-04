@@ -8,3 +8,6 @@ Desktop.ini
 
 # Netlify CLI local state
 .netlify/
+
+# Upload packages built by deploy/build-namecheap.ps1
+dist/

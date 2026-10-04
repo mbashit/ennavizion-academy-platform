@@ -1,0 +1,26 @@
+# Apache settings for the static site on Namecheap (public_html).
+
+RewriteEngine On
+
+# Always HTTPS, and one canonical host (no www.) — keeps donations, CORS and SEO consistent.
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteRule ^ https://ennavizion.com%{REQUEST_URI} [L,R=301]
+
+ErrorDocument 404 /404.html
+
+# admin.html is the old browser-only submissions viewer; real submissions are in the
+# backend's admin panel (api.ennavizion.com/admin), so keep this one off the live site.
+RewriteRule ^admin\.html$ - [R=404,L]
+
+# Short cache for CSS/JS (edits show up within an hour), longer for images.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 hour"
+  ExpiresByType application/javascript "access plus 1 hour"
+  ExpiresByType text/javascript "access plus 1 hour"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+</IfModule>

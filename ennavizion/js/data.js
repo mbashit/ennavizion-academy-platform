@@ -46,10 +46,12 @@ const SITE = {
   // The Laravel backend's API base (see /backend). When set, main.js loads all content from
   // it (the admin panel's data replaces everything below), sends the contact/enrolment/
   // newsletter forms to it, and runs donations through it. If the API can't be reached, the
-  // site falls back to the content in this file. Locally it points at `php artisan serve`;
-  // replace the "" with the real backend URL (e.g. "https://api.ennavizion.com/api") once
-  // it's deployed — until then the public site runs on this file's content alone.
-  apiBase: ["localhost", "127.0.0.1"].includes(location.hostname) ? "http://127.0.0.1:8000/api" : ""
+  // site falls back to the content in this file. Picked by where the site is opened: the
+  // live domain uses the live backend, a local copy uses `php artisan serve`, and anywhere
+  // else (e.g. a Netlify preview) runs on this file's content alone.
+  apiBase: ["ennavizion.com", "www.ennavizion.com"].includes(location.hostname) ? "https://api.ennavizion.com/api"
+    : ["localhost", "127.0.0.1"].includes(location.hostname) ? "http://127.0.0.1:8000/api"
+    : ""
 };
 
 const PROGRAMS = [
