@@ -27,6 +27,10 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            // "Forgot password?" on the login page — emails a reset link (needs MAIL_* in .env).
+            ->passwordReset()
+            // Each user can change their own name, email and password from the user menu.
+            ->profile()
             ->brandName('Ennavizion Admin')
             ->colors([
                 'primary' => Color::hex('#E8B21E'), // brand gold, matches --gold in the site's css/style.css

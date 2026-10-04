@@ -59,8 +59,14 @@ php artisan key:generate --force
 php artisan migrate --seed --force  # creates the tables and loads the starter content
 php artisan storage:link            # makes uploaded photos visible on the website
 php artisan config:cache && php artisan route:cache && php artisan view:cache
-php artisan make:filament-user      # create the admin login (name, email, password)
+php artisan make:filament-user      # the client's admin login (name, email, password)
+php artisan app:make-developer      # your developer login — hidden from the client
 ```
+
+The client can add more staff logins later under **Admin users** in the panel; they never
+see or can change the developer account. Forgotten password: use "Forgot password?" on the
+login page (emails a reset link), or in Terminal run
+`php artisan app:admin-password their@email.com`.
 
 `--seed` loads the same placeholder content the site shows today; run it **only on the
 first deploy**. After that, change content in the admin panel.

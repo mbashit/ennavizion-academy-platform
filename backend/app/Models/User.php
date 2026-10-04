@@ -13,8 +13,8 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable implements FilamentUser
 {
     // Filament locks the admin panel to everyone in production unless this says otherwise.
-    // There's no public sign-up — accounts only exist if created with
-    // `php artisan make:filament-user` on the server — so every user is an admin.
+    // There's no public sign-up — accounts are only created by an existing admin (Admin users
+    // page) or on the server via artisan — so every user is an admin.
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
@@ -54,6 +54,8 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            // Deliberately not $fillable: no admin form can grant it, only app:make-developer.
+            'is_developer' => 'boolean',
         ];
     }
 }
