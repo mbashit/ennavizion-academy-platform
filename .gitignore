@@ -5,3 +5,6 @@
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# Netlify CLI local state
+.netlify/
