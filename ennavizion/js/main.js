@@ -48,7 +48,9 @@
 
   /* ---------- Icons ---------- */
   const ICON = {
-    logo: '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="none" stroke="#E8B21E" stroke-width="3"/><circle cx="20" cy="20" r="6" fill="#E8B21E"/><path d="M2 20h36" stroke="#F4F6F1" stroke-width="2"/></svg>',
+    // Club crest (cropped from the client's logo artwork). alt is empty because the
+    // brand link always carries the site name as text/aria-label alongside it.
+    logo: '<img class="brand-logo" src="assets/images/logo.png" alt="" width="480" height="340">',
     cart: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>',
     menu: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
     close: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',

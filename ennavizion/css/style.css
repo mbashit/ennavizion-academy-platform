@@ -115,6 +115,19 @@ p { margin: 0 0 1em; max-width: 68ch; }
 }
 .brand:hover { color: var(--ink); }
 .brand svg { width: 34px; height: 34px; flex: none; }
+/* Crest artwork sits on its own deep-green field, so it reads as a badge on the lemon header. */
+.site-header .brand { flex: none; font-size: 1.6rem; gap: 8px; }
+.main-nav a { padding-left: 10px; padding-right: 10px; }
+.main-nav a::after { left: 10px; right: 10px; }
+@media (min-width: 1141px) and (max-width: 1280px) {
+  .header-inner { gap: 16px; }
+  .main-nav a { padding-left: 8px; padding-right: 8px; }
+  .main-nav a::after { left: 8px; right: 8px; }
+  /* Still reachable from the footer ("Support a player") and the mobile menu. */
+  .header-actions .support-link { display: none; }
+}
+.brand-logo { height: 48px; width: auto; flex: none; border-radius: 6px; box-shadow: 0 1px 3px rgba(20,35,28,.25); }
+.site-footer .brand-logo { height: 72px; border-radius: 8px; box-shadow: none; }
 .main-nav { margin-left: auto; }
 .main-nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: .25rem; }
 .main-nav a {
