@@ -676,71 +676,140 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .btn:active { transform: scale(.98); }
 
 /* =========================================================
-   FINISH — client asked (Oct 2026) for "something with a design inside the colour",
-   not flat light green. Kept to two deliberate touches so the photos and the league
-   table stay the loudest things on the page:
-     - green surfaces carry mowed-pitch stripes (the one texture);
-     - page banners end on a chalk halfway line with a centre circle (the signature,
-       echoing the chalk pitch markings in the home hero).
-   Gold is a flat accent: the main action, scores and our own row in the league table.
+   RICH FINISH — client feedback (Oct 2026): "something shiny, not just light green,
+   like wallpaper/carpet with a design inside the colour". Same lemon-green palette;
+   this layer adds pattern and sheen on top of it:
+     - green surfaces get a woven diamond "carpet" motif, mowed-pitch stripes and a
+       stadium-light highlight (text contrast unchanged — overlays stay low-alpha);
+     - gold is a polished foil (buttons, edges, heading rules, CTA band, scores);
+     - the footer gets a gold-lattice wallpaper; the page background a faint one.
+   The shine is static light and material, not motion: nothing here loops, glows or
+   clips text, so the photos and the league table still read first.
+   Everything visual lives here, so it can be tuned or removed in one place.
    ========================================================= */
 :root {
-  --mow-stripes: repeating-linear-gradient(90deg, rgba(255,255,255,.055) 0 96px, rgba(20,60,10,.03) 96px 192px);
-  --chalk-mark: rgba(255,255,255,.7);
+  --gold-foil: linear-gradient(115deg, #9C7307 0%, #E8B21E 16%, #FFE89C 30%, #E8B21E 44%, #B98A0A 60%, #F7D35A 78%, #9C7307 100%);
+  --pitch-rich: linear-gradient(165deg, #74CE4A 0%, #5FB93A 45%, #4A9A2B 100%);
+  --mow-stripes: repeating-linear-gradient(90deg, rgba(255,255,255,.085) 0 90px, rgba(20,60,10,.05) 90px 180px);
+  --stadium-light: radial-gradient(90% 75% at 12% -8%, rgba(255,255,255,.42), transparent 60%);
+  --gold-glow: radial-gradient(60% 65% at 100% 110%, rgba(255,214,90,.38), transparent 65%);
+  /* Woven diamond motif in deep green with cream "stitch" dots at each crossing. */
+  --tile-carpet: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%231F4D16' stroke-width='1.2'%3E%3Cpath d='M36 0 72 36 36 72 0 36Z' stroke-opacity='.2'/%3E%3Cpath d='M36 12 60 36 36 60 12 36Z' stroke-opacity='.11'/%3E%3C/g%3E%3Cpath d='M36 27c2 5 4 7 9 9-5 2-7 4-9 9-2-5-4-7-9-9 5-2 7-4 9-9Z' fill='%231F4D16' fill-opacity='.17'/%3E%3Cg fill='%23FFF6C8' fill-opacity='.55'%3E%3Ccircle cx='36' cy='0' r='2'/%3E%3Ccircle cx='0' cy='36' r='2'/%3E%3Ccircle cx='72' cy='36' r='2'/%3E%3Ccircle cx='36' cy='72' r='2'/%3E%3C/g%3E%3C/svg%3E");
+  /* Same motif in gold, for the dark footer and mobile menu. */
+  --tile-gold: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23E8B21E' stroke-width='1.1'%3E%3Cpath d='M36 0 72 36 36 72 0 36Z' stroke-opacity='.16'/%3E%3Cpath d='M36 12 60 36 36 60 12 36Z' stroke-opacity='.08'/%3E%3C/g%3E%3Cpath d='M36 27c2 5 4 7 9 9-5 2-7 4-9 9-2-5-4-7-9-9 5-2 7-4 9-9Z' fill='%23E8B21E' fill-opacity='.16'/%3E%3Cg fill='%23FFE89C' fill-opacity='.4'%3E%3Ccircle cx='36' cy='0' r='1.8'/%3E%3Ccircle cx='0' cy='36' r='1.8'/%3E%3Ccircle cx='72' cy='36' r='1.8'/%3E%3Ccircle cx='36' cy='72' r='1.8'/%3E%3C/g%3E%3C/svg%3E");
+  /* Faint wallpaper for the light page background — barely there, behind body text. */
+  --tile-wallpaper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cpath d='M48 0 96 48 48 96 0 48Z' fill='none' stroke='%233C7A28' stroke-opacity='.06' stroke-width='1'/%3E%3Cpath d='M48 40c1.6 4 3.2 5.6 8 8-4.8 2.4-6.4 4-8 8-1.6-4-3.2-5.6-8-8 4.8-2.4 6.4-4 8-8Z' fill='%233C7A28' fill-opacity='.05'/%3E%3Cg fill='%23E8B21E' fill-opacity='.22'%3E%3Ccircle cx='48' cy='0' r='1.5'/%3E%3Ccircle cx='0' cy='48' r='1.5'/%3E%3Ccircle cx='96' cy='48' r='1.5'/%3E%3Ccircle cx='48' cy='96' r='1.5'/%3E%3C/g%3E%3C/svg%3E");
+  /* Embossed lattice for the gold CTA band. */
+  --tile-foil: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke-width='1.2'%3E%3Cpath d='M36 0 72 36 36 72 0 36Z' stroke='%23FFFFFF' stroke-opacity='.28'/%3E%3Cpath d='M36 12 60 36 36 60 12 36Z' stroke='%237A5A00' stroke-opacity='.14'/%3E%3C/g%3E%3Cpath d='M36 27c2 5 4 7 9 9-5 2-7 4-9 9-2-5-4-7-9-9 5-2 7-4 9-9Z' fill='%237A5A00' fill-opacity='.13'/%3E%3C/svg%3E");
 }
 
-/* ---- Green surfaces: mowed stripes over flat pitch green ---- */
+body { background: var(--tile-wallpaper), var(--chalk); }
+
+/* ---- Green surfaces: carpet motif + mowed stripes + stadium light ---- */
 .hero, .page-hero, .on-dark {
   position: relative; overflow: hidden;
-  background: var(--mow-stripes), var(--pitch);
+  background: var(--stadium-light), var(--gold-glow), var(--tile-carpet), var(--mow-stripes), var(--pitch-rich);
+}
+/* Fixed diagonal sheen on the big banners — the "shine", held still. */
+.hero::after, .page-hero::after {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: linear-gradient(105deg, transparent 52%, rgba(255,255,255,.16) 62%, rgba(255,246,200,.1) 66%, transparent 76%);
 }
 .hero-inner, .page-hero > .wrap, .on-dark > .wrap { position: relative; z-index: 1; }
-.testimonial-section { background: var(--mow-stripes), #56A836; }
-
-/* ---- Page banners: chalk halfway line + centre circle ---- */
-/* The line sits 24px above the edge so it reads against green, not the chalk page below;
-   the circle is centred on it and clipped by the banner's overflow. */
-.page-hero { border-bottom: 0; padding-bottom: clamp(4rem, 7vw, 5.5rem); }
-.page-hero::before, .page-hero::after { content: ""; position: absolute; pointer-events: none; }
-.page-hero::after { left: 0; right: 0; bottom: 24px; height: 2px; background: var(--chalk-mark); }
+.page-hero, .site-footer { border-bottom: 0; }
 .page-hero::before {
-  left: 50%; bottom: -24px; width: 96px; height: 96px; transform: translateX(-50%);
-  border: 2px solid var(--chalk-mark); border-radius: 50%;
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 6px; z-index: 1;
+  background: var(--gold-foil);
+}
+/* The testimonial band: same finish, a step deeper than --pitch, but never darker than the
+   flat --grass it replaced, so its dark text keeps at least its original contrast. */
+.testimonial-section {
+  background: var(--stadium-light), var(--tile-carpet), var(--mow-stripes), linear-gradient(165deg, #66B840, #52A034 55%, var(--grass));
 }
 
-/* ---- Header: flat pitch with a hairline ---- */
-.site-header { background: var(--pitch); border-bottom: 1px solid var(--ink-line); }
+/* ---- Header: glossy bar with a thin gold-foil edge ---- */
+.site-header {
+  background: linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,0) 70%), var(--tile-carpet), var(--pitch);
+  border-bottom: 0;
+  box-shadow: 0 4px 12px rgba(20,35,28,.12);
+}
+.site-header::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 3px;
+  background: var(--gold-foil);
+}
 .header-actions .btn { white-space: nowrap; }
-@media (max-width: 900px) { .hero-media { margin-top: 32px; } }
 .header-actions .support-link {
   color: var(--ink); font-weight: 500; text-decoration: none; padding: 8px 12px; border-radius: var(--radius-sm); white-space: nowrap;
 }
 .header-actions .support-link:hover { color: var(--ink); background: rgba(0,0,0,.06); }
-@media (max-width: 1140px) { .header-actions .support-link { display: none; } }
+@media (max-width: 1140px) {
+  .header-actions .support-link { display: none; }
+  .main-nav { background: var(--tile-gold), var(--pitch-deep); }
+}
 
-/* ---- Gold: flat accent ---- */
-.cart-count, .match .score, .on-dark .match .score { background: var(--gold); color: var(--ink); }
-.btn-green, .to-top { background: var(--pitch); color: var(--ink); }
-.btn-green:hover { background: var(--pitch-deep); color: var(--chalk); }
-/* On green sections the green button would vanish into its surface — use ink instead. */
-.on-dark .btn-green { background: var(--ink); color: var(--chalk); }
+/* ---- Gold foil: buttons, badges, scores ---- */
+.btn-gold, .main-nav a.nav-cta {
+  position: relative; overflow: hidden;
+  background: var(--gold-foil); background-size: 220% 100%; background-position: 0 0;
+  color: var(--ink);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6), inset 0 -2px 0 rgba(122,90,0,.25), 0 2px 6px rgba(20,35,28,.15);
+  transition: background-position .4s ease, transform .1s ease;
+}
+/* Hover turns the foil to catch the light — a material response, not a glow. */
+.btn-gold:hover, .btn-gold:focus-visible { background: var(--gold-foil); background-size: 220% 100%; background-position: 100% 0; color: var(--ink); }
+.btn-green, .to-top {
+  background: linear-gradient(180deg, #7DD553, #4FA22F);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 2px 6px rgba(20,35,28,.15);
+}
+.btn-green:hover { background: linear-gradient(180deg, var(--grass), var(--pitch-deep)); }
+.cart-count, .on-dark .match .score, .match .score { background: var(--gold-foil); color: var(--ink); box-shadow: inset 0 1px 0 rgba(255,255,255,.5); }
 
-/* ---- League table: our own row is the moment ---- */
-.league-table tr.us td { background: rgba(232,178,30,.22); }
-.on-dark .league-table tr.us td { background: rgba(255,222,120,.6); }
+/* Gold-foil accent rule under section headings. */
+.section-head h2::after {
+  content: ""; display: block; width: 72px; height: 4px; margin-top: 16px; border-radius: 2px;
+  background: var(--gold-foil);
+}
+
+/* ---- League table: our own row carries the gold ---- */
+.on-dark .league-table tr.us td { background: rgba(255,222,120,.5); }
 .league-table tr.us td:first-child { box-shadow: inset 4px 0 0 var(--gold-deep); }
-.league-table td.pts { font-variant-numeric: tabular-nums; }
 
-/* ---- Cards and stats: hairlines, no frames ---- */
-.on-dark .impact-stat { background: rgba(255,255,255,.12); }
-.section:not(.on-dark) .panel:hover, .product:hover { border-color: rgba(20,35,28,.3); }
+/* ---- Cards: gold-foil frame (always on stats, on hover for cards) ---- */
+.impact-stat {
+  border: 1.5px solid transparent;
+  background: linear-gradient(var(--paper), var(--paper)) padding-box, var(--gold-foil) border-box;
+}
+.on-dark .impact-stat {
+  background: linear-gradient(rgba(255,255,255,.18), rgba(255,255,255,.06)) padding-box, var(--gold-foil) border-box;
+}
+.section:not(.on-dark) .panel:hover, .product:hover {
+  border-color: transparent;
+  background: linear-gradient(var(--paper), var(--paper)) padding-box, var(--gold-foil) border-box;
+}
 
-/* ---- Footer ---- */
-.site-footer { background: var(--pitch-deep); }
-.site-footer h4 { color: var(--chalk); }
+/* ---- Gold CTA band: polished foil with embossed lattice ---- */
+.cta-band {
+  position: relative; overflow: hidden;
+  background: var(--tile-foil), var(--gold-foil); background-size: 72px 72px, 100% 100%;
+}
+.cta-band .btn-gold { background: var(--ink); color: var(--chalk); box-shadow: none; }
+.cta-band .btn-gold:hover { background: var(--pitch-deep); color: var(--chalk); }
+
+/* ---- Footer: deep green with gold-lattice wallpaper ---- */
+.site-footer {
+  position: relative;
+  background: var(--tile-gold), linear-gradient(180deg, #24591A, var(--pitch-deep) 40%, #163A10);
+}
+.site-footer::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px;
+  background: var(--gold-foil);
+}
+.site-footer h4 { color: var(--gold); }
 .socials a:hover { border-color: var(--gold); color: var(--gold); }
 
+@media (max-width: 900px) { .hero-media { margin-top: 32px; } }
+/* Sticky league column must match its section's surface rather than flat colours. */
 @media (max-width: 640px) {
-  .on-dark .league-table td.team, .on-dark .league-table th.team { background: var(--pitch); }
-  .on-dark .league-table tr.us td.team { background: #BFCF5F; } /* the .us tint flattened over --pitch */
+  .on-dark .league-table td.team, .on-dark .league-table th.team { background: #5FB93A; }
+  .on-dark .league-table tr.us td.team { background: #B7CC5C; }
 }
