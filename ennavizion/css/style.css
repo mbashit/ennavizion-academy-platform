@@ -68,12 +68,12 @@ button { font: inherit; cursor: pointer; }
 /* ---------- Type ---------- */
 h1, h2, h3, h4 {
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: 700;
   line-height: 0.98;
   letter-spacing: 0.005em;
   margin: 0 0 .5em;
 }
-h1 { font-size: clamp(3rem, 9vw, 7.25rem); font-weight: 900; }
+h1 { font-size: clamp(3rem, 9vw, 7.25rem); font-weight: 800; }
 h2 { font-size: clamp(2.25rem, 5vw, 3.75rem); }
 h3 { font-size: clamp(1.5rem, 2.4vw, 1.9rem); line-height: 1.05; }
 h4 { font-size: 1.25rem; }
@@ -84,8 +84,8 @@ p { margin: 0 0 1em; max-width: 68ch; }
 /* ---------- Buttons ---------- */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
-  min-height: 48px; padding: .75rem 1.5rem;
-  font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; letter-spacing: .02em;
+  min-height: 48px; padding: 12px 24px;
+  font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; letter-spacing: .02em;
   text-decoration: none; border: 2px solid transparent; border-radius: var(--radius-sm);
   transition: background-color .15s, color .15s, border-color .15s;
 }
@@ -97,7 +97,7 @@ p { margin: 0 0 1em; max-width: 68ch; }
 .btn-line:hover { background: var(--pitch); color: var(--ink); border-color: var(--pitch); }
 .on-dark .btn-line { color: var(--ink); }
 .on-dark .btn-line:hover { background: var(--ink); color: var(--chalk); border-color: var(--ink); }
-.btn-sm { min-height: 40px; padding: .45rem 1rem; font-size: 1.05rem; }
+.btn-sm { min-height: 40px; padding: 8px 16px; font-size: 1.05rem; }
 .btn-block { width: 100%; }
 .btn:disabled { opacity: .5; cursor: not-allowed; pointer-events: none; }
 
@@ -111,14 +111,14 @@ p { margin: 0 0 1em; max-width: 68ch; }
 .brand {
   display: flex; align-items: center; gap: .6rem;
   color: var(--ink); text-decoration: none;
-  font-family: var(--font-display); font-weight: 900; font-size: 1.85rem; letter-spacing: .01em;
+  font-family: var(--font-display); font-weight: 800; font-size: 1.85rem; letter-spacing: .01em;
 }
 .brand:hover { color: var(--ink); }
 .brand svg { width: 34px; height: 34px; flex: none; }
 .main-nav { margin-left: auto; }
 .main-nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: .25rem; }
 .main-nav a {
-  display: block; padding: .5rem .7rem; color: rgba(20,35,28,.7);
+  display: block; padding: 8px 12px; color: rgba(20,35,28,.75);
   text-decoration: none; font-weight: 400; border-radius: var(--radius-sm);
 }
 .main-nav a:hover { color: var(--ink); background: rgba(0,0,0,.06); }
@@ -166,7 +166,7 @@ p { margin: 0 0 1em; max-width: 68ch; }
 @media (min-width: 1141px) { .main-nav .nav-cta, .main-nav .nav-cta-secondary { display: none; } }
 /* Underline sweep on hover/focus makes the active nav state easier to scan at a glance. */
 .main-nav a { position: relative; }
-.main-nav a::after { content: ""; position: absolute; left: .7rem; right: .7rem; bottom: .3rem; height: 2px; background: var(--pitch-deep); transform: scaleX(0); transition: transform .15s ease; }
+.main-nav a::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 4px; height: 2px; background: var(--pitch-deep); transform: scaleX(0); transition: transform .15s ease; }
 .main-nav a:hover::after, .main-nav a:focus-visible::after, .main-nav a[aria-current="page"]::after { transform: scaleX(1); }
 /* Gold reads fine against the mobile flyout's dark background but disappears against the
    bright header bar, so this breakpoint keeps the original gold sweep only where the panel is dark. */
@@ -223,8 +223,7 @@ p { margin: 0 0 1em; max-width: 68ch; }
 
 /* ---------- Hero: eyebrow + supporting photo ---------- */
 .hero-eyebrow {
-  font-family: var(--font-display); font-weight: 700; font-size: .95rem; letter-spacing: .12em;
-  text-transform: uppercase; color: var(--pitch-deep); margin: 0 0 .9rem;
+  font-weight: 500; font-size: 1rem; color: var(--pitch-deep); margin: 0 0 16px;
 }
 /* row-gap:0 because .hero-strip (a grid sibling, spanning both columns below) already
    controls its own spacing via margin-top — a row-gap here would stack on top of that. */
@@ -239,7 +238,7 @@ p { margin: 0 0 1em; max-width: 68ch; }
 /* ---------- Hero load-in sequence (CSS-only: safe with no JS, and neutralised for
    prefers-reduced-motion by the existing global "*{animation:none}" rule below) ---------- */
 @keyframes heroFadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes heroImageIn { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: scale(1); } }
+@keyframes heroImageIn { from { opacity: 0; } to { opacity: 1; } }
 .hero-eyebrow, .hero h1, .hero .lead, .hero-actions, .hero-strip { animation: heroFadeUp .7s ease both; }
 .hero-eyebrow { animation-delay: .05s; }
 .hero h1 { animation-delay: .16s; }
@@ -247,10 +246,6 @@ p { margin: 0 0 1em; max-width: 68ch; }
 .hero-actions { animation-delay: .48s; }
 .hero-strip { animation-delay: .62s; }
 .hero-media { animation: heroImageIn .8s ease both; animation-delay: .3s; }
-/* Slow, subtle Ken-Burns drift on the hero photo only — off on small screens and under reduced motion. */
-@keyframes heroKenBurns { from { transform: scale(1); } to { transform: scale(1.07); } }
-.hero-photo { animation: heroKenBurns 20s ease-in-out infinite alternate; }
-@media (max-width: 640px) { .hero-photo { animation: none; } }
 
 /* ---------- Page hero (inner pages) ---------- */
 /* Belt-and-suspenders alongside html{scroll-padding-top} above: if a future in-page anchor
@@ -272,7 +267,7 @@ p { margin: 0 0 1em; max-width: 68ch; }
   position: relative; aspect-ratio: 4 / 3; border-radius: var(--radius-md); overflow: hidden;
   background:
     repeating-linear-gradient(90deg, rgba(255,255,255,.04) 0 40px, transparent 40px 80px),
-    linear-gradient(160deg, var(--grass), var(--pitch));
+    var(--grass);
 }
 .photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
 .photo .ph-label {
@@ -286,7 +281,7 @@ p { margin: 0 0 1em; max-width: 68ch; }
 .pathway li { counter-increment: step; padding: 1.5rem 1.5rem 0 0; border-top: 3px solid var(--gold); position: relative; }
 .pathway li::before {
   content: counter(step); display: block;
-  font-family: var(--font-display); font-weight: 900; font-size: 3.5rem; line-height: 1; color: var(--gold); margin-bottom: .5rem;
+  font-family: var(--font-display); font-weight: 800; font-size: 3.5rem; line-height: 1; color: var(--gold); margin-bottom: .5rem;
 }
 .pathway h3 { margin-bottom: .35em; }
 .pathway p { font-size: 1rem; }
@@ -354,7 +349,7 @@ p { margin: 0 0 1em; max-width: 68ch; }
 .league-table th { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--muted); }
 .league-table td.team, .league-table th.team { text-align: left; }
 .league-table td.team { font-weight: 600; }
-.league-table td.pts { font-family: var(--font-display); font-weight: 900; font-size: 1.35rem; }
+.league-table td.pts { font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; }
 .league-table tr.us td { background: rgba(232,178,30,.14); }
 .league-table td.pos { width: 2.5rem; color: var(--muted); }
 .on-dark .league-table th, .on-dark .league-table td { border-color: var(--ink-line); }
@@ -369,7 +364,7 @@ p { margin: 0 0 1em; max-width: 68ch; }
 .match .home { text-align: right; font-weight: 600; }
 .match .away { font-weight: 600; }
 .match .score, .match .vs {
-  font-family: var(--font-display); font-weight: 900; font-size: 1.5rem; min-width: 4.5rem; text-align: center;
+  font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; min-width: 4.5rem; text-align: center;
   background: var(--pitch); color: var(--ink); border-radius: var(--radius-sm); padding: .1rem .5rem;
 }
 .match .vs { background: transparent; color: var(--muted); font-size: 1.2rem; }
@@ -437,7 +432,7 @@ p { margin: 0 0 1em; max-width: 68ch; }
 .stock-status.in::before { background: var(--grass); }
 .stock-status.out { color: var(--muted); }
 .stock-status.out::before { background: var(--muted); }
-.product-body .price { font-family: var(--font-display); font-weight: 900; font-size: 1.5rem; margin-top: auto; }
+.product-body .price { font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; margin-top: auto; }
 .product-body select { margin-bottom: .25rem; }
 .product-body select:disabled { opacity: .55; cursor: not-allowed; }
 
@@ -463,7 +458,7 @@ p { margin: 0 0 1em; max-width: 68ch; }
 .qty span { min-width: 2rem; text-align: center; font-weight: 600; }
 .remove-link { background: none; border: 0; color: var(--danger); font-size: .9rem; padding: .5rem 0; margin-left: .75rem; text-decoration: underline; }
 .cart-foot { padding: 1.25rem 1.5rem 1.5rem; border-top: 1px solid var(--rule); }
-.cart-total { display: flex; justify-content: space-between; font-family: var(--font-display); font-weight: 900; font-size: 1.6rem; margin-bottom: 1rem; }
+.cart-total { display: flex; justify-content: space-between; font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; margin-bottom: 1rem; }
 .cart-empty { color: var(--muted); padding: 2rem 0; }
 /* Quiet secondary action — deliberately plainer than .btn so "Send order" reads as the
    one strong action in the drawer, per the "secondary actions should be visually quieter" rule. */
@@ -613,12 +608,12 @@ fieldset { border: 0; padding: 0; margin: 0; }
 /* ---------- Community / impact stats ---------- */
 .impact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin: 2rem 0; }
 .impact-stat { padding: 1.5rem 1.25rem; text-align: center; border: 1px solid var(--rule); border-radius: var(--radius-md); background: var(--paper); }
-.impact-stat strong { display: block; font-family: var(--font-display); font-weight: 900; font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1; color: var(--pitch-deep); }
+.impact-stat strong { display: block; font-family: var(--font-display); font-weight: 800; font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1; color: var(--pitch-deep); }
 .impact-stat span { color: var(--muted); font-size: .92rem; }
 .on-dark .impact-stat { background: transparent; border-color: var(--ink-line); }
 .on-dark .impact-stat strong { color: var(--pitch-deep); }
 .on-dark .impact-stat span { color: rgba(20,35,28,.75); }
-.impact-note { font-size: .88rem; color: var(--muted); font-style: italic; margin-top: -.75rem; }
+.impact-note { font-size: .88rem; color: var(--muted); margin-top: -12px; }
 @media (max-width: 760px) { .impact-grid { grid-template-columns: 1fr; } }
 
 /* ---------- Testimonial avatar placeholder ---------- */
@@ -628,7 +623,7 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .quote figcaption span { font-size: .9rem; font-weight: 400; }
 .quote blockquote { position: relative; }
 .quote blockquote::before {
-  content: "“"; display: block; font-family: var(--font-display); font-weight: 900;
+  content: "“"; display: block; font-family: var(--font-display); font-weight: 800;
   font-size: 4.5rem; line-height: 1; color: var(--pitch-deep); margin-bottom: -.5rem;
 }
 
@@ -642,10 +637,8 @@ fieldset { border: 0; padding: 0; margin: 0; }
 .footer-legal { display: flex; flex-wrap: wrap; gap: .4rem 1rem; order: 3; flex-basis: 100%; }
 @media (min-width: 700px) { .footer-legal { order: initial; flex-basis: auto; } }
 
-/* ---------- Card hover: subtle lift, no glow/gradient ---------- */
-.post-card, .product, .panel { transition: transform .15s ease, box-shadow .15s ease; }
-.post-card:hover, .post-card:focus-visible { transform: translateY(-3px); }
-.section:not(.on-dark) .panel:hover, .product:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(31,77,22,.12); }
+/* ---------- Card hover: border step only (see FINISH below) ---------- */
+.product, .panel { transition: border-color .15s ease; }
 
 /* ---------- League table: keep the team column readable while scrolling ---------- */
 @media (max-width: 640px) {
@@ -678,157 +671,76 @@ fieldset { border: 0; padding: 0; margin: 0; }
   .stagger > * { transform: translateY(10px); }
 }
 
-/* ---------- Card image hover: slight scale, clipped by the rounded photo frame ---------- */
-.post-card:hover img, .post-card:focus-visible img,
-.product:hover img,
-.gallery button:hover img, .gallery button:focus-visible img { transform: scale(1.06); }
-
-/* ---------- Button hover: gentle lift alongside the existing colour transition ---------- */
-.btn { transition: background-color .15s, color .15s, border-color .15s, transform .15s ease; }
-.btn:hover, .btn:focus-visible { transform: translateY(-1px); }
-
-/* ---------- Testimonial decorative arc: thin gold pitch-inspired curve, brand-only motion ---------- */
-.testimonial-section { position: relative; overflow: hidden; }
-.testimonial-section .wrap { position: relative; z-index: 1; }
-.testimonial-arc { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; opacity: .3; pointer-events: none; }
-.testimonial-arc path, .testimonial-arc circle { fill: none; stroke: var(--gold); stroke-width: 1.5; }
+/* ---------- Button press: tiny scale down ---------- */
+.btn { transition: background-color .15s, color .15s, border-color .15s, transform .1s ease; }
+.btn:active { transform: scale(.98); }
 
 /* =========================================================
-   RICH FINISH — client feedback (Oct 2026): "something shiny, not just light green,
-   like wallpaper/carpet with a design inside the colour". Same lemon-green palette as
-   before; this layer adds pattern and sheen on top of it:
-     - green surfaces get a woven diamond "carpet" motif, mowed-pitch stripes and a
-       stadium-light glow (text contrast is unchanged — overlays stay low-alpha);
-     - gold becomes a polished foil gradient (buttons, borders, CTA band, scores);
-     - the footer gets a gold-lattice wallpaper; the page background a faint one.
-   Everything visual lives here, so it can be tuned or removed in one place.
+   FINISH — client asked (Oct 2026) for "something with a design inside the colour",
+   not flat light green. Kept to two deliberate touches so the photos and the league
+   table stay the loudest things on the page:
+     - green surfaces carry mowed-pitch stripes (the one texture);
+     - page banners end on a chalk halfway line with a centre circle (the signature,
+       echoing the chalk pitch markings in the home hero).
+   Gold is a flat accent: the main action, scores and our own row in the league table.
    ========================================================= */
 :root {
-  --gold-foil: linear-gradient(115deg, #9C7307 0%, #E8B21E 16%, #FFE89C 30%, #E8B21E 44%, #B98A0A 60%, #F7D35A 78%, #9C7307 100%);
-  --pitch-rich: linear-gradient(165deg, #74CE4A 0%, #5FB93A 45%, #4A9A2B 100%);
-  --mow-stripes: repeating-linear-gradient(90deg, rgba(255,255,255,.085) 0 90px, rgba(20,60,10,.05) 90px 180px);
-  --stadium-light: radial-gradient(90% 75% at 12% -8%, rgba(255,255,255,.42), transparent 60%);
-  --gold-glow: radial-gradient(60% 65% at 100% 110%, rgba(255,214,90,.38), transparent 65%);
-  /* Woven diamond motif in deep green with cream "stitch" dots at each crossing. */
-  --tile-carpet: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%231F4D16' stroke-width='1.2'%3E%3Cpath d='M36 0 72 36 36 72 0 36Z' stroke-opacity='.2'/%3E%3Cpath d='M36 12 60 36 36 60 12 36Z' stroke-opacity='.11'/%3E%3C/g%3E%3Cpath d='M36 27c2 5 4 7 9 9-5 2-7 4-9 9-2-5-4-7-9-9 5-2 7-4 9-9Z' fill='%231F4D16' fill-opacity='.17'/%3E%3Cg fill='%23FFF6C8' fill-opacity='.55'%3E%3Ccircle cx='36' cy='0' r='2'/%3E%3Ccircle cx='0' cy='36' r='2'/%3E%3Ccircle cx='72' cy='36' r='2'/%3E%3Ccircle cx='36' cy='72' r='2'/%3E%3C/g%3E%3C/svg%3E");
-  /* Same motif in gold, for the dark footer and mobile menu. */
-  --tile-gold: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23E8B21E' stroke-width='1.1'%3E%3Cpath d='M36 0 72 36 36 72 0 36Z' stroke-opacity='.16'/%3E%3Cpath d='M36 12 60 36 36 60 12 36Z' stroke-opacity='.08'/%3E%3C/g%3E%3Cpath d='M36 27c2 5 4 7 9 9-5 2-7 4-9 9-2-5-4-7-9-9 5-2 7-4 9-9Z' fill='%23E8B21E' fill-opacity='.16'/%3E%3Cg fill='%23FFE89C' fill-opacity='.4'%3E%3Ccircle cx='36' cy='0' r='1.8'/%3E%3Ccircle cx='0' cy='36' r='1.8'/%3E%3Ccircle cx='72' cy='36' r='1.8'/%3E%3Ccircle cx='36' cy='72' r='1.8'/%3E%3C/g%3E%3C/svg%3E");
-  /* Faint wallpaper for the light page background — barely there, behind body text. */
-  --tile-wallpaper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cpath d='M48 0 96 48 48 96 0 48Z' fill='none' stroke='%233C7A28' stroke-opacity='.06' stroke-width='1'/%3E%3Cpath d='M48 40c1.6 4 3.2 5.6 8 8-4.8 2.4-6.4 4-8 8-1.6-4-3.2-5.6-8-8 4.8-2.4 6.4-4 8-8Z' fill='%233C7A28' fill-opacity='.05'/%3E%3Cg fill='%23E8B21E' fill-opacity='.22'%3E%3Ccircle cx='48' cy='0' r='1.5'/%3E%3Ccircle cx='0' cy='48' r='1.5'/%3E%3Ccircle cx='96' cy='48' r='1.5'/%3E%3Ccircle cx='48' cy='96' r='1.5'/%3E%3C/g%3E%3C/svg%3E");
-  /* Embossed lattice for the gold CTA band. */
-  --tile-foil: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke-width='1.2'%3E%3Cpath d='M36 0 72 36 36 72 0 36Z' stroke='%23FFFFFF' stroke-opacity='.28'/%3E%3Cpath d='M36 12 60 36 36 60 12 36Z' stroke='%237A5A00' stroke-opacity='.14'/%3E%3C/g%3E%3Cpath d='M36 27c2 5 4 7 9 9-5 2-7 4-9 9-2-5-4-7-9-9 5-2 7-4 9-9Z' fill='%237A5A00' fill-opacity='.13'/%3E%3C/svg%3E");
+  --mow-stripes: repeating-linear-gradient(90deg, rgba(255,255,255,.055) 0 96px, rgba(20,60,10,.03) 96px 192px);
+  --chalk-mark: rgba(255,255,255,.7);
 }
 
-body { background: var(--tile-wallpaper), var(--chalk); }
-
-/* ---- Green surfaces: carpet motif + mowed stripes + stadium light ---- */
+/* ---- Green surfaces: mowed stripes over flat pitch green ---- */
 .hero, .page-hero, .on-dark {
   position: relative; overflow: hidden;
-  background: var(--stadium-light), var(--gold-glow), var(--tile-carpet), var(--mow-stripes), var(--pitch-rich);
+  background: var(--mow-stripes), var(--pitch);
 }
-/* Slow light sweep across the big banners — the "shine". Behind content, no pointer events. */
-.hero::after, .page-hero::after {
-  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.26) 48%, rgba(255,246,200,.18) 52%, transparent 65%);
-  background-size: 300% 100%;
-  animation: sheenSweep 9s ease-in-out infinite;
-}
-@keyframes sheenSweep { 0% { background-position: 120% 0; } 55%, 100% { background-position: -120% 0; } }
 .hero-inner, .page-hero > .wrap, .on-dark > .wrap { position: relative; z-index: 1; }
-.hero h1, .page-hero h1 { text-shadow: 0 1px 0 rgba(255,255,255,.28), 0 6px 18px rgba(20,60,10,.18); }
-.page-hero, .site-footer { border-bottom: 0; }
+.testimonial-section { background: var(--mow-stripes), #56A836; }
+
+/* ---- Page banners: chalk halfway line + centre circle ---- */
+/* The line sits 24px above the edge so it reads against green, not the chalk page below;
+   the circle is centred on it and clipped by the banner's overflow. */
+.page-hero { border-bottom: 0; padding-bottom: clamp(4rem, 7vw, 5.5rem); }
+.page-hero::before, .page-hero::after { content: ""; position: absolute; pointer-events: none; }
+.page-hero::after { left: 0; right: 0; bottom: 24px; height: 2px; background: var(--chalk-mark); }
 .page-hero::before {
-  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 6px; z-index: 1;
-  background: var(--gold-foil); background-size: 200% 100%;
-  animation: foilDrift 6s linear infinite alternate;
-}
-@keyframes foilDrift { from { background-position: 0 0; } to { background-position: 100% 0; } }
-/* The testimonial band: same finish, a step deeper than --pitch, but never darker than the
-   flat --grass it replaced, so its dark text keeps at least its original contrast. */
-.testimonial-section {
-  background: var(--stadium-light), var(--tile-carpet), var(--mow-stripes), linear-gradient(165deg, #66B840, #52A034 55%, var(--grass));
+  left: 50%; bottom: -24px; width: 96px; height: 96px; transform: translateX(-50%);
+  border: 2px solid var(--chalk-mark); border-radius: 50%;
 }
 
-/* ---- Header: glossy bar with a thin gold-foil edge ---- */
-.site-header {
-  background: linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,0) 70%), var(--tile-carpet), var(--pitch);
-  border-bottom: 0;
-  box-shadow: 0 3px 0 -0px #E8B21E, 0 8px 22px rgba(20,60,10,.18);
+/* ---- Header: flat pitch with a hairline ---- */
+.site-header { background: var(--pitch); border-bottom: 1px solid var(--ink-line); }
+.header-actions .btn { white-space: nowrap; }
+@media (max-width: 900px) { .hero-media { margin-top: 32px; } }
+.header-actions .support-link {
+  color: var(--ink); font-weight: 500; text-decoration: none; padding: 8px 12px; border-radius: var(--radius-sm); white-space: nowrap;
 }
-.site-header::after {
-  content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 3px;
-  background: var(--gold-foil); background-size: 200% 100%; animation: foilDrift 6s linear infinite alternate;
-}
-@media (max-width: 1140px) {
-  .main-nav { background: radial-gradient(80% 50% at 50% 0%, rgba(232,178,30,.18), transparent 70%), var(--tile-gold), var(--pitch-deep); }
-}
+.header-actions .support-link:hover { color: var(--ink); background: rgba(0,0,0,.06); }
+@media (max-width: 1140px) { .header-actions .support-link { display: none; } }
 
-/* ---- Gold foil: buttons, badges, scores ---- */
-.btn-gold, .main-nav a.nav-cta {
-  position: relative; overflow: hidden;
-  background: var(--gold-foil); background-size: 220% 100%; background-position: 0 0;
-  color: var(--ink);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.6), inset 0 -2px 0 rgba(122,90,0,.25), 0 4px 14px rgba(196,147,11,.35);
-  transition: background-position .6s ease, transform .15s ease, box-shadow .15s ease;
-}
-.btn-gold:hover, .btn-gold:focus-visible { background: var(--gold-foil); background-size: 220% 100%; background-position: 100% 0; color: var(--ink); box-shadow: inset 0 1px 0 rgba(255,255,255,.6), inset 0 -2px 0 rgba(122,90,0,.25), 0 8px 20px rgba(196,147,11,.45); }
-/* Glint that sweeps across a gold button on hover. */
-.btn-gold::after {
-  content: ""; position: absolute; top: -50%; bottom: -50%; left: -60%; width: 40%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.75), transparent);
-  transform: skewX(-20deg); pointer-events: none; transition: left .6s ease;
-}
-.btn-gold:hover::after, .btn-gold:focus-visible::after { left: 130%; }
-.btn-green, .to-top {
-  background: linear-gradient(180deg, #7DD553, #4FA22F);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 4px 12px rgba(60,122,40,.3);
-}
-.btn-green:hover { background: linear-gradient(180deg, var(--grass), var(--pitch-deep)); }
-.cart-count, .on-dark .match .score, .match .score { background: var(--gold-foil); color: var(--ink); box-shadow: inset 0 1px 0 rgba(255,255,255,.5); }
+/* ---- Gold: flat accent ---- */
+.cart-count, .match .score, .on-dark .match .score { background: var(--gold); color: var(--ink); }
+.btn-green, .to-top { background: var(--pitch); color: var(--ink); }
+.btn-green:hover { background: var(--pitch-deep); color: var(--chalk); }
+/* On green sections the green button would vanish into its surface — use ink instead. */
+.on-dark .btn-green { background: var(--ink); color: var(--chalk); }
 
-/* Gold-foil accent rule under section headings. */
-.section-head h2::after {
-  content: ""; display: block; width: 72px; height: 4px; margin-top: .9rem; border-radius: 2px;
-  background: var(--gold-foil); background-size: 200% 100%;
-}
+/* ---- League table: our own row is the moment ---- */
+.league-table tr.us td { background: rgba(232,178,30,.22); }
+.on-dark .league-table tr.us td { background: rgba(255,222,120,.6); }
+.league-table tr.us td:first-child { box-shadow: inset 4px 0 0 var(--gold-deep); }
+.league-table td.pts { font-variant-numeric: tabular-nums; }
 
-/* ---- Cards: gold-foil frame (always on stats, on hover for cards) ---- */
-.impact-stat {
-  border: 1.5px solid transparent;
-  background: linear-gradient(var(--paper), var(--paper)) padding-box, var(--gold-foil) border-box;
-}
-.on-dark .impact-stat {
-  background: linear-gradient(rgba(255,255,255,.18), rgba(255,255,255,.06)) padding-box, var(--gold-foil) border-box;
-  backdrop-filter: blur(2px);
-}
-.section:not(.on-dark) .panel:hover, .product:hover {
-  border-color: transparent;
-  background: linear-gradient(var(--paper), var(--paper)) padding-box, var(--gold-foil) border-box;
-  box-shadow: 0 10px 26px rgba(196,147,11,.18);
-}
+/* ---- Cards and stats: hairlines, no frames ---- */
+.on-dark .impact-stat { background: rgba(255,255,255,.12); }
+.section:not(.on-dark) .panel:hover, .product:hover { border-color: rgba(20,35,28,.3); }
 
-/* ---- Gold CTA band: polished foil with embossed lattice and a moving sheen ---- */
-.cta-band {
-  position: relative; overflow: hidden;
-  background: var(--tile-foil), var(--gold-foil); background-size: 72px 72px, 200% 100%;
-  animation: foilDrift 10s linear infinite alternate;
-}
-.cta-band .btn-gold { background: var(--ink); color: var(--chalk); box-shadow: 0 6px 16px rgba(20,35,28,.3); }
-.cta-band .btn-gold:hover { background: var(--pitch-deep); color: var(--chalk); }
+/* ---- Footer ---- */
+.site-footer { background: var(--pitch-deep); }
+.site-footer h4 { color: var(--chalk); }
+.socials a:hover { border-color: var(--gold); color: var(--gold); }
 
-/* ---- Footer: deep green with gold-lattice wallpaper ---- */
-.site-footer {
-  position: relative;
-  background: radial-gradient(70% 60% at 85% 0%, rgba(232,178,30,.16), transparent 70%), var(--tile-gold), linear-gradient(180deg, #24591A, var(--pitch-deep) 40%, #163A10);
-}
-.site-footer::before {
-  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px;
-  background: var(--gold-foil); background-size: 200% 100%;
-}
-.site-footer h4 { background: var(--gold-foil); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.socials a:hover { border-color: #E8B21E; color: #E8B21E; box-shadow: 0 0 14px rgba(232,178,30,.35); }
-
-/* Sticky league column must match its section's new surface rather than flat colours. */
 @media (max-width: 640px) {
-  .on-dark .league-table td.team, .on-dark .league-table th.team { background: #5FB93A; }
+  .on-dark .league-table td.team, .on-dark .league-table th.team { background: var(--pitch); }
+  .on-dark .league-table tr.us td.team { background: #BFCF5F; } /* the .us tint flattened over --pitch */
 }

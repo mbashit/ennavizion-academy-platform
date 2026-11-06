@@ -100,7 +100,7 @@
                plans a fashion/merch line, so this icon (with its item-count badge, currently
                hidden at 0) is ready to be the entry point once that launches. -->
           <button class="cart-btn" type="button" data-open-cart aria-label="Open shopping cart">${ICON.cart}<span class="cart-count" data-count="0">0</span></button>
-          <a class="btn btn-line btn-sm support-link" href="donate.html">Support us</a>
+          <a class="support-link" href="donate.html">Support us</a>
           <a class="btn btn-gold btn-sm" href="enroll.html">Enrol a player</a>
           <button class="menu-toggle" type="button" aria-controls="main-nav" aria-expanded="false" aria-label="Open menu">${ICON.menu}</button>
         </div>
