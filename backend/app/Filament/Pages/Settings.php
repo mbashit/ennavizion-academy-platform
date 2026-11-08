@@ -29,7 +29,7 @@ class Settings extends Page implements HasForms
     {
         $keys = [
             'site_name', 'domain', 'tagline', 'email', 'phone', 'whatsapp',
-            'address', 'hours', 'currency', 'league_season',
+            'address', 'hours', 'currency',
             'social_instagram', 'social_x', 'social_youtube', 'social_facebook',
         ];
 
@@ -49,13 +49,12 @@ class Settings extends Page implements HasForms
                     TextInput::make('site_name')->label('Site name')->required(),
                     TextInput::make('domain'),
                     TextInput::make('tagline'),
-                    TextInput::make('league_season')->placeholder('2026/27 Season'),
                     TextInput::make('currency')->placeholder('₦')->maxLength(3),
                 ])->columns(2),
                 Section::make('Contact details')->schema([
                     TextInput::make('email')->email(),
-                    TextInput::make('phone'),
-                    TextInput::make('whatsapp')->helperText('Digits only, with country code — e.g. 2348000000000.'),
+                    TextInput::make('phone')->regex('/^[+0-9 ()\-]{7,30}$/')->helperText('Shown on the site exactly as typed. Leave blank to hide.'),
+                    TextInput::make('whatsapp')->regex('/^\d{10,15}$/')->helperText('Digits only, with country code, e.g. 2348012345678. Leave blank to hide WhatsApp on the site.'),
                     TextInput::make('address'),
                     TextInput::make('hours')->placeholder('Mon–Sat, 7:00 – 18:00'),
                 ])->columns(2),

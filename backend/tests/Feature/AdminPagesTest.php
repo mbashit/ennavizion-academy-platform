@@ -30,7 +30,7 @@ class AdminPagesTest extends TestCase
             '/admin', '/admin/submissions', "/admin/submissions/{$sub->id}/edit",
             '/admin/league-seasons', '/admin/league-seasons/create', "/admin/league-seasons/{$season->id}/edit",
             '/admin/league-matches', '/admin/league-matches/create', "/admin/league-matches/{$match->id}/edit",
-            '/admin/league-teams', '/admin/programs', '/admin/programs/create',
+            '/admin/league-teams', '/admin/programs', '/admin/programs/create', '/admin/settings',
         ];
 
         foreach ($urls as $url) {

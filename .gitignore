@@ -11,3 +11,7 @@ Desktop.ini
 
 # Upload packages built by deploy/build-namecheap.ps1
 dist/
+
+# Browser test dependencies and output
+e2e/node_modules/
+e2e/screenshots/

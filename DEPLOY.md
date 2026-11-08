@@ -68,10 +68,31 @@ see or can change the developer account. Forgotten password: use "Forgot passwor
 login page (emails a reset link), or in Terminal run
 `php artisan app:admin-password their@email.com`.
 
-`--seed` loads the same placeholder content the site shows today; run it **only on the
-first deploy**. After that, change content in the admin panel.
+`--seed` only adds the site name, email and the four programmes by age group (with no
+fees). Everything else — fees, training locations, league seasons, staff, photos, products —
+is added by the academy in the admin panel once it's real. Run it **only on the first deploy**.
+
+**Back up `APP_KEY`.** Copy the `APP_KEY=` line from `.env` somewhere safe (a password
+manager). Medical notes on applications are encrypted with it; if the key is lost or
+regenerated, those notes can't be read again.
+
+**Scheduled tasks.** cPanel → *Cron Jobs* → add, every minute:
+
+```
+cd ~/ennavizion-backend && php artisan schedule:run >> /dev/null 2>&1
+```
+
+This runs `app:prune-submissions` daily, which deletes old submissions only after the
+academy has set `SUBMISSION_RETENTION_DAYS` in `.env` (blank = keep everything).
 
 ## 5. Upload the website
+
+**Domain.** The site's sitemap, robots.txt, social preview image and structured data point
+at the current production address, `https://ennavizion.netlify.app`. When `ennavizion.com`
+becomes the main address, replace it in these four files before building:
+`ennavizion/sitemap.xml`, `ennavizion/robots.txt`, and the `og:image` / JSON-LD lines in the
+`<head>` of every `ennavizion/*.html` page (one find-and-replace across the folder).
+
 
 *File Manager* → `public_html` → delete Namecheap's default files (e.g. `default.html`) →
 **Upload** `ennavizion-site.zip` → **Extract** → delete the zip. Check that the hidden
@@ -85,8 +106,15 @@ first deploy**. After that, change content in the admin panel.
   new fee shows.
 - Send the contact form: it appears under **Submissions** in the admin, and an email
   arrives at `info@ennavizion.com`.
-- Donations: add Paystack **test** keys to `.env`, run `php artisan config:cache`, and make a
-  test donation. Switch to **live** keys only when the client is ready to take payments.
+- Donations stay hidden on the site until a Paystack key is set. To test: add Paystack
+  **test** keys (`sk_test_…`) to `.env`, run `php artisan config:cache`, and in the Paystack
+  dashboard (Settings → API Keys & Webhooks) set the webhook URL to
+  `https://api.ennavizion.com/api/donations/webhook`. Make a test donation with a Paystack
+  test card; it shows as **Paid** under Submissions. Switch to **live** keys only when the
+  academy authorises taking real payments.
+- Apply for a trial with test details: you get a reference like `ENR-2026-7KQ4XM`, the
+  application appears under **Submissions**, and the notification email contains only the
+  reference.
 
 If anything shows "Server Error", the details are in
 `~/ennavizion-backend/storage/logs/` (newest file).
