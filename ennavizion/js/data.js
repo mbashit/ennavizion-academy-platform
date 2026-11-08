@@ -24,7 +24,7 @@ const SITE = {
   phone: "+7 906 590-93-21",
   whatsapp: "",          // digits only, with country code, e.g. "2348012345678"
   address: "Training ground, Jos, Nigeria",
-  hours: "[Office hours, e.g. Mon–Fri 9:00–17:00]",
+  hours: "Mon–Fri, 9am – 5pm",
   // Business plan 2027, section 4.
   registrationFee: 10000,  // one-time, newly admitted players
   goalkeeperAddOn: 15000,  // per month, for players enrolled in another programme
@@ -148,24 +148,28 @@ const TESTIMONIALS = [
 // illustrative stock photos (Unsplash) until the academy's own are added; the gallery page
 // says so. Photos of the academy's players need parental consent for publication.
 const GALLERY = [
-  { src: "https://images.unsplash.com/photo-1786088987909-8fca31316c64?auto=format&fit=crop&w=800&h=800&q=75", category: "training", caption: "Rondo drill" },
-  { src: "https://images.unsplash.com/photo-1598880513655-d1c6d4b2dfbf?auto=format&fit=crop&w=800&h=800&q=75", category: "matches", caption: "Match day" },
-  { src: "https://images.unsplash.com/photo-1518905332052-b6cfda20ee45?auto=format&fit=crop&w=800&h=800&q=75", category: "training", caption: "Goalkeeper handling" },
-  { src: "https://images.unsplash.com/photo-1680024436315-fb06267264b2?auto=format&fit=crop&w=800&h=800&q=75", category: "events", caption: "Trial day" },
-  { src: "https://images.unsplash.com/photo-1787535849781-9d35cfde0445?auto=format&fit=crop&w=800&h=800&q=75", category: "matches", caption: "Celebrating a goal" },
-  { src: "https://images.unsplash.com/photo-1771577125789-93dc33e63f31?auto=format&fit=crop&w=800&h=800&q=75", category: "events", caption: "Team talk" },
-  { src: "https://images.unsplash.com/photo-1502904550040-7534597429ae?auto=format&fit=crop&w=800&h=800&q=75", category: "training", caption: "Strength and conditioning" },
-  { src: "https://images.unsplash.com/photo-1715277331664-a546eb85a8e8?auto=format&fit=crop&w=800&h=800&q=75", category: "matches", caption: "Penalty practice" },
-  { src: "https://images.unsplash.com/photo-1664325426906-ba7596dd1258?auto=format&fit=crop&w=800&h=800&q=75", category: "events", caption: "Watching from the touchline" }
+  { src: "assets/images/photos/photo-1786088987909-8fca31316c64-800x800.webp", category: "training", caption: "Rondo drill" },
+  { src: "assets/images/photos/photo-1598880513655-d1c6d4b2dfbf-800x800.webp", category: "matches", caption: "Match day" },
+  { src: "assets/images/photos/photo-1518905332052-b6cfda20ee45-800x800.webp", category: "training", caption: "Goalkeeper handling" },
+  { src: "assets/images/photos/photo-1680024436315-fb06267264b2-800x800.webp", category: "events", caption: "Trial day" },
+  { src: "assets/images/photos/photo-1787535849781-9d35cfde0445-800x800.webp", category: "matches", caption: "Celebrating a goal" },
+  { src: "assets/images/photos/photo-1771577125789-93dc33e63f31-800x800.webp", category: "events", caption: "Team talk" },
+  { src: "assets/images/photos/photo-1502904550040-7534597429ae-800x800.webp", category: "training", caption: "Strength and conditioning" },
+  { src: "assets/images/photos/photo-1715277331664-a546eb85a8e8-800x800.webp", category: "matches", caption: "Penalty practice" },
+  { src: "assets/images/photos/photo-1664325426906-ba7596dd1258-800x800.webp", category: "events", caption: "Watching from the touchline" }
 ];
 
-// Shop products — { id, sku, name, price, tag, stock, colors?, image }. Placeholder items are
-// listed but can't be ordered ("stock: false") until real names and prices are filled in.
+// Shop products — { id, sku, name, price, tag, stock, colors?, image }. Orders are sent to the
+// academy as a request (WhatsApp if set, otherwise email); nothing is paid on the site.
 const PRODUCTS = [
-  { id: "item-1", sku: "[SKU]", name: "[Home kit]", price: 0, tag: "Kit", stock: false, image: "https://images.unsplash.com/photo-1602674809970-89073c530b0a?auto=format&fit=crop&w=700&h=700&q=75" },
-  { id: "item-2", sku: "[SKU]", name: "[Training top]", price: 0, tag: "Training", stock: false, image: "https://images.unsplash.com/photo-1774414489671-9f33b8dff0a9?auto=format&fit=crop&w=700&h=700&q=75" },
-  { id: "item-3", sku: "[SKU]", name: "[Training shorts]", price: 0, tag: "Training", stock: false, image: "https://images.unsplash.com/photo-1789110519888-758d7ab3908e?auto=format&fit=crop&w=700&h=700&q=75" },
-  { id: "item-4", sku: "[SKU]", name: "[Academy cap]", price: 0, tag: "Merch", stock: false, image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=700&h=700&q=75" }
+  { id: "home-kit",  sku: "ENV-KIT-HOME-26", name: "Home kit 2026",        price: 18000, tag: "Kit",       stock: true, colors: ["Green/Gold"], image: "assets/images/photos/photo-1602674809970-89073c530b0a-700x700.webp" },
+  { id: "away-kit",  sku: "ENV-KIT-AWAY-26", name: "Away kit 2026",        price: 18000, tag: "Kit",       stock: true, colors: ["Off-white"], image: "assets/images/photos/photo-1689624291789-7b402a15915a-700x700.webp" },
+  { id: "training",  sku: "ENV-TRN-TOP-26",  name: "Training top",         price: 12000, tag: "Training",  stock: true, image: "assets/images/photos/photo-1774414489671-9f33b8dff0a9-700x700.webp" },
+  { id: "shorts",    sku: "ENV-TRN-SHT-26",  name: "Training shorts",      price: 7500,  tag: "Training",  stock: true, image: "assets/images/photos/photo-1789110519888-758d7ab3908e-700x700.webp" },
+  { id: "ball",      sku: "ENV-EQP-BALL-5",  name: "Match ball, size 5",   price: 15000, tag: "Equipment", stock: true, image: "assets/images/photos/photo-1653273056548-9af3f97dfdca-700x700.webp" },
+  { id: "bottle",    sku: "ENV-EQP-BTL",     name: "Water bottle",         price: 4000,  tag: "Equipment", stock: true, image: "assets/images/photos/photo-1554415955-3e13eb195c5f-700x700.webp" },
+  { id: "cap",       sku: "ENV-MER-CAP",     name: "Academy cap",          price: 6000,  tag: "Merch",     stock: true, image: "assets/images/photos/photo-1588850561407-ed78c282e89b-700x700.webp" },
+  { id: "bag",       sku: "ENV-MER-BAG",     name: "Kit bag",              price: 14000, tag: "Merch",     stock: false, image: "assets/images/photos/photo-1708622833152-924c6e364138-700x700.webp" }
 ];
 
 // News posts — { id, title, date, category, minutes, image, imageAlt, excerpt, body: [] }.

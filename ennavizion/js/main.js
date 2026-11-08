@@ -571,8 +571,8 @@
     if (real.length) { grid.innerHTML = real.map((m) => teamCard(m, false)).join(""); return; }
     {
       try {
-        await loadScript("js/demo-team.js");
-        grid.insertAdjacentHTML("beforebegin", '<div class="notice notice-test team-demo-note" role="note"><h3>Sample profiles</h3><p>These names and illustrations are examples while the academy finalises its team. They are not Ennavizion staff; real profiles will replace them once appointments are confirmed.</p></div>');
+        await loadScript("js/demo-team.js?v=20261109d");
+        grid.insertAdjacentHTML("beforebegin", '<div class="notice notice-test team-demo-note" role="note"><h3>Sample profiles</h3><p>These names and stock photos are examples while the academy finalises its team. They are not Ennavizion staff and the people pictured are not connected with the academy; real profiles will replace them once appointments are confirmed.</p></div>');
         grid.innerHTML = DEMO_STAFF.map((m) => teamCard(m, true)).join("");
         return;
       } catch { /* fall through to the announcement */ }

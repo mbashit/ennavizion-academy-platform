@@ -47,14 +47,15 @@ const isoYearsAgo = (y, extraDays = 10) => { const d = new Date(); d.setFullYear
       await page.getByRole("tab", { name: "Results" }).click();
       await page.getByText("Match results will appear here when available.").waitFor();
     });
-    await test("static: shop listed with placeholder items that can't be ordered; no WhatsApp without a number", async () => {
-      await page.goto(`${base}/index.html`, { waitUntil: "networkidle" });
-      assert.equal(await page.locator('#nav-list a[href="shop.html"]').count(), 1);
-      assert.equal(await page.locator(".wa-float").count(), 0);
-      assert.ok(!(await page.locator(".cart-btn").isVisible()), "no cart while nothing is orderable");
+    await test("static: shop shows the kit with pictures; orders go by email without WhatsApp", async () => {
       await page.goto(`${base}/shop.html`, { waitUntil: "networkidle" });
-      assert.ok(await page.locator(".product").count() > 0);
-      assert.equal(await page.locator("[data-add]:not([disabled])").count(), 0);
+      assert.equal(await page.locator(".product").count(), 8);
+      await page.locator("#product-grid img").last().scrollIntoViewIfNeeded(); await page.waitForTimeout(500);
+      assert.ok(await page.locator("#product-grid img").evaluateAll((els) => els.every((e) => e.complete && e.naturalWidth > 0)), "all product pictures load");
+      assert.equal(await page.locator(".wa-float").count(), 0);
+      await page.locator("[data-add]:not([disabled])").nth(4).click(); // match ball (no size)
+      await page.locator(".cart-btn").click();
+      await page.getByRole("button", { name: "Send order by email" }).waitFor();
     });
     await test("static: placeholders are text, never links or choices", async () => {
       await page.goto(`${base}/contact.html`, { waitUntil: "networkidle" });
