@@ -1,10 +1,10 @@
-// Smoke test: every page, three widths. Reports console errors, failed requests,
+// Smoke test: every page at six widths. Reports console errors, failed requests,
 // horizontal overflow, and saves screenshots. Usage: node smoke.js <baseUrl> <outDir> [shotPages]
 const { chromium } = require("playwright");
 const fs = require("fs");
 const [base, out, shotList = "index,about,programs,league,enroll,donate,contact"] = process.argv.slice(2);
 const PAGES = ["index", "about", "programs", "league", "community", "donate", "enroll", "contact", "shop", "gallery", "blog", "post", "privacy", "safeguarding", "terms", "404"];
-const WIDTHS = [320, 390, 1440];
+const WIDTHS = [320, 375, 390, 768, 1024, 1440];
 fs.mkdirSync(out, { recursive: true });
 
 (async () => {
@@ -19,7 +19,10 @@ fs.mkdirSync(out, { recursive: true });
       page.on("pageerror", (e) => errs.push("pageerror: " + e.message));
       page.on("requestfailed", (r) => { if (!r.url().includes("unsplash")) errs.push("failed: " + r.url() + " " + r.failure()?.errorText); });
       page.on("response", (r) => { if (r.status() >= 400 && !r.url().endsWith("favicon.ico")) errs.push(`http ${r.status()}: ${r.url()}`); });
-      await page.goto(`${base}/${p}.html`, { waitUntil: "networkidle" });
+      // Wait for the footer (rendered last, after content) rather than network idle: an
+      // embedded map keeps requests open indefinitely.
+      await page.goto(`${base}/${p}.html`, { waitUntil: "load" });
+      await page.waitForSelector(".site-footer", { timeout: 15000 });
       await page.waitForTimeout(300);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
       if (overflow > 0) errs.push(`horizontal overflow ${overflow}px`);

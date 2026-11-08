@@ -15,7 +15,7 @@ python -m http.server 5500 --bind 0.0.0.0 --directory ../ennavizion
 # For the backend tests, in another terminal:
 cd ../backend && php artisan migrate && php artisan db:seed && php artisan serve
 
-npm run smoke        # every page at 320/390/1440px: console errors, overflow, stray "undefined"/placeholder text
+npm run smoke        # every page at 320/375/390/768/1024/1440px: console errors, overflow, stray "undefined"/placeholder text
 npm run e2e:static   # forms switched off honestly, empty states, no shop/WhatsApp without data
 npm run e2e:backend  # trial application end to end (age checks, reference, double-click, error state, draft),
                      # contact form, donations closed, league from the API, mobile menu keyboard behaviour

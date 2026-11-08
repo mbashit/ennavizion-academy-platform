@@ -1057,3 +1057,16 @@ body.menu-open { overflow: hidden; }
    is there from the first paint. */
 .site-header { min-height: var(--header-h); }
 @media (min-width: 901px) { .hero-strip { min-height: 96px; } }
+
+/* ---- League table: team names are row headers (<th scope="row">) for screen readers;
+   style them like the other cells, and keep column abbreviations free of underlines. ---- */
+.league-table tbody th.team { font-family: var(--font-body); font-size: 1rem; font-weight: 600; color: var(--ink); text-align: left; border-bottom: 1px solid var(--rule); padding: .75rem .45rem; }
+.on-dark .league-table tbody th.team { color: var(--ink); border-color: var(--ink-line); }
+.league-table tr.us th { background: rgba(232,178,30,.14); }
+.on-dark .league-table tr.us th { background: rgba(255,222,120,.5); }
+.league-table tbody tr:not(.us):hover th { background: rgba(60,122,40,.07); }
+.league-table abbr { text-decoration: none; }
+@media (max-width: 640px) {
+  .league-table tbody th.team { position: sticky; left: 0; background: var(--chalk); }
+  .league-table tr.us th.team { background: #F2ECD4; } /* the .us tint flattened over --chalk */
+}
