@@ -978,13 +978,19 @@
   // straight away (CSS reserves its height, so nothing shifts), then fill in content.
   renderHeader();
   initChrome();
+  // The rest runs in separate short tasks, yielding to the browser in between, so no single
+  // task blocks input for long on a slow phone.
+  const yieldToBrowser = () => new Promise((r) => setTimeout(r, 0));
   (async () => {
     await contentReady;
-    renderContentChrome();
+    await yieldToBrowser();
+    const page = document.body.dataset.page;
+    if (pages[page]) pages[page]();      // the page's own content first
+    await yieldToBrowser();
+    renderContentChrome();               // footer, cart drawer, WhatsApp button
     initCart();
     initForms();
-    const page = document.body.dataset.page;
-    if (pages[page]) pages[page]();
+    await yieldToBrowser();
     initReveal();
   })();
 })();

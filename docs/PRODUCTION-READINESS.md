@@ -7,7 +7,7 @@ Branch `production-readiness`, 8 November 2026. Starting point and confirmed pro
 
 ## Architecture (unchanged in shape)
 
-- **Public site** — static HTML, one stylesheet, two scripts, no build step
+- **Public site** — static HTML, one stylesheet, two scripts, self-hosted fonts, no build step
   (`ennavizion/`). Kept deliberately: it's fast, cheap to host, and the academy's content
   needs don't justify a framework.
 - **Backend** — Laravel 11 + Filament 3 admin (`backend/`). It's needed because enrolment
@@ -95,24 +95,26 @@ All results below are from runs on 8 November 2026 on Windows 11, Chromium 141 (
 | Content-Security-Policy (`e2e/csp.js`) | **0 violations** | Every page served with the production CSP from `_headers`. |
 | Lighthouse 12.8.2 | see below | Mobile preset with simulated throttling, against a local Python server with **no compression, HTTP/2 or CDN** (Netlify provides all three), static mode. |
 
-Lighthouse (performance / accessibility / best practices / SEO, LCP, CLS):
+Lighthouse (performance / accessibility / best practices / SEO, mobile, simulated throttling):
 
-| Page | Perf | A11y | BP | SEO | LCP | CLS |
-|---|---|---|---|---|---|---|
-| Home | 86 | 100 | 79 | 100 | 3.5 s | 0.024 |
-| About | 90 | 100 | 79 | 100 | 3.0 s | 0 |
-| Programmes | 90 | 100* | 79 | 100 | 2.9 s | 0 |
-| League | 90 | 100 | 79 | 100 | 2.9 s | 0.005 |
-| Community | 93 | 100 | 79 | 100 | 2.7 s | 0 |
-| Apply | 91 | 100 | 79 | 100 | 2.8 s | 0.008 |
-| Contact | 91 | 100* | 79 | 100 | 2.8 s | 0.004 |
-| Donate | 91 | 100 | 79 | 100 | 2.8 s | 0.018 |
+| Page | Perf | A11y | BP | SEO | FCP | LCP | CLS | TBT |
+|---|---|---|---|---|---|---|---|---|
+| Home | 89 | 100 | 79 | 100 | 2.0 s | 3.3 s | 0 | 0 ms |
+| About | 94 | 100 | 79 | 100 | 1.7 s | 2.4 s | 0 | 180 ms |
+| Programmes | 96 | 100 | 79 | 100 | 2.0 s | 2.4 s | 0 | 0 ms |
+| League | 96 | 100 | 79 | 100 | 2.0 s | 2.3 s | 0 | 100 ms |
+| Community | 97 | 100 | 79 | 100 | 1.7 s | 2.4 s | 0 | 50 ms |
+| Apply | 97 | 100 | 79 | 100 | 1.7 s | 2.3 s | 0 | 90 ms |
+| Contact | 96 | 100 | 79 | 100 | 1.7 s | 2.3 s | 0 | 120 ms |
+| Donate | 96 | 100 | 79 | 100 | 1.7 s | 2.3 s | 0 | 130 ms |
 
-\* These two scored 98 for heading order in the run; the cause (an `<h3>` notice heading
-straight after the page `<h1>`) was fixed afterwards and confirmed by checking the heading
-outline in the browser, but Lighthouse was not re-run on them. Best practices is 79 only
-because the local server isn't HTTPS. Total blocking time was 0 ms on every page; INP was
-not measured (it needs real user interaction data).
+Before this work the same setup gave the League page CLS 0.41 and the home page LCP 3.5 s.
+What changed: fonts self-hosted (the Google Fonts stylesheet was render-blocking and held
+back the scripts), an empty header shipped in the HTML so its space is reserved, default
+text for data-driven areas, a metric-matched fallback font, script work split into short
+tasks, and a responsive, preloaded hero image. Best practices is 79 only because the local
+server isn't HTTPS. INP was not measured (it needs real user interaction data); TBT is the
+lab proxy.
 
 **Not tested:** a real Paystack test-mode transaction (needs the academy's Paystack account);
 email delivery through a real mailbox; the Namecheap deployment itself; real phones (layouts
@@ -185,9 +187,9 @@ Fees, training locations, programme structure confirmation, staff profiles, safe
 policy and lead, privacy policy and retention, enrolment terms, photo consent, live payments.
 
 **Remaining issues**
-- LCP on mobile is 2.7–3.5 s in throttled lab tests. The hero image is the largest element
-  on the home page; real academy photos served in WebP at the right size, and self-hosting
-  the two fonts, are the next steps.
+- Home page LCP is 3.3 s in the throttled lab test (other pages 2.3–2.4 s). The LCP element
+  is the hero photo, served from Unsplash. Replacing it with the academy's own photo, saved
+  as WebP at 480/720/1000 px in `assets/images/`, removes the third-party connection.
 - CSS and JS aren't minified (no build step by design). With compression on Netlify the
   saving would be small.
 - The site renders content with JavaScript; without JS, pages show their static text but
