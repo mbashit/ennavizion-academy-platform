@@ -9,21 +9,28 @@
   <meta property="og:title" content="Community | Ennavizion">
   <meta property="og:description" content="Ennavizion's community and social impact work: scholarships, equipment support and coaching access for players from disadvantaged backgrounds.">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ennavizion">
+  <meta property="og:image" content="https://ennavizion.netlify.app/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/big-shoulders-display-latin-9.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/barlow-latin-1.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/data.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
 </head>
 <body data-page="community">
+<header class="site-header"></header>
 <main id="main">
 
   <section class="page-hero on-dark">
     <div class="wrap">
       <div class="crumbs"><a href="index.html">Home</a> / Community</div>
       <h1>Community &amp; social impact</h1>
-      <p>Ennavizion is more than a football academy. We work to open the door for talented players who couldn't otherwise afford coaching, kit or a route into competitive football.</p>
+      <p>Ennavizion's community work aims to open the door for talented players who couldn't otherwise afford coaching, kit or a route into competitive football.</p>
     </div>
   </section>
 
@@ -31,12 +38,12 @@
     <div class="wrap split">
       <div>
         <h2>Football shouldn't depend on what you can afford</h2>
-        <p class="lead">Talent is everywhere. Good coaching, decent boots and a competitive league often aren't. Our community program exists to close that gap.</p>
-        <p>Through scholarships, equipment support and outreach sessions, we aim to give promising players from disadvantaged backgrounds the same start as anyone else at the academy.</p>
+        <p class="lead">Talent is everywhere. Good coaching, decent boots and a competitive league often aren't. Our community work exists to close that gap.</p>
+        <p>Through scholarships, equipment support and outreach, the aim is to give promising players from disadvantaged backgrounds the same start as anyone else at the academy.</p>
         <a class="btn btn-line" href="donate.html">Support a player</a>
       </div>
-      <!-- Sourced from Unsplash as a stand-in for a real community outreach photo. -->
-      <div class="photo"><img src="https://images.unsplash.com/photo-1632215861513-130b66fe97f4?auto=format&fit=crop&w=1000&q=80" alt="A mentor guiding students through a lesson at a community school" loading="lazy" onerror="this.remove()"><span class="ph-label">Community outreach session</span></div>
+      <!-- Illustrative photo (Unsplash) — replace with the academy's own outreach work. -->
+      <div class="photo"><img src="https://images.unsplash.com/photo-1632215861513-130b66fe97f4?auto=format&fit=crop&w=900&q=75" alt="A mentor guiding young students through a lesson" width="900" height="675" loading="lazy" decoding="async"></div>
     </div>
   </section>
 
@@ -44,23 +51,29 @@
     <div class="wrap">
       <div class="section-head">
         <h2>Where support goes</h2>
-        <p>See <a href="donate.html">how to support a player</a> directly.</p>
+        <p>See <a href="donate.html">how to support a player</a>.</p>
       </div>
       <div class="values">
-        <div><h3>Scholarships</h3><p>Fee support for talented players whose families can't cover program costs.</p></div>
+        <div><h3>Scholarships</h3><p>Fee support for talented players whose families can't cover programme costs.</p></div>
         <div><h3>Equipment &amp; kit</h3><p>Boots, training wear and match kit for players who'd otherwise go without.</p></div>
-        <div><h3>Community outreach</h3><p>Free taster sessions and coaching access in underserved neighbourhoods.</p></div>
+        <div><h3>Community outreach</h3><p>Taster sessions and coaching access in underserved neighbourhoods.</p></div>
       </div>
     </div>
   </section>
 
+  <!-- Targets from the 2027 business plan — always labelled as goals, never as results. -->
+  <section class="section on-paper">
+    <div class="wrap">
+      <div class="section-head"><h2>Our 2027 goals</h2><p>Targets for the academy's first operating year.</p></div>
+      <div id="community-goals"></div>
+    </div>
+  </section>
+
+  <!-- Shown only when the academy publishes confirmed figures. -->
   <section class="section">
     <div class="wrap">
       <div class="section-head"><h2>Our impact so far</h2></div>
-      <!-- Placeholder stats — see IMPACT in js/data.js. Rendered as "XX+"/"₦X.XM" on purpose;
-           replace with confirmed figures before launch. -->
       <div class="impact-grid" id="community-impact"></div>
-      <p class="impact-note">Figures above are placeholders pending confirmed, client-approved data — do not treat as factual.</p>
     </div>
   </section>
 

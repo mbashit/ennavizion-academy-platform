@@ -4,64 +4,66 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Contact | Ennavizion</title>
-  <meta name="description" content="Contact Ennavizion football academy: enrolment questions, partnerships, scouting and visits.">
+  <meta name="description" content="Contact Ennavizion football academy about programmes, applications, the league, partnerships and scouting.">
   <meta name="theme-color" content="#5FB93A">
   <meta property="og:title" content="Contact | Ennavizion">
-  <meta property="og:description" content="Contact Ennavizion football academy: enrolment questions, partnerships, scouting and visits.">
+  <meta property="og:description" content="Contact Ennavizion football academy about programmes, applications, the league, partnerships and scouting.">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ennavizion">
+  <meta property="og:image" content="https://ennavizion.netlify.app/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/big-shoulders-display-latin-9.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/barlow-latin-1.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/data.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
 </head>
 <body data-page="contact">
+<header class="site-header"></header>
 <main id="main">
 
   <section class="page-hero on-dark">
     <div class="wrap">
       <div class="crumbs"><a href="index.html">Home</a> / Contact</div>
       <h1>Contact us</h1>
-      <p>Questions about programs, partnerships, scouting or a visit. We reply within one working day.</p>
+      <p>Questions about programmes, applications, the league, partnerships or scouting. Send a message and we'll reply by email.</p>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap split" style="align-items:start">
       <div>
-        <ul class="contact-list">
-          <li><span>Email</span><a data-href="email" data-site="email"></a></li>
-          <li><span>Phone</span><a data-href="phone" data-site="phone"></a></li>
-          <li><span>WhatsApp</span><a data-href="wa" target="_blank" rel="noopener">Chat with us</a></li>
-          <li><span>Main centre</span><strong data-site="address"></strong></li>
-          <li><span>Office hours</span><strong data-site="hours"></strong></li>
-        </ul>
-        <iframe class="map" title="Map of the main training centre" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q=Surulere%2C%20Lagos&output=embed"></iframe>
+        <ul class="contact-list" id="contact-list"></ul>
       </div>
       <form class="form panel" data-form="contact" novalidate>
-        <h2 style="font-size:2.25rem">Send a message</h2>
+        <h2 class="form-title">Send a message</h2>
         <div class="form-row">
-          <div class="field"><label for="c-name">Your name</label><input id="c-name" name="name" type="text" required autocomplete="name"><p class="error-msg">Enter your name.</p></div>
-          <div class="field"><label for="c-email">Email</label><input id="c-email" name="email" type="email" required autocomplete="email"><p class="error-msg">Enter an email address like name@example.com.</p></div>
+          <div class="field"><label for="c-name">Your name</label><input id="c-name" name="name" type="text" required autocomplete="name" maxlength="255"><p class="error-msg">Enter your name.</p></div>
+          <div class="field"><label for="c-email">Email</label><input id="c-email" name="email" type="email" required autocomplete="email" maxlength="255"><p class="error-msg">Enter an email address like name@example.com.</p></div>
         </div>
         <div class="form-row">
-          <div class="field"><label for="c-phone">Phone <span class="hint">Optional</span></label><input id="c-phone" name="phone" type="tel" autocomplete="tel"></div>
+          <div class="field"><label for="c-phone">Phone <span class="hint">Optional</span></label><input id="c-phone" name="phone" type="tel" autocomplete="tel" maxlength="50"></div>
           <div class="field"><label for="c-topic">What's it about?</label>
             <select id="c-topic" name="topic" required>
               <option value="">Choose a topic</option>
-              <option value="enrolment">Enrolment and programs</option>
-              <option value="visit">Visiting a centre</option>
+              <option value="enrolment">Programmes, fees and applications</option>
+              <option value="visit">Visiting the academy</option>
               <option value="league">Entering the league</option>
               <option value="scout">Scouting request</option>
               <option value="community">Community and donations</option>
+              <option value="sponsor">Becoming a sponsor</option>
               <option value="partner">Partnership or sponsorship</option>
               <option value="services">Camps and private coaching</option>
+              <option value="safeguarding">Safeguarding concern</option>
               <option value="other">Something else</option>
             </select><p class="error-msg">Choose a topic so the right person replies.</p></div>
         </div>
-        <div class="field"><label for="c-message">Message</label><textarea id="c-message" name="message" required minlength="10"></textarea><p class="error-msg">Write at least 10 characters.</p></div>
+        <div class="field"><label for="c-message">Message</label><textarea id="c-message" name="message" required minlength="10" maxlength="5000"></textarea><p class="error-msg">Write at least 10 characters.</p></div>
+        <p class="muted small">Please don't include a child's medical details in this form. See our <a href="privacy.html">privacy notice</a>.</p>
         <button class="btn btn-green" type="submit">Send message</button>
         <div class="form-status" role="status" aria-live="polite"></div>
       </form>

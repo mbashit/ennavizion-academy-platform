@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <title>Forms | Ennavizion</title>
+</head>
+<body>
+<!-- Netlify reads these at deploy time to set up Netlify Forms. The real forms on the site
+     submit to these names with JavaScript (see submitForm in js/main.js). Only fields listed
+     here are stored, so add a field here whenever one is added to a form. Not linked. -->
+<form name="enrolment" data-netlify="true" netlify-honeypot="website" hidden>
+  <input name="reference"><input name="player_first"><input name="player_last"><input name="dob">
+  <input name="position"><input name="current_club"><input name="program"><input name="centre">
+  <input name="guardian_name"><input name="guardian_phone"><input name="guardian_email"><input name="consent">
+  <input name="website">
+</form>
+<form name="contact" data-netlify="true" netlify-honeypot="website" hidden>
+  <input name="reference"><input name="name"><input name="email"><input name="phone"><input name="topic">
+  <textarea name="message"></textarea><input name="website">
+</form>
+<form name="newsletter" data-netlify="true" netlify-honeypot="website" hidden>
+  <input name="email"><input name="website">
+</form>
+</body>
+</html>

@@ -42,3 +42,32 @@ Artisan::command('app:make-developer', function () {
         ? "Developer account created for {$email}."
         : "{$email} is now a developer account (password unchanged).");
 })->purpose('Create a developer account hidden from the client\'s admin users');
+
+// Deletes old form submissions once the academy has decided how long to keep them
+// (SUBMISSION_RETENTION_DAYS in .env). Unset = keep everything; nothing is deleted.
+// Paid donations are kept regardless — they're financial records.
+Artisan::command('app:prune-submissions {--dry-run : Only count what would be deleted}', function () {
+    $days = config('privacy.retention_days');
+    if (! $days) {
+        $this->warn('SUBMISSION_RETENTION_DAYS is not set, so nothing was deleted.');
+
+        return 0;
+    }
+
+    $query = \App\Models\Submission::where('created_at', '<', now()->subDays((int) $days))
+        ->where(fn ($q) => $q->where('type', '!=', 'donation')->orWhere('status', '!=', 'paid'));
+    $count = $query->count();
+
+    if ($this->option('dry-run')) {
+        $this->info("{$count} submission(s) older than {$days} days would be deleted.");
+
+        return 0;
+    }
+
+    $query->delete();
+    \Illuminate\Support\Facades\Log::info('Pruned old submissions', ['count' => $count, 'days' => $days]);
+    $this->info("Deleted {$count} submission(s) older than {$days} days.");
+})->purpose('Delete form submissions older than the configured retention period');
+
+\Illuminate\Support\Facades\Schedule::command('app:prune-submissions')->daily()
+    ->when(fn () => (bool) config('privacy.retention_days'));

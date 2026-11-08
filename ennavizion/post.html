@@ -9,20 +9,27 @@
   <meta property="og:title" content="News article | Ennavizion">
   <meta property="og:description" content="Ennavizion news article.">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ennavizion">
+  <meta property="og:image" content="https://ennavizion.netlify.app/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/big-shoulders-display-latin-9.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/barlow-latin-1.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/data.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
 </head>
 <body data-page="post">
+<header class="site-header"></header>
 <main id="main">
 
   <section class="page-hero on-dark">
     <div class="wrap">
       <div class="crumbs"><a href="index.html">Home</a> / <a href="blog.html">News</a></div>
-      <h1 id="post-title" style="font-size:clamp(2.5rem,6vw,4.5rem);max-width:18ch">Loading…</h1>
+      <h1 id="post-title" class="post-title"></h1>
       <p id="post-meta"></p>
     </div>
   </section>

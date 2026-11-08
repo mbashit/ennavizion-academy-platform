@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /404.html
+Disallow: /netlify-forms.html
+
+Sitemap: https://ennavizion.netlify.app/sitemap.xml

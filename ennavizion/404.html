@@ -3,26 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
   <title>Page not found | Ennavizion</title>
   <meta name="description" content="Page not found.">
   <meta name="theme-color" content="#5FB93A">
   <meta property="og:title" content="Page not found | Ennavizion">
   <meta property="og:description" content="Page not found.">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ennavizion">
+  <meta property="og:image" content="https://ennavizion.netlify.app/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/big-shoulders-display-latin-9.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/barlow-latin-1.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/data.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
 </head>
 <body data-page="404">
+<header class="site-header"></header>
 <main id="main">
 
-  <section class="page-hero on-dark" style="min-height:60vh;display:flex;align-items:center">
+  <section class="page-hero on-dark page-404">
     <div class="wrap">
       <h1>Offside.</h1>
-      <p>This page doesn't exist or has moved. Head back to the <a href="index.html" style="color:var(--gold)">home page</a> or check the menu above.</p>
+      <p>This page doesn't exist or has moved. Head back to the <a href="index.html">home page</a> or use the menu above.</p>
     </div>
   </section>
 </main>

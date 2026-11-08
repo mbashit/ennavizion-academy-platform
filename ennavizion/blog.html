@@ -9,32 +9,36 @@
   <meta property="og:title" content="News | Ennavizion">
   <meta property="og:description" content="News, coaching advice and league updates from Ennavizion football academy.">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ennavizion">
+  <meta property="og:image" content="https://ennavizion.netlify.app/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/big-shoulders-display-latin-9.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/barlow-latin-1.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/data.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
 </head>
 <body data-page="blog">
+<header class="site-header"></header>
 <main id="main">
 
   <section class="page-hero on-dark">
     <div class="wrap">
       <div class="crumbs"><a href="index.html">Home</a> / News</div>
       <h1>News</h1>
-      <!-- Categories are examples, not a fixed list — they come from each post's "category"
-           field in POSTS (js/data.js). Typical categories: Academy, Matches, Community,
-           Coaching, Player Development, Announcements. -->
       <p>Academy news, coaching advice for players and parents, and league updates.</p>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap">
-      <div class="section-head" style="margin-bottom:1.5rem">
-        <div class="tabs" id="post-cats" role="group" aria-label="Filter by category" style="margin:0"></div>
-        <div style="min-width:min(320px,100%)"><label class="visually-hidden" for="post-search">Search news</label><input type="text" id="post-search" placeholder="Search news"></div>
+      <div class="section-head post-tools" id="post-tools">
+        <div class="tabs" id="post-cats" role="group" aria-label="Filter by category"></div>
+        <div class="post-search"><label class="visually-hidden" for="post-search">Search news</label><input type="search" id="post-search" placeholder="Search news"></div>
       </div>
       <div class="grid grid-3" id="post-grid"></div>
     </div>

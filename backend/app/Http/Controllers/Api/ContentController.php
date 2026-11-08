@@ -6,14 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Center;
 use App\Models\GalleryItem;
 use App\Models\ImpactStat;
-use App\Models\LeagueFixture;
-use App\Models\LeagueResult;
-use App\Models\LeagueTeam;
+use App\Models\LeagueMatch;
+use App\Models\LeagueSeason;
 use App\Models\Post;
 use App\Models\Product;
 use App\Models\Program;
 use App\Models\SiteSetting;
 use App\Models\Testimonial;
+use App\Services\LeagueStandings;
+use App\Services\PaystackService;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -25,10 +26,23 @@ use Illuminate\Support\Facades\Storage;
  */
 class ContentController extends Controller
 {
+    public function __construct(
+        private readonly LeagueStandings $standings,
+        private readonly PaystackService $paystack,
+    ) {
+    }
+
     public function index()
     {
         return response()->json([
             'SITE' => $this->site(),
+            'CONTRIBUTIONS' => [
+                'programme' => config('contributions.programme_name'),
+                'options' => config('contributions.options'),
+                'allocations' => config('contributions.allocations'),
+                'min' => config('contributions.min_naira'),
+            ],
+            'GOALS' => config('contributions.goals'),
             'PROGRAMS' => Program::orderBy('sort_order')->get()->map(fn (Program $p) => [
                 'id' => $p->slug,
                 'name' => $p->name,
@@ -39,8 +53,9 @@ class ContentController extends Controller
             ]),
             'CENTERS' => Center::orderBy('sort_order')->get(['name', 'pitch', 'days']),
             'LEAGUE' => $this->league(),
-            'IMPACT' => ImpactStat::orderBy('sort_order')->get(['value', 'label']),
-            'TESTIMONIALS' => Testimonial::where('is_published', true)->latest()->get()->map(fn (Testimonial $t) => [
+            // Only figures staff have marked as confirmed, and only real, consented quotes.
+            'IMPACT' => ImpactStat::where('is_confirmed', true)->orderBy('sort_order')->get(['value', 'label']),
+            'TESTIMONIALS' => Testimonial::where('is_published', true)->where('is_verified', true)->latest()->get()->map(fn (Testimonial $t) => [
                 'quote' => $t->quote,
                 'name' => $t->name,
                 'role' => $t->role,
@@ -95,6 +110,10 @@ class ContentController extends Controller
             'address' => $s['address'] ?? null,
             'hours' => $s['hours'] ?? null,
             'currency' => $s['currency'] ?? null,
+            // off | test | live (see PaystackService::mode). Checkout only opens in test or live;
+            // test mode is labelled on the page and never counted as a real contribution.
+            'donations' => $this->paystack->isConfigured(),
+            'donationMode' => $this->paystack->mode(),
             'socials' => array_filter([
                 'instagram' => $s['social_instagram'] ?? null,
                 'x' => $s['social_x'] ?? null,
@@ -106,37 +125,37 @@ class ContentController extends Controller
 
     private function league(): array
     {
-        $teams = LeagueTeam::all();
+        $season = LeagueSeason::current();
+        if (! $season) {
+            return ['season' => '', 'table' => [], 'teams' => [], 'fixtures' => [], 'results' => []];
+        }
+        $season->load('teams');
 
-        return array_filter([
-            'season' => SiteSetting::get('league_season'),
-            // Same tuple order as data.js (team, P, W, D, L, GF, GA) plus an explicit
-            // "is us" flag, so highlighting doesn't depend on the team name's prefix.
-            'table' => $teams->map(fn (LeagueTeam $t) => [
-                $t->name, $t->played, $t->won, $t->drawn, $t->lost, $t->goals_for, $t->goals_against, $t->is_ennavizion,
-            ])->values(),
-            'fixtures' => LeagueFixture::with('homeTeam', 'awayTeam')
-                ->whereDate('date', '>=', now()->toDateString())
-                ->orderBy('date')->orderBy('time')
-                ->get()
-                ->map(fn (LeagueFixture $f) => [
-                    'date' => $f->date->toDateString(),
-                    'time' => substr($f->time, 0, 5),
-                    'home' => $f->homeTeam->name,
-                    'away' => $f->awayTeam->name,
-                    'venue' => $f->venue,
-                ]),
-            'results' => LeagueResult::with('homeTeam', 'awayTeam')
-                ->orderByDesc('date')
-                ->get()
-                ->map(fn (LeagueResult $r) => [
-                    'date' => $r->date->toDateString(),
-                    'home' => $r->homeTeam->name,
-                    'hs' => $r->home_score,
-                    'away' => $r->awayTeam->name,
-                    'as' => $r->away_score,
-                ]),
-        ], fn ($v) => $v !== null);
+        $match = fn (LeagueMatch $m) => [
+            'date' => $m->date->toDateString(),
+            'time' => $m->time ? substr($m->time, 0, 5) : null,
+            'venue' => $m->venue,
+            'home' => $m->homeTeam->name,
+            'away' => $m->awayTeam->name,
+            'status' => $m->status,
+            'hs' => $m->home_score,
+            'as' => $m->away_score,
+        ];
+
+        return [
+            'season' => trim($season->name.($season->age_group ? ' · '.$season->age_group : '')),
+            'rules' => [
+                'win' => $season->points_win, 'draw' => $season->points_draw, 'loss' => $season->points_loss,
+                'tiebreakers' => $season->tiebreakerOrder(),
+            ],
+            // Calculated from published results with this season's rules — never typed in.
+            'table' => $this->standings->for($season),
+            'teams' => $season->teams->map(fn ($t) => ['name' => $t->name, 'us' => $t->is_ennavizion])->values(),
+            'fixtures' => $season->matches()->upcoming()->with('homeTeam', 'awayTeam')
+                ->orderBy('date')->orderBy('time')->get()->map($match)->values(),
+            'results' => $season->matches()->countedResults()->with('homeTeam', 'awayTeam')
+                ->orderByDesc('date')->get()->map($match)->values(),
+        ];
     }
 
     /** Seeded rows hold full Unsplash URLs; admin uploads hold a path on the public disk. */

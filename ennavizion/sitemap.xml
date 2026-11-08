@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://ennavizion.netlify.app/</loc><priority>1.0</priority></url>
+  <url><loc>https://ennavizion.netlify.app/about.html</loc><priority>0.8</priority></url>
+  <url><loc>https://ennavizion.netlify.app/programs.html</loc><priority>0.9</priority></url>
+  <url><loc>https://ennavizion.netlify.app/league.html</loc><priority>0.8</priority></url>
+  <url><loc>https://ennavizion.netlify.app/community.html</loc><priority>0.5</priority></url>
+  <url><loc>https://ennavizion.netlify.app/enroll.html</loc><priority>0.9</priority></url>
+  <url><loc>https://ennavizion.netlify.app/contact.html</loc><priority>0.5</priority></url>
+  <url><loc>https://ennavizion.netlify.app/donate.html</loc><priority>0.5</priority></url>
+  <url><loc>https://ennavizion.netlify.app/blog.html</loc><priority>0.5</priority></url>
+  <url><loc>https://ennavizion.netlify.app/gallery.html</loc><priority>0.5</priority></url>
+  <url><loc>https://ennavizion.netlify.app/shop.html</loc><priority>0.5</priority></url>
+  <url><loc>https://ennavizion.netlify.app/safeguarding.html</loc><priority>0.5</priority></url>
+  <url><loc>https://ennavizion.netlify.app/privacy.html</loc><priority>0.5</priority></url>
+  <url><loc>https://ennavizion.netlify.app/terms.html</loc><priority>0.5</priority></url>
+</urlset>

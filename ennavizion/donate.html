@@ -3,91 +3,108 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Donate | Ennavizion</title>
-  <meta name="description" content="Support a player at Ennavizion: fund scholarships, equipment, transport, education and community projects.">
+  <title>Support a future footballer | Ennavizion</title>
+  <meta name="description" content="Support a Future Footballer: help talented young players take part in organised football through training fees, equipment and community coaching.">
   <meta name="theme-color" content="#5FB93A">
-  <meta property="og:title" content="Donate | Ennavizion">
-  <meta property="og:description" content="Support a player at Ennavizion: fund scholarships, equipment, transport, education and community projects.">
+  <meta property="og:title" content="Support a future footballer | Ennavizion">
+  <meta property="og:description" content="Support a Future Footballer: help talented young players take part in organised football through training fees, equipment and community coaching.">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ennavizion">
+  <meta property="og:image" content="https://ennavizion.netlify.app/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/big-shoulders-display-latin-9.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/barlow-latin-1.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/data.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
 </head>
 <body data-page="donate">
+<header class="site-header"></header>
 <main id="main">
 
   <section class="page-hero on-dark">
     <div class="wrap">
-      <div class="crumbs"><a href="index.html">Home</a> / Donate</div>
-      <h1>Support a player</h1>
-      <p>Your donation helps fund scholarships, kit, transport and community coaching for players who couldn't otherwise afford it.</p>
+      <div class="crumbs"><a href="index.html">Home</a> / Support a player</div>
+      <h1>Support a future footballer</h1>
+      <p>Help remove the financial barriers that stop talented young people from taking part in organised football.</p>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap split" style="align-items:start">
       <div>
-        <h2>What your donation supports</h2>
-        <p class="lead">Every pledge goes toward one or more of the following, prioritised by need.</p>
-        <div class="grid grid-2">
-          <div class="panel"><h3>Scholarship support</h3><p>Covers academy program fees for a player whose family can't afford them.</p></div>
-          <div class="panel"><h3>Equipment</h3><p>Boots, shin pads, training wear and match kit.</p></div>
-          <div class="panel"><h3>Transport</h3><p>Getting players to training sessions and match days.</p></div>
-          <div class="panel"><h3>Education</h3><p>Supporting schoolwork alongside football, in line with our player-first approach.</p></div>
-          <div class="panel"><h3>Community projects</h3><p>Outreach sessions and coaching access in underserved communities.</p></div>
-        </div>
-        <h2 class="mt-2" style="font-size:1.9rem">What happens after you donate</h2>
-        <ol class="pathway pathway-compact cols-3">
-          <li><h3>Submit</h3><p>Choose an amount and send your details below.</p></li>
-          <li><h3>Pay securely</h3><p>You're taken to Paystack's own checkout page to complete payment.</p></li>
-          <li><h3>Confirmation</h3><p>You're brought back here with a confirmation once payment is verified.</p></li>
-        </ol>
-        <ul class="trust-strip">
-          <li>No card details collected here</li>
-          <li><a href="privacy.html">Privacy Policy</a></li>
-          <li><a href="contact.html?topic=community">Contact us</a></li>
+        <h2>Where contributions go</h2>
+        <p class="lead">Contributions support training fees for players who can't afford them, essential equipment, transport help and community coaching.</p>
+        <ul class="contribution-list" id="contribution-options"></ul>
+        <p class="muted small">These show how support is planned to be used. They aren't a promise of a specific item or a named player. When you give, you choose whether your contribution goes where it's needed most or only toward a purpose you pick.</p>
+
+        <h2 class="mt-2 section-title-sm">How contributions are handled</h2>
+        <ul class="check-list">
+          <li>A contribution is only recorded once Paystack has confirmed the payment.</li>
+          <li>If you choose a specific purpose, your contribution is kept for that purpose.</li>
+          <li>The academy keeps records of contributions, processing fees and spending, and will publish summaries once they have been reconciled and approved.</li>
+          <li>Supported players' private details and identifiable photos are never published without permission, and contributions don't give access to information about them.</li>
         </ul>
-        <!-- Paystack IS integrated (backend/app/Services/PaystackService.php + the
-             /api/donations/* routes) — this note only applies until PAYSTACK_SECRET_KEY is
-             set in the backend's .env. Remove this whole <p> once a real donation has been
-             tested end-to-end. Until then, submitting shows an honest error rather than a
-             fake success — see initDonate() in js/main.js. -->
-        <p class="dev-status-note mt-2"><strong>Development status:</strong> the payment connection is built but not yet switched on with live keys — donating right now will show an error, not a fake confirmation.</p>
+
+        <div id="donate-steps">
+          <h2 class="mt-2 section-title-sm">What happens when you give</h2>
+          <ol class="pathway pathway-compact cols-3">
+            <li><h3>Choose</h3><p>Pick an amount and how it should be used.</p></li>
+            <li><h3>Pay securely</h3><p>You complete payment on Paystack's own checkout page.</p></li>
+            <li><h3>Confirmation</h3><p>You're brought back here once Paystack has confirmed the payment.</p></li>
+          </ol>
+        </div>
+        <ul class="trust-strip">
+          <li>No card details collected on this site</li>
+          <li><a href="privacy.html">Privacy notice</a></li>
+          <li><a href="terms.html">Terms</a></li>
+        </ul>
       </div>
       <div>
         <form class="form panel" id="donate-form" data-form="donate" novalidate>
-          <h2 style="font-size:2.25rem">Donate now</h2>
-          <!-- Monthly giving is intentionally disabled, not hidden: it's honest about what's
-               not built yet rather than faking a working recurring-payment toggle. -->
-          <fieldset class="field">
-            <legend>Donation type</legend>
-            <div class="radio-cards">
-              <div class="radio-card"><input type="radio" id="type-once" name="donation_type" value="once" checked><label for="type-once"><strong>One-time</strong></label></div>
-              <div class="radio-card"><input type="radio" id="type-monthly" name="donation_type" value="monthly" disabled><label for="type-monthly"><strong>Monthly</strong><br><small>Coming soon</small></label></div>
-            </div>
-          </fieldset>
+          <h2 class="form-title">Make a one-time contribution</h2>
+          <input type="hidden" name="donation_type" value="once">
           <fieldset class="field">
             <legend>Amount</legend>
-            <div class="radio-cards" id="amount-options"></div>
-            <p class="error-msg">Choose an amount, or Custom amount.</p>
+            <div class="radio-cards amount-cards" id="amount-options"></div>
+            <p class="error-msg">Choose an amount, or Other amount.</p>
           </fieldset>
           <div class="field" id="custom-amount-field" hidden>
-            <label for="custom-amount">Custom amount (₦)</label>
+            <label for="custom-amount" id="custom-amount-label">Amount in naira (minimum ₦500)</label>
             <input id="custom-amount" name="custom_amount" type="number" min="500" step="1" inputmode="numeric">
-            <p class="error-msg">Enter a custom amount.</p>
+            <p class="error-msg">Enter an amount of at least ₦500.</p>
+          </div>
+          <div class="field">
+            <label for="allocation">Use my contribution for</label>
+            <select id="allocation" name="allocation"></select>
+            <p class="hint">"Where it is needed most" lets the academy use it for its greatest current need. Any other choice restricts it to that purpose.</p>
           </div>
           <div class="form-row">
-            <div class="field"><label for="d-name">Your name</label><input id="d-name" name="donor_name" type="text" required autocomplete="name"><p class="error-msg">Enter your name.</p></div>
-            <div class="field"><label for="d-email">Email</label><input id="d-email" name="donor_email" type="email" required autocomplete="email"><p class="error-msg">Enter an email address like name@example.com.</p></div>
+            <div class="field"><label for="d-name">Your name</label><input id="d-name" name="donor_name" type="text" required autocomplete="name" maxlength="255"><p class="error-msg">Enter your name.</p></div>
+            <div class="field"><label for="d-email">Email</label><input id="d-email" name="donor_email" type="email" required autocomplete="email" maxlength="255"><p class="error-msg">Enter an email address like name@example.com.</p></div>
           </div>
-          <div class="field"><label for="d-message">Message <span class="hint">Optional</span></label><textarea id="d-message" name="message"></textarea></div>
-          <button class="btn btn-gold" type="submit">Donate now</button>
+          <div class="field"><label for="d-message">Message <span class="hint">Optional</span></label><textarea id="d-message" name="message" maxlength="2000"></textarea></div>
+          <button class="btn btn-gold" type="submit">Continue to secure payment</button>
         </form>
         <div id="donate-status" class="form-status" role="status" aria-live="polite" tabindex="-1"></div>
+
+        <div class="panel sponsor-panel">
+          <h2 class="section-title-sm">Become a sponsor</h2>
+          <p>Businesses, organisations and individuals interested in sponsoring players, equipment or community clinics can talk to the academy about how support is used and reported.</p>
+          <a class="btn btn-line btn-sm" href="contact.html?topic=sponsor">Talk to us about sponsorship</a>
+        </div>
       </div>
+    </div>
+  </section>
+
+  <section class="section on-paper">
+    <div class="wrap">
+      <div class="section-head"><h2>Our 2027 goals</h2><p>What the contribution programme aims to achieve in the academy's first operating year.</p></div>
+      <div id="donate-goals"></div>
     </div>
   </section>
 </main>
