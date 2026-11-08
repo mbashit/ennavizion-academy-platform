@@ -30,7 +30,7 @@ class AdminPagesTest extends TestCase
             '/admin', '/admin/submissions', "/admin/submissions/{$sub->id}/edit",
             '/admin/league-seasons', '/admin/league-seasons/create', "/admin/league-seasons/{$season->id}/edit",
             '/admin/league-matches', '/admin/league-matches/create', "/admin/league-matches/{$match->id}/edit",
-            '/admin/league-teams', '/admin/programs', '/admin/programs/create', '/admin/settings',
+            '/admin/league-teams', '/admin/programs', '/admin/programs/create', '/admin/settings', '/admin/contributions',
         ];
 
         foreach ($urls as $url) {
@@ -45,6 +45,8 @@ class AdminPagesTest extends TestCase
         // The submission screen shows the decrypted notes to staff; the list does not.
         $this->get("/admin/submissions/{$sub->id}/edit")->assertSee('Asthma')->assertSee($sub->reference);
         $this->get('/admin/submissions')->assertDontSee('Asthma')->assertDontSee('Ada');
+        // Searching and filtering contributions works (Filament injects closure arguments by name).
+        $this->get('/admin/contributions?tableSearch=Ada&tableFilters[mode][value]=test')->assertOk();
         // The season screen previews the calculated table.
         $this->get("/admin/league-seasons/{$season->id}/edit")->assertSee('Alpha');
     }

@@ -30,7 +30,9 @@ const isoYearsAgo = (y, extraDays = 10) => { const d = new Date(); d.setFullYear
       assert.equal(await page.locator('form[data-form="newsletter"]').count(), 0);
       await page.goto(`${base}/donate.html`, { waitUntil: "networkidle" });
       assert.equal(await page.locator("#donate-form").count(), 0);
-      await page.getByText("Online donations aren't open yet").waitFor();
+      await page.getByText("Online contributions aren't open yet").waitFor();
+      assert.equal(await page.locator("#contribution-options li").count(), 6, "contribution options still shown");
+      await page.getByText("not results already achieved").waitFor();
     });
     await test("static: old browser-stored submissions are deleted", async () => {
       await page.evaluate(() => localStorage.setItem("ennavizion_submissions", "[{\"player_first\":\"X\"}]"));
@@ -135,10 +137,27 @@ const isoYearsAgo = (y, extraDays = 10) => { const d = new Date(); d.setFullYear
       await page.getByText("Message received").waitFor();
     });
 
-    await test("donations: closed while Paystack isn't configured", async () => {
+    await test("contributions: information shown, checkout closed while Paystack is off", async () => {
       await page.goto(`${base}/donate.html`, { waitUntil: "networkidle" });
-      await page.getByText("Online donations aren't open yet").waitFor();
+      await page.getByText("Online contributions aren't open yet").waitFor();
       assert.equal(await page.locator("#donate-form").count(), 0);
+      assert.equal(await page.locator("#contribution-options li").count(), 6);
+    });
+
+    await test("contributions: test mode shows a labelled form; amount suggests its purpose", async () => {
+      // Pretend the backend reports test mode (no request reaches Paystack in this test).
+      await page.route("**/api/content", async (route) => {
+        const res = await route.fetch(); const json = await res.json();
+        json.SITE = { ...json.SITE, donations: true, donationMode: "test" };
+        route.fulfill({ response: res, json });
+      });
+      await page.goto(`${base}/donate.html`, { waitUntil: "networkidle" });
+      await page.getByText("No real money is taken").waitFor();
+      await page.locator("#amt-25000").check({ force: true });
+      assert.equal(await page.inputValue("#allocation"), "training_fees");
+      await page.locator("#amt-custom").check({ force: true });
+      assert.ok(await page.locator("#custom-amount").isVisible());
+      await page.unroute("**/api/content");
     });
 
     await test("league: table, results and fixtures render from the API", async () => {

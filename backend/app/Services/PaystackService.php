@@ -14,14 +14,34 @@ class PaystackService
 {
     private const BASE_URL = 'https://api.paystack.co';
 
+    /**
+     * The activation state (business plan section 19):
+     *   off  — not configured, or mode and key don't agree: contribution information is shown,
+     *          checkout is unavailable;
+     *   test — PAYSTACK_MODE=test with an sk_test_ key: checkout works, clearly labelled, no
+     *          real money, never counted as a real contribution;
+     *   live — PAYSTACK_MODE=live with an sk_live_ key, set deliberately once authorised.
+     */
+    public function mode(): string
+    {
+        $mode = strtolower(trim((string) config('services.paystack.mode', 'off')));
+        $key = (string) config('services.paystack.secret_key');
+
+        return match (true) {
+            $mode === 'test' && str_starts_with($key, 'sk_test_') => 'test',
+            $mode === 'live' && str_starts_with($key, 'sk_live_') => 'live',
+            default => 'off',
+        };
+    }
+
     public function isConfigured(): bool
     {
-        return filled(config('services.paystack.secret_key'));
+        return $this->mode() !== 'off';
     }
 
     public function isTestMode(): bool
     {
-        return str_starts_with((string) config('services.paystack.secret_key'), 'sk_test_');
+        return $this->mode() === 'test';
     }
 
     /**
@@ -67,10 +87,14 @@ class PaystackService
         ];
     }
 
-    /** Paystack signs each webhook body with HMAC-SHA512 using the secret key. */
+    /**
+     * Paystack signs each webhook body with HMAC-SHA512 using the secret key. Checked whenever a
+     * key exists, even if checkout has since been switched off, so a payment completed just
+     * before that is still recorded.
+     */
     public function validSignature(string $payload, ?string $signature): bool
     {
-        return $this->isConfigured() && filled($signature)
+        return filled(config('services.paystack.secret_key')) && filled($signature)
             && hash_equals(hash_hmac('sha512', $payload, (string) config('services.paystack.secret_key')), $signature);
     }
 

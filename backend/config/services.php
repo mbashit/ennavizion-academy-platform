@@ -36,6 +36,10 @@ return [
     ],
 
     'paystack' => [
+        // off | test | live. Checkout only opens when the mode and the key agree (test needs
+        // an sk_test_ key, live an sk_live_ key), so adding a live key never switches the
+        // site to real payments on its own — PAYSTACK_MODE=live has to be set deliberately.
+        'mode' => env('PAYSTACK_MODE', 'off'),
         'secret_key' => env('PAYSTACK_SECRET_KEY'),
         'public_key' => env('PAYSTACK_PUBLIC_KEY'),
     ],

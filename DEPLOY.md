@@ -106,12 +106,14 @@ becomes the main address, replace it in these four files before building:
   new fee shows.
 - Send the contact form: it appears under **Submissions** in the admin, and an email
   arrives at `info@ennavizion.com`.
-- Donations stay hidden on the site until a Paystack key is set. To test: add Paystack
-  **test** keys (`sk_test_…`) to `.env`, run `php artisan config:cache`, and in the Paystack
+- Contribution checkout stays closed (the programme information is still shown) until
+  Paystack is switched on. To test: set `PAYSTACK_MODE=test` and Paystack **test** keys
+  (`sk_test_…`) in `.env`, run `php artisan config:cache`, and in the Paystack
   dashboard (Settings → API Keys & Webhooks) set the webhook URL to
   `https://api.ennavizion.com/api/donations/webhook`. Make a test donation with a Paystack
-  test card; it shows as **Paid** under Submissions. Switch to **live** keys only when the
-  academy authorises taking real payments.
+  test card; it shows as **Paid** under Finance → Contributions, marked *Test*, and is not counted
+  in the totals. Switch to `PAYSTACK_MODE=live` with **live** keys only when the academy
+  has authorised real payments and verified its settlement account.
 - Apply for a trial with test details: you get a reference like `ENR-2026-7KQ4XM`, the
   application appears under **Submissions**, and the notification email contains only the
   reference.

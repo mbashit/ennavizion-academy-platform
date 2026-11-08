@@ -48,6 +48,8 @@
       swap(PROGRAMS, c.PROGRAMS); swap(CENTERS, c.CENTERS); swap(IMPACT, c.IMPACT);
       swap(TESTIMONIALS, c.TESTIMONIALS); swap(GALLERY, c.GALLERY); swap(PRODUCTS, c.PRODUCTS); swap(POSTS, c.POSTS);
       if (c.LEAGUE) Object.assign(LEAGUE, c.LEAGUE);
+      if (c.CONTRIBUTIONS) Object.assign(CONTRIBUTIONS, c.CONTRIBUTIONS);
+      if (c.GOALS) Object.assign(GOALS, c.GOALS);
     } catch (err) {
       console.warn("Using bundled content from data.js — backend unavailable:", err.message);
     } finally { clearTimeout(timer); }
@@ -153,6 +155,7 @@
             <ul>
               <li><a href="enroll.html">${CTA_LABEL}</a></li>
               <li><a href="donate.html">Support a player</a></li>
+              <li><a href="contact.html?topic=sponsor">Become a sponsor</a></li>
               <li><a href="contact.html?topic=partner">Partner with us</a></li>
               <li><a href="contact.html?topic=scout">Scouting requests</a></li>
               ${PRODUCTS.length ? '<li><a href="shop.html">Shop</a></li>' : ""}
@@ -554,6 +557,7 @@
 
     community() {
       const im = $("#community-impact"); if (im) { if (IMPACT.length) im.innerHTML = impactHTML(); else dropSection(im); }
+      const g = $("#community-goals"); if (g) { const h = goalsHTML(); if (h) g.innerHTML = h; else dropSection(g); }
     },
 
     donate() { initDonate(); },
@@ -861,33 +865,57 @@
     go(0, false);
   }
 
-  /* ---------- Donate ---------- */
-  // Donations run through the backend's Paystack integration (hosted checkout, verified
-  // server-side). SITE.donations is only true when the backend reports Paystack is set up;
-  // otherwise the form is replaced by an honest notice with another way to help.
+  /* ---------- Contributions ("Support a Future Footballer") ---------- */
+  // The programme information is always shown. Checkout follows the backend's Paystack state
+  // (SITE.donationMode): "off" → information plus another way to give; "test" → working
+  // checkout, clearly labelled, no real money; "live" → real payments, only ever switched on
+  // deliberately on the server.
+  const optionsHTML = () => CONTRIBUTIONS.options.map((o) =>
+    `<li><strong>${money(o.amount)}</strong><span>${esc(o.purpose)}</span></li>`).join("");
+
+  function goalsHTML() {
+    if (!GOALS || !GOALS.items || !GOALS.items.length) return "";
+    return `<div class="impact-grid goals-grid">${GOALS.items.map((g) => `<div class="impact-stat"><strong>${esc(g.value)}</strong><span>${esc(g.label)}</span></div>`).join("")}</div>
+      <p class="goals-note">These are targets for ${esc(GOALS.year)}, the academy's first operating year — not results already achieved. Confirmed figures will be published once they have been verified.</p>`;
+  }
+
   function initDonate() {
+    const list = $("#contribution-options"); if (list) list.innerHTML = optionsHTML();
+    const goals = $("#donate-goals"); if (goals) { const h = goalsHTML(); if (h) goals.innerHTML = h; else dropSection(goals); }
     const form = $("#donate-form"); if (!form) return;
     const status = $("#donate-status");
     const reference = new URLSearchParams(location.search).get("reference");
-    if (!SITE.apiBase || (!SITE.donations && !reference)) {
+    const mode = SITE.apiBase ? (SITE.donationMode || (SITE.donations ? "live" : "off")) : "off";
+
+    if (mode === "off" && !reference) {
       $("#donate-steps")?.remove();
-      form.outerHTML = `<div class="panel">${`<div class="notice" role="note"><h2>Online donations aren't open yet</h2><p>We'll open secure online giving once our payment account is set up. If you'd like to support a player now, email ${emailLink()} and we'll explain the options.</p></div>`}</div>`;
+      form.outerHTML = `<div class="panel"><div class="notice" role="note"><h2>Online contributions aren't open yet</h2><p>Secure online giving opens once the academy's payment account is verified. To support a player now, email ${emailLink()} and we'll explain the options.</p></div></div>`;
       return;
     }
+    if (mode === "test") {
+      form.insertAdjacentHTML("afterbegin", `<div class="notice notice-test" role="note"><h2>Test mode</h2><p>Checkout uses Paystack's test environment. No real money is taken, and test payments are never counted as contributions.</p></div>`);
+    }
     addHoneypot(form);
-    const box = $("#amount-options");
-    box.innerHTML = DONATION_AMOUNTS.map((n, i) => `
-      <div class="radio-card"><input type="radio" id="amt-${n}" name="amount" value="${n}" ${i === 0 ? "required" : ""}>
-      <label for="amt-${n}"><strong>${money(n)}</strong></label></div>`).join("") + `
-      <div class="radio-card"><input type="radio" id="amt-custom" name="amount" value="custom">
-      <label for="amt-custom"><strong>Other amount</strong></label></div>`;
-    const customField = $("#custom-amount-field");
+
+    $("#amount-options").innerHTML = CONTRIBUTIONS.options.map((o, i) => `
+      <div class="radio-card"><input type="radio" id="amt-${o.amount}" name="amount" value="${o.amount}" data-allocation="${esc(o.allocation)}" ${i === 0 ? "required" : ""}>
+      <label for="amt-${o.amount}"><strong>${money(o.amount)}</strong><small>${esc(o.purpose)}</small></label></div>`).join("") + `
+      <div class="radio-card"><input type="radio" id="amt-custom" name="amount" value="custom" data-allocation="greatest_need">
+      <label for="amt-custom"><strong>Other amount</strong><small>You choose</small></label></div>`;
+    const alloc = $("#allocation");
+    alloc.innerHTML = Object.entries(CONTRIBUTIONS.allocations).map(([k, v]) => `<option value="${esc(k)}">${esc(v)}</option>`).join("");
+    const custom = $("#custom-amount");
+    if (CONTRIBUTIONS.min) { custom.min = CONTRIBUTIONS.min; $("#custom-amount-label").textContent = `Amount in naira (minimum ${money(CONTRIBUTIONS.min)})`; }
+
     form.addEventListener("change", (e) => {
       if (e.target.name !== "amount") return;
       const isCustom = e.target.value === "custom";
-      customField.hidden = !isCustom;
-      $("#custom-amount").required = isCustom;
+      $("#custom-amount-field").hidden = !isCustom;
+      custom.required = isCustom;
+      // Suggest the purpose that goes with the amount; the donor can change it.
+      if (e.target.dataset.allocation && alloc.querySelector(`option[value="${e.target.dataset.allocation}"]`)) alloc.value = e.target.dataset.allocation;
     });
+
     let sending = false;
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -905,7 +933,10 @@
           body: JSON.stringify(payload)
         });
         const result = await res.json().catch(() => ({}));
-        if (!res.ok || !result.authorization_url) throw new Error(result.message || "Checkout couldn't be started.");
+        if (!res.ok || !result.authorization_url) {
+          const firstError = result.errors ? Object.values(result.errors)[0]?.[0] : null;
+          throw new Error(firstError || result.message || "Checkout couldn't be started.");
+        }
         location.href = result.authorization_url; // Paystack's hosted page
       } catch (err) {
         status.className = "form-status err";

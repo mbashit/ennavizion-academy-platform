@@ -32,8 +32,10 @@ const SITE = {
     youtube: "",
     facebook: ""
   },
-  // Set by the backend from its Paystack configuration — never set this to true by hand.
+  // Set by the backend from its Paystack configuration — never set these by hand.
+  // donationMode: "off" (information only), "test" (labelled test checkout) or "live".
   donations: false,
+  donationMode: "off",
   // Optional: a Formspree-style endpoint for static-only hosting. Forms are disabled (with an
   // email alternative) when neither this nor apiBase is set; they never pretend to send.
   formEndpoint: "",
@@ -76,8 +78,40 @@ const LEAGUE = {
 // Confirmed community figures only: { value: "120", label: "Players supported" }.
 const IMPACT = [];
 
-// Preset donation amounts (naira) for donate.html, used once online donations are open.
-const DONATION_AMOUNTS = [5000, 10000, 25000, 50000];
+// "Support a Future Footballer" contribution programme (business plan 2027, section 7).
+// Mirrors backend/config/contributions.php, which replaces it when the backend is live.
+// Purposes are planned allocations, not a promise of a specific item or beneficiary.
+const CONTRIBUTIONS = {
+  programme: "Support a Future Footballer",
+  options: [
+    { amount: 5000, purpose: "Toward shared training equipment", allocation: "equipment" },
+    { amount: 10000, purpose: "Toward a player's training kit", allocation: "kit" },
+    { amount: 25000, purpose: "One month of Foundation training", allocation: "training_fees" },
+    { amount: 35000, purpose: "One month of Development training", allocation: "training_fees" },
+    { amount: 50000, purpose: "One month of Elite Pathway training", allocation: "training_fees" },
+    { amount: 150000, purpose: "Toward a longer-term player sponsorship", allocation: "sponsorship" }
+  ],
+  allocations: {
+    greatest_need: "Where it is needed most",
+    equipment: "Training equipment",
+    kit: "Player kit",
+    training_fees: "Training fees for supported players",
+    sponsorship: "Longer-term player sponsorship",
+    community: "Community football clinics"
+  },
+  min: 500
+};
+
+// Targets for the first operating year. Always shown as goals, never as results achieved.
+const GOALS = {
+  year: 2027,
+  items: [
+    { value: "250", label: "Young people reached through the academy and outreach" },
+    { value: "30", label: "Players receiving full or partial financial support" },
+    { value: "4", label: "Community football clinics" },
+    { value: "₦3,000,000", label: "Raised in contributions and sponsorship" }
+  ]
+};
 
 // Only real quotes with written consent from the person (and a parent, for a minor).
 const TESTIMONIALS = [];

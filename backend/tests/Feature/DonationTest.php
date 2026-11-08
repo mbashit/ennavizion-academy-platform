@@ -16,7 +16,7 @@ class DonationTest extends TestCase
 
     private function configure(): void
     {
-        config(['services.paystack.secret_key' => self::KEY, 'services.frontend.url' => 'https://ennavizion.com']);
+        config(['services.paystack.mode' => 'test', 'services.paystack.secret_key' => self::KEY, 'services.frontend.url' => 'https://ennavizion.com']);
     }
 
     private function fakeVerify(string $status, int $amountKobo, string $currency = 'NGN'): void
@@ -37,6 +37,52 @@ class DonationTest extends TestCase
         ])->assertOk()->assertJsonPath('authorization_url', 'https://checkout.paystack.com/abc')->json('reference');
 
         return Submission::where('reference', $ref)->firstOrFail();
+    }
+
+    public function test_activation_states_need_mode_and_key_to_agree(): void
+    {
+        $mode = fn () => app(\App\Services\PaystackService::class)->mode();
+        config(['services.paystack.mode' => 'off', 'services.paystack.secret_key' => self::KEY]);
+        $this->assertSame('off', $mode(), 'a key alone does not open checkout');
+        config(['services.paystack.mode' => 'test', 'services.paystack.secret_key' => 'sk_live_real']);
+        $this->assertSame('off', $mode(), 'test mode refuses a live key');
+        config(['services.paystack.mode' => 'live', 'services.paystack.secret_key' => self::KEY]);
+        $this->assertSame('off', $mode(), 'live mode refuses a test key');
+        config(['services.paystack.mode' => 'live', 'services.paystack.secret_key' => 'sk_live_real']);
+        $this->assertSame('live', $mode(), 'live only when set deliberately with a live key');
+        $this->getJson('/api/content')->assertJsonPath('SITE.donationMode', 'live');
+    }
+
+    public function test_contribution_information_is_published_even_when_checkout_is_closed(): void
+    {
+        $this->getJson('/api/content')
+            ->assertJsonPath('SITE.donationMode', 'off')
+            ->assertJsonPath('CONTRIBUTIONS.options.0.amount', 5000)
+            ->assertJsonPath('CONTRIBUTIONS.allocations.greatest_need', 'Where it is needed most')
+            ->assertJsonPath('GOALS.year', 2027);
+    }
+
+    public function test_allocation_is_recorded_and_test_payments_are_not_counted(): void
+    {
+        $this->configure();
+        Http::fake(['api.paystack.co/transaction/initialize' => fn ($req) => Http::response(['status' => true, 'data' => [
+            'authorization_url' => 'https://checkout.paystack.com/x', 'access_code' => 'x', 'reference' => $req['reference'],
+        ]])]);
+        $ref = $this->postJson('/api/donations/initialize', ['amount' => '25000', 'allocation' => 'training_fees', 'donor_name' => 'A', 'donor_email' => 'a@example.com'])
+            ->assertOk()->json('reference');
+        $this->postJson('/api/donations/initialize', ['amount' => '5000', 'allocation' => 'made_up', 'donor_name' => 'A', 'donor_email' => 'a@example.com'])
+            ->assertUnprocessable()->assertJsonValidationErrors('allocation');
+
+        $d = Submission::where('reference', $ref)->first();
+        $this->assertSame('training_fees', $d->data['allocation']);
+        $this->assertTrue($d->data['restricted']);
+        $this->assertSame('test', $d->data['mode']);
+
+        $d->update(['status' => 'paid']);
+        Submission::create(['type' => 'donation', 'status' => 'paid', 'data' => ['amount' => 10000, 'mode' => 'live', 'allocation' => 'greatest_need', 'restricted' => false]]);
+        $t = \App\Filament\Resources\ContributionResource::totals();
+        $this->assertSame(1, $t['count'], 'the test-mode payment is excluded');
+        $this->assertEquals(10000, $t['total']);
     }
 
     public function test_donations_are_closed_when_paystack_is_not_configured(): void

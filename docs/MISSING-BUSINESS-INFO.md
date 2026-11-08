@@ -8,6 +8,32 @@ it's real.
 "Admin" means the admin panel at `api.ennavizion.com/admin` once the backend is live.
 Until then (Netlify), the same values go in `ennavizion/js/data.js`.
 
+## What the 2027 business plan settles
+
+The owner's "Business Plan, Growth Strategy and Digital Operations — 2027" is itself marked
+"subject to management approval". The website uses only the parts it says can be public now:
+
+| From the plan | On the website |
+|---|---|
+| Mission, vision and six core values | About page |
+| "Support a Future Footballer" contribution programme, options and purposes | Support a player page (information always shown; checkout follows the Paystack mode) |
+| "Give talent a chance" — Support a Player / Become a Sponsor | Home page |
+| 2027 goals (250 reached, 30 supported, 4 clinics, ₦3,000,000) | Community and Support pages, headed "Our 2027 goals" and labelled as targets |
+| Paystack activation states (off / test / live, live set deliberately) | Backend `PAYSTACK_MODE` |
+
+Still **not** on the website, because the plan's approval register lists them as proposed,
+fictional or draft:
+
+| Plan item | Status in the plan | What unlocks it |
+|---|---|---|
+| Programme fees (₦25,000 / ₦35,000 / ₦50,000 / ₦30,000 per month), ₦10,000 registration fee, ₦15,000 goalkeeper add-on | Proposed | Management approval → enter fees in Admin → Programs. The registration fee and add-on need a small page addition. |
+| Sessions per week per programme | Proposed | Approval → add to programme descriptions |
+| Coaching staff names (Chinedu Okafor, Amina Bello, Tobi Adeyemi, Zainab Musa) | **Fictional examples** | Real, verified staff with consent — never these names |
+| Complimentary first trial | Proposed | Approval → the site can say "free trial" |
+| Safeguarding, privacy, enrolment/refund, media and contribution policies | Draft | Adoption + qualified review → publish on the policy pages |
+| Settlement bank and account details | To be verified | Configured in the Paystack dashboard, never on the site |
+| Online fee payments for families | Planned | Needs approved fees and an admission step; see PRODUCTION-READINESS.md |
+
 ## Needed before launch
 
 | What | Why it matters | Where it goes |
@@ -28,7 +54,7 @@ Until then (Netlify), the same values go in `ennavizion/js/data.js`.
 
 | What | Unlocks | Where it goes |
 |---|---|---|
-| **Paystack account and API keys** (test first, then live) and authorisation to take live payments | Online donations. The form is hidden until a key is set. | Backend `.env` → `PAYSTACK_SECRET_KEY`; webhook URL in the Paystack dashboard (DEPLOY.md) |
+| **Paystack account and API keys** (test first, then live), verified settlement account, and authorisation to take live payments | Contribution checkout. Information is shown without it; checkout opens only in test or live mode. | Backend `.env` → `PAYSTACK_MODE`, `PAYSTACK_SECRET_KEY`; webhook URL in the Paystack dashboard (DEPLOY.md) |
 | **League season**: name, age group, teams, fixtures (date, time, venue), results | The league table, fixtures and results. The table is calculated from published results. | Admin → League → Seasons and table / Teams / Fixtures and results |
 | **Shop products**: name, price, sizes, photo, availability | The Shop link in the navigation and the shop page. | Admin → Products |
 | **Coaching staff**: name, role, verified licences/qualifications, photo (with consent) | A staff section on the About page. Removed until real. Needs a small page addition when ready. | Ask the developer |

@@ -36,6 +36,13 @@ class ContentController extends Controller
     {
         return response()->json([
             'SITE' => $this->site(),
+            'CONTRIBUTIONS' => [
+                'programme' => config('contributions.programme_name'),
+                'options' => config('contributions.options'),
+                'allocations' => config('contributions.allocations'),
+                'min' => config('contributions.min_naira'),
+            ],
+            'GOALS' => config('contributions.goals'),
             'PROGRAMS' => Program::orderBy('sort_order')->get()->map(fn (Program $p) => [
                 'id' => $p->slug,
                 'name' => $p->name,
@@ -103,8 +110,10 @@ class ContentController extends Controller
             'address' => $s['address'] ?? null,
             'hours' => $s['hours'] ?? null,
             'currency' => $s['currency'] ?? null,
-            // True only when a Paystack key is configured; the site hides the donation form otherwise.
+            // off | test | live (see PaystackService::mode). Checkout only opens in test or live;
+            // test mode is labelled on the page and never counted as a real contribution.
             'donations' => $this->paystack->isConfigured(),
+            'donationMode' => $this->paystack->mode(),
             'socials' => array_filter([
                 'instagram' => $s['social_instagram'] ?? null,
                 'x' => $s['social_x'] ?? null,

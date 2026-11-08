@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -23,9 +24,6 @@ use Illuminate\Validation\ValidationException;
  */
 class DonationController extends Controller
 {
-    private const MIN_NAIRA = 500;
-    private const MAX_NAIRA = 10_000_000;
-
     public function __construct(private readonly PaystackService $paystack)
     {
     }
@@ -46,12 +44,15 @@ class DonationController extends Controller
             'donor_email' => ['required', 'email', 'max:255'],
             'message' => ['nullable', 'string', 'max:2000'],
             'donation_type' => ['nullable', 'in:once'],
+            'allocation' => ['nullable', Rule::in(array_keys(config('contributions.allocations')))],
         ]);
 
+        [$min, $max] = [config('contributions.min_naira'), config('contributions.max_naira')];
         $naira = $v['amount'] === 'custom' ? (float) ($v['custom_amount'] ?? 0) : (float) $v['amount'];
-        if ($naira < self::MIN_NAIRA || $naira > self::MAX_NAIRA) {
-            throw ValidationException::withMessages(['amount' => 'Enter an amount between ₦500 and ₦10,000,000.']);
+        if ($naira < $min || $naira > $max) {
+            throw ValidationException::withMessages(['amount' => 'Enter an amount between ₦'.number_format($min).' and ₦'.number_format($max).'.']);
         }
+        $allocation = $v['allocation'] ?? 'greatest_need';
         $kobo = (int) round($naira * 100);
 
         $donation = Submission::create([
@@ -64,7 +65,11 @@ class DonationController extends Controller
                 'amount' => $naira,
                 'amount_kobo' => $kobo,
                 'currency' => 'NGN',
-                'mode' => $this->paystack->isTestMode() ? 'test' : 'live',
+                // Restricted = the donor chose a specific purpose; it must be spent on that.
+                'allocation' => $allocation,
+                'restricted' => $allocation !== 'greatest_need',
+                // Test-mode payments are kept apart and never counted as real contributions.
+                'mode' => $this->paystack->mode(),
             ],
         ]);
 
@@ -74,7 +79,7 @@ class DonationController extends Controller
                 amountKobo: $kobo,
                 reference: $donation->reference,
                 callbackUrl: rtrim(config('services.frontend.url'), '/').'/donate.html',
-                metadata: ['submission_id' => $donation->id],
+                metadata: ['submission_id' => $donation->id, 'allocation' => $allocation],
             );
         } catch (\Throwable $e) {
             $donation->update(['status' => 'failed']);

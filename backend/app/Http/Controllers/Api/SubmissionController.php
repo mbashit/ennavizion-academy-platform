@@ -34,7 +34,7 @@ class SubmissionController extends Controller
                 'name' => ['required', 'string', 'max:255', 'not_regex:/[<>]/'],
                 'email' => ['required', 'email', 'max:255'],
                 'phone' => ['nullable', 'string', 'max:50', 'regex:/^[+0-9 ()\-]*$/'],
-                'topic' => ['required', 'string', Rule::in(['enrolment', 'visit', 'league', 'scout', 'community', 'partner', 'services', 'safeguarding', 'other'])],
+                'topic' => ['required', 'string', Rule::in(['enrolment', 'visit', 'league', 'scout', 'community', 'sponsor', 'partner', 'services', 'safeguarding', 'other'])],
                 'message' => ['required', 'string', 'min:10', 'max:5000'],
             ],
             'enrolment' => array_filter([

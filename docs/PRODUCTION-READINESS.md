@@ -54,7 +54,8 @@ sitemap/social tags.
 | `APP_URL`, `FRONTEND_URL` | yes | API address; site address (CORS and the Paystack return page). |
 | `DB_*` | yes | MySQL database from cPanel. |
 | `MAIL_*`, `NOTIFY_EMAIL` | recommended | "New submission" emails (reference number only). |
-| `PAYSTACK_SECRET_KEY`, `PAYSTACK_PUBLIC_KEY` | for donations | Blank = donations hidden. Use `sk_test_` until live payments are authorised. |
+| `PAYSTACK_MODE` | for contributions | `off` (default), `test` or `live`. Checkout opens only when mode and key agree; live must be set deliberately. |
+| `PAYSTACK_SECRET_KEY`, `PAYSTACK_PUBLIC_KEY` | for contributions | `sk_test_` with `test`; `sk_live_` with `live` once authorised. |
 | `SUBMISSION_RETENTION_DAYS` | academy decision | Blank = keep submissions until deleted by hand. |
 | `CORS_EXTRA_ORIGINS` | optional | Extra site origins allowed to call the API. |
 
@@ -88,9 +89,9 @@ All results below are from runs on 8 November 2026 on Windows 11, Chromium 141 (
 
 | Suite | Result | What it covers |
 |---|---|---|
-| Backend (`php artisan test`) | **30 passed** | Submissions: reference format, medical notes encrypted at rest and absent from `data`, staff email without personal details, age span and programme-band checks, unknown programme, consent, honeypot, double-submit, contact validation, newsletter de-duplication, no submissions in the public API, retention pruning. Donations (Paystack faked, no real requests): closed when unconfigured, our reference and kobo sent, amount limits, verified payment marked paid, amount mismatch held for review, abandoned → failed, paid never downgraded, unknown references not sent to Paystack, webhook signature required and idempotent. League: table from published played matches only, configurable points and tie-breakers, registered teams with no games, current-season API output, one current season, no public write access. Admin: every screen requires login and renders for staff; medical notes only on the single-submission screen. |
+| Backend (`php artisan test`) | **33 passed** | Submissions: reference format, medical notes encrypted at rest and absent from `data`, staff email without personal details, age span and programme-band checks, unknown programme, consent, honeypot, double-submit, contact validation, newsletter de-duplication, no submissions in the public API, retention pruning. Donations (Paystack faked, no real requests): closed when unconfigured, our reference and kobo sent, amount limits, verified payment marked paid, amount mismatch held for review, abandoned → failed, paid never downgraded, unknown references not sent to Paystack, webhook signature required and idempotent. League: table from published played matches only, configurable points and tie-breakers, registered teams with no games, current-season API output, one current season, no public write access. Admin: every screen requires login and renders for staff; medical notes only on the single-submission screen. |
 | Browser smoke (`e2e/smoke.js`) | **0 problems** | 16 pages × 320/390/1440 px: no console errors, failed requests, horizontal overflow, or visible "undefined"/"NaN"/"placeholder"/"Coach Name"/"XX+". |
-| Browser end to end, backend (`e2e/e2e.js`) | **10/10** | Every nav/footer link resolves; age checks; full application with a double-click → one record and a reference; medical notes stored encrypted; server error shown as an error with answers kept; draft restore without medical notes; contact form; donations closed; league from the API; mobile menu (not tabbable when closed, focus moves in, page inert, Escape returns focus, closes on navigation). |
+| Browser end to end, backend (`e2e/e2e.js`) | **11/11** | Every nav/footer link resolves; age checks; full application with a double-click → one record and a reference; medical notes stored encrypted; server error shown as an error with answers kept; draft restore without medical notes; contact form; contributions information shown with checkout closed, and a labelled test-mode form with amount → purpose; league from the API; mobile menu (not tabbable when closed, focus moves in, page inert, Escape returns focus, closes on navigation). |
 | Browser end to end, static (`e2e/e2e.js … static`) | **5/5** | Forms replaced by email route, no fake success; old browser-stored submissions deleted; exact league empty-state wording; no shop link, cart or WhatsApp button without data. |
 | Content-Security-Policy (`e2e/csp.js`) | **0 violations** | Every page served with the production CSP from `_headers`. |
 | Lighthouse 12.8.2 | see below | Mobile preset with simulated throttling, against a local Python server with **no compression, HTTP/2 or CDN** (Netlify provides all three), static mode. |
@@ -119,6 +120,24 @@ lab proxy.
 **Not tested:** a real Paystack test-mode transaction (needs the academy's Paystack account);
 email delivery through a real mailbox; the Namecheap deployment itself; real phones (layouts
 were checked in emulated mobile viewports); screen readers beyond automated checks.
+
+## Contribution programme (business plan 2027)
+
+- Options, purposes, allocations and 2027 goals live in `backend/config/contributions.php`
+  (mirrored in `js/data.js` for the static site).
+- Donors choose "where it is needed most" or a specific purpose; anything else is stored as
+  restricted. Each donation records amount (naira and kobo), allocation, restricted flag and
+  mode (test/live).
+- Admin → Finance → **Contributions**: read-only list with search and filters, and totals of
+  verified live payments only (pending, failed and test payments excluded; Paystack fees not
+  deducted).
+- Activation states: `off` shows the programme and an email route; `test` shows a working
+  checkout with a "Test mode — no real money" banner; `live` only with `PAYSTACK_MODE=live`
+  and an `sk_live_` key. Webhook signatures are still checked after checkout is switched off,
+  so late confirmations are recorded.
+- Not built yet: online **fee** payments for families. The plan describes them, but they need
+  approved fees and an admission step (who is asked to pay what, and when). The Paystack
+  layer is ready to reuse with a `type` of fee instead of donation.
 
 ## Security and privacy summary
 
