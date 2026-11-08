@@ -46,7 +46,9 @@ body {
   background: var(--chalk);
   -webkit-font-smoothing: antialiased;
 }
-img { max-width: 100%; display: block; }
+img { max-width: 100%; height: auto; display: block; }
+/* The hidden attribute always wins over component display rules (e.g. .cart-btn's grid). */
+[hidden] { display: none !important; }
 a { color: var(--grass); text-underline-offset: 3px; }
 a:hover { color: var(--pitch-deep); }
 :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; border-radius: 2px; }

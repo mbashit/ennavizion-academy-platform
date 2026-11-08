@@ -2,34 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/** A team that can play in league seasons. Its record is calculated from matches, never stored. */
 class LeagueTeam extends Model
 {
-    protected $fillable = [
-        'name', 'played', 'won', 'drawn', 'lost', 'goals_for', 'goals_against', 'is_ennavizion',
-    ];
+    protected $fillable = ['name', 'is_ennavizion'];
 
     protected $casts = [
-        'played' => 'integer',
-        'won' => 'integer',
-        'drawn' => 'integer',
-        'lost' => 'integer',
-        'goals_for' => 'integer',
-        'goals_against' => 'integer',
         'is_ennavizion' => 'boolean',
     ];
 
-    // Matches the points/goal-difference math already used in js/main.js's leagueRows()
-    // (3 for a win, 1 for a draw) — keep both in sync if the rule ever changes.
-    protected function points(): Attribute
+    public function seasons(): BelongsToMany
     {
-        return Attribute::get(fn () => $this->won * 3 + $this->drawn);
-    }
-
-    protected function goalDifference(): Attribute
-    {
-        return Attribute::get(fn () => $this->goals_for - $this->goals_against);
+        return $this->belongsToMany(LeagueSeason::class, 'league_season_team');
     }
 }

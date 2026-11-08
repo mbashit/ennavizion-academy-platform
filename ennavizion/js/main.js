@@ -323,7 +323,15 @@
     if (input.type === "radio") ok = !input.required || $$(`input[name="${input.name}"]`, field).some((r) => r.checked);
     else if (input.type === "checkbox") ok = !input.required || input.checked;
     else ok = input.checkValidity();
-    if (ok && typeof field._check === "function") { const msg = field._check(input); if (msg) { ok = false; const m = $(".error-msg", field); if (m) m.textContent = msg; } }
+    // A field-specific check (e.g. age range) gives a clearer message than the browser's
+    // generic one, so it also runs when the value is merely out of the min/max range.
+    const m = $(".error-msg", field);
+    if (m && m.dataset.default == null) m.dataset.default = m.textContent;
+    let msg = "";
+    const outOfRange = input.validity && (input.validity.rangeOverflow || input.validity.rangeUnderflow);
+    if (typeof field._check === "function" && (ok || outOfRange)) msg = field._check(input);
+    if (msg) ok = false;
+    if (m) m.textContent = msg || m.dataset.default;
     field.classList.toggle("invalid", !ok);
     input.setAttribute("aria-invalid", String(!ok));
     return ok;
