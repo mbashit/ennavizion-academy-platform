@@ -59,6 +59,30 @@ const test = async (name, fn) => { try { await fn(); results.push(["PASS", name]
     await page.getByText("Your message didn't send").waitFor();
   });
 
+  await test("live site: no demo team names; 'announced soon' with roles; demo file never loaded", async () => {
+    const p2 = await browser.newPage(); const requested = [];
+    p2.on("request", (r) => requested.push(r.url()));
+    await p2.goto(`${base}/about.html`, { waitUntil: "networkidle" });
+    await p2.getByText("Our coaching team profiles will be announced soon").waitFor();
+    assert.equal(await p2.locator(".role-chips li").count(), 7);
+    const text = await p2.locator("main").innerText();
+    for (const n of ["Chinedu", "Amina", "Tobi", "Zainab", "Emeka", "Ngozi", "Ibrahim"]) assert.ok(!text.includes(n), n + " must not appear live");
+    assert.ok(!requested.some((u) => u.includes("demo-team")), "demo-team.js not requested");
+    await p2.close();
+  });
+
+  await test("preview deploy: seven labelled demo profiles with loaded images and alt text", async () => {
+    const p3 = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    await p3.goto(`http://preview-1--ennavizion.netlify.app:${port}/about.html`, { waitUntil: "networkidle" });
+    await p3.getByText("Demonstration profiles").waitFor();
+    assert.equal(await p3.locator(".team-card").count(), 7);
+    assert.equal(await p3.locator(".team-badge", { hasText: "Demo profile" }).count(), 7);
+    const imgs = await p3.locator(".team-card img").evaluateAll((els) => els.map((e) => ({ ok: e.complete && e.naturalWidth > 0, alt: e.alt })));
+    assert.ok(imgs.every((i) => i.ok), "all images load");
+    assert.ok(imgs.every((i) => i.alt.length > 10), "all images have alt text");
+    await p3.close();
+  });
+
   await browser.close();
   for (const r of results) console.log(r.join("  "));
   console.log(`${results.filter((r) => r[0] === "PASS").length}/${results.length} passed`);

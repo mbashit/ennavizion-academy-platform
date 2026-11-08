@@ -14,7 +14,7 @@ live, the admin panel values replace these.
 | `[Office hours, …]` | Contact | `SITE.hours` |
 | WhatsApp (blank, not a placeholder) | WhatsApp button, shop orders | `SITE.whatsapp` — digits with 234. Left blank so families never message a wrong number. |
 | `[Pitch type…]`, `[Training days]` (centre: Jos training ground) | Programmes → Training locations | `CENTERS` |
-| `[Name]`, `[Qualifications and experience]` × 7 roles | About → Coaching and academy team | `STAFF` — real people only, with consent and verified qualifications |
+| Team profiles | About → Meet our team. Live site: "announced soon" with the roles until a real profile is added. Previews (local, Netlify draft/preview deploys) show the 7 fictional demo profiles from `js/demo-team.js`, labelled | `STAFF` in `js/data.js`: `{ name, role, description, image, altText, isVerified: true, isPublished: true }`. Put photos (4:5, WebP) in `assets/images/team/`. Real people only, with consent and verified details |
 | Testimonial `[…]` | Home page | `TESTIMONIALS` — real quote with written consent (and a parent's for a minor) |
 | `[Home kit]`, `[Training top]`, `[Training shorts]`, `[Academy cap]`, `[SKU]`, price | Shop ("Coming soon", can't be ordered) | `PRODUCTS` — set name, `sku`, `price`, `image` and `stock: true` to make an item orderable |
 | `[Safeguarding lead name]`, `[safeguarding phone number]` | Safeguarding page | `ennavizion/safeguarding.html` |

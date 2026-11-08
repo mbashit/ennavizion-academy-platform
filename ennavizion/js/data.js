@@ -74,16 +74,20 @@ const CENTERS = [
   { name: "Jos training ground", pitch: "[Pitch type, e.g. full-size grass pitch]", days: "[Training days]" }
 ];
 
-// Staff roles from the 2027 business plan (section 5). Names are placeholders — never use
-// a name until that person is confirmed, with their consent and verified qualifications.
-const STAFF = [
-  { name: "[Name]", role: "Technical Director / Head Coach", detail: "[Qualifications and experience]" },
-  { name: "[Name]", role: "Foundation Coach", detail: "[Qualifications and experience]" },
-  { name: "[Name]", role: "Development and Elite Coach", detail: "[Qualifications and experience]" },
-  { name: "[Name]", role: "Goalkeeper Coach", detail: "[Qualifications and experience]" },
-  { name: "[Name]", role: "Academy Operations Manager", detail: "Administration, scheduling, enrolment and parent communication" },
-  { name: "[Name]", role: "Safeguarding Lead", detail: "Safeguarding reporting, prevention and incident coordination" },
-  { name: "[Name]", role: "League Coordinator", detail: "League administration, fixtures and results" }
+// Team profiles shown on the About page. Only REAL staff go here, and a profile is shown on
+// the live site only when both isVerified and isPublished are true (identity, role and any
+// qualification checked; the person agreed to be listed). Fields:
+//   { name, role, description, image: "assets/images/team/<file>.webp", altText,
+//     isVerified: true, isPublished: true }
+// Until at least one profile qualifies, the live site says profiles will be announced soon.
+// Sample profiles for previews live separately in js/demo-team.js and never load live.
+const STAFF = [];
+
+// Roles the academy is appointing (business plan 2027, section 5) — listed while profiles
+// are being finalised.
+const TEAM_ROLES = [
+  "Technical Director / Head Coach", "Foundation Coach", "Development and Elite Coach",
+  "Goalkeeper Coach", "Academy Operations Manager", "Safeguarding Lead", "League Coordinator"
 ];
 
 // League data. With the backend, the table arrives already calculated from published

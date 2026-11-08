@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" role="img">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2D5A22"/><stop offset=".62" stop-color="#3C7A28"/><stop offset=".62" stop-color="#4F9A33"/><stop offset="1" stop-color="#5FB93A"/></linearGradient>
+    <radialGradient id="light" cx=".18" cy=".05" r=".7"><stop offset="0" stop-color="#FFF6C8" stop-opacity=".55"/><stop offset="1" stop-color="#FFF6C8" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="400" height="500" fill="url(#sky)"/>
+  <rect width="400" height="500" fill="url(#light)"/>
+  <g fill="#FFFFFF" opacity=".18"><rect x="0" y="310" width="400" height="2"/><rect x="0" y="348" width="400" height="2"/></g>
+  <path d="M60 500c6-92 62-140 140-140s134 48 140 140z" fill="#14231C"/>
+  <path d="M168 362l32 40 32-40" fill="none" stroke="#5FB93A" stroke-width="8" stroke-linejoin="round"/>
+  <rect x="96" y="404" width="6" height="90" fill="#C9CED2"/><path d="M102 404h44l-10 16 10 16h-44z" fill="#E8B21E"/>
+  <rect x="178" y="290" width="44" height="64" rx="18" fill="#6E4632"/>
+  <ellipse cx="200" cy="218" rx="54" ry="66" fill="#6E4632"/>
+  <path d="M146 168c0-40 24-64 54-64s54 24 54 64z" fill="#1F4D16"/><path d="M200 168h82c0 9-16 14-34 14h-48z" fill="#163A10"/><circle cx="200" cy="132" r="7" fill="#E8B21E"/>
+  <ellipse cx="146" cy="222" rx="8" ry="13" fill="#6E4632"/><ellipse cx="254" cy="222" rx="8" ry="13" fill="#6E4632"/>
+  <g fill="#FFFFFF" opacity=".92"><rect x="268" y="462" width="118" height="28" rx="6" fill="#14231C" opacity=".72"/></g>
+  <text x="327" y="481" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">Illustration</text>
+</svg>

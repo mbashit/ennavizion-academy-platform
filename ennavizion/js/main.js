@@ -544,6 +544,47 @@
   // Removes a section (and keeps the alternating backgrounds tidy) when it has nothing to show.
   const dropSection = (el) => el?.closest("section")?.remove();
 
+  /* ---------- Team profiles (About page) ---------- */
+  // Live site: verified + published staff only, otherwise an "announced soon" section.
+  // Local copies and Netlify preview/draft deploys (hostnames containing "--") can preview
+  // the fictional profiles in js/demo-team.js, clearly labelled as demonstrations.
+  const isPreviewEnv = () => location.protocol === "file:" || /^(localhost|127\.\d+\.\d+\.\d+)$/.test(location.hostname) || location.hostname.includes("--");
+  const loadScript = (src) => new Promise((resolve, reject) => {
+    const el = document.createElement("script"); el.src = src; el.onload = resolve; el.onerror = reject; document.head.appendChild(el);
+  });
+
+  function teamCard(m, demo) {
+    return `<article class="team-card">
+      <div class="team-photo">${m.image ? `<img src="${esc(m.image)}" alt="${esc(m.altText || "")}" width="400" height="500" loading="lazy" decoding="async">` : ""}
+        ${demo ? '<span class="team-badge">Demo profile</span>' : ""}</div>
+      <div class="team-body">
+        <h3>${esc(m.name)}</h3>
+        <p class="team-role">${esc(m.role)}</p>
+        ${m.description ? `<p class="team-desc">${esc(m.description)}</p>` : ""}
+      </div>
+    </article>`;
+  }
+
+  async function renderTeam() {
+    const grid = $("#staff-grid"); if (!grid) return;
+    const real = (typeof STAFF !== "undefined" ? STAFF : []).filter((m) => m.isVerified && m.isPublished);
+    if (real.length) { grid.innerHTML = real.map((m) => teamCard(m, false)).join(""); return; }
+    if (isPreviewEnv()) {
+      try {
+        await loadScript("js/demo-team.js");
+        grid.insertAdjacentHTML("beforebegin", '<div class="notice notice-test team-demo-note" role="note"><h3>Demonstration profiles</h3><p>These names and illustrations are fictional examples for previewing this section. They are not Ennavizion staff and are never shown on the live site.</p></div>');
+        grid.innerHTML = DEMO_STAFF.map((m) => teamCard(m, true)).join("");
+        return;
+      } catch { /* fall through to the announcement */ }
+    }
+    const roles = typeof TEAM_ROLES !== "undefined" ? TEAM_ROLES : [];
+    grid.outerHTML = `<div class="team-soon">
+      <h3>Our coaching team profiles will be announced soon</h3>
+      <p>We're finalising appointments and the checks every member of staff completes before working with players. Profiles will appear here once they're confirmed.</p>
+      ${roles.length ? `<p class="team-soon-label">The team will include</p><ul class="role-chips">${roles.map((r) => `<li>${esc(r)}</li>`).join("")}</ul>` : ""}
+    </div>`;
+  }
+
   /* ---------- Page renderers ---------- */
   const pages = {
     home() {
@@ -570,14 +611,7 @@
       const b = $("#home-posts"); if (b) { if (POSTS.length) b.innerHTML = POSTS.slice(0, 3).map(postCard).join(""); else dropSection(b); }
     },
 
-    about() {
-      const g = $("#staff-grid");
-      if (g) { if (typeof STAFF !== "undefined" && STAFF.length) g.innerHTML = STAFF.map((m) => `
-        <article class="staff-card">
-          <div class="staff-photo" aria-hidden="true"></div>
-          <h3>${esc(m.name)}</h3><p class="staff-role">${esc(m.role)}</p>${m.detail ? `<p class="muted small">${esc(m.detail)}</p>` : ""}
-        </article>`).join(""); else dropSection(g); }
-    },
+    about() { renderTeam(); },
 
     community() {
       const im = $("#community-impact"); if (im) { if (IMPACT.length) im.innerHTML = impactHTML(); else dropSection(im); }
