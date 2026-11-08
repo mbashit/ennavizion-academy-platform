@@ -9,21 +9,27 @@
   <meta property="og:title" content="League | Ennavizion">
   <meta property="og:description" content="Ennavizion League fixtures, results and the league table, published by the academy.">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ennavizion">
+  <meta property="og:image" content="https://ennavizion.netlify.app/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Big+Shoulders+Display:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="league">
+<header class="site-header"></header>
 <main id="main">
 
   <section class="page-hero on-dark">
     <div class="wrap">
       <div class="crumbs"><a href="index.html">Home</a> / League</div>
       <h1>Ennavizion League</h1>
-      <p><strong id="season-name"></strong>. <span id="league-lead"></span></p>
+      <p><strong id="season-name">Fixtures, results and the league table</strong>. <span id="league-lead">Fixtures and results are published here as soon as the academy confirms them.</span></p>
     </div>
   </section>
 
@@ -36,8 +42,8 @@
           <button class="tab" role="tab" type="button" id="tab-results" aria-controls="panel-results" aria-selected="false" tabindex="-1">Results</button>
         </div>
         <div role="tabpanel" id="panel-table" aria-labelledby="tab-table" tabindex="0">
-          <div class="table-scroll"><table class="league-table" id="league-table"></table></div>
-          <p class="muted mt-2" id="league-rules"></p>
+          <div id="league-table-slot"><p class="empty-state">The league table will appear once results are published.</p></div>
+          <p class="muted mt-2" id="league-rules">3 points for a win, 1 for a draw. Teams level on points are separated by goal difference and goals scored.</p>
         </div>
         <div role="tabpanel" id="panel-fixtures" aria-labelledby="tab-fixtures" tabindex="0" hidden><ul class="match-list" id="fixtures"></ul></div>
         <div role="tabpanel" id="panel-results" aria-labelledby="tab-results" tabindex="0" hidden><ul class="match-list" id="results"></ul></div>

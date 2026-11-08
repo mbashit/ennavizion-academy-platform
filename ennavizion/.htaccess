@@ -9,9 +9,18 @@ RewriteRule ^ https://ennavizion.com%{REQUEST_URI} [L,R=301]
 
 ErrorDocument 404 /404.html
 
-# admin.html is the old browser-only submissions viewer; real submissions are in the
-# backend's admin panel (api.ennavizion.com/admin), so keep this one off the live site.
+# admin.html (an old browser-only demo viewer) was removed; keep any cached link a 404.
 RewriteRule ^admin\.html$ - [R=404,L]
+
+# Security headers — the same policy as _headers for Netlify; keep the two in step.
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+  Header always set Strict-Transport-Security "max-age=31536000"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.ennavizion.com; frame-src https://www.google.com; form-action 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'"
+</IfModule>
 
 # Short cache for CSS/JS (edits show up within an hour), longer for images.
 <IfModule mod_expires.c>
@@ -23,4 +32,10 @@ RewriteRule ^admin\.html$ - [R=404,L]
   ExpiresByType image/png "access plus 30 days"
   ExpiresByType image/webp "access plus 30 days"
   ExpiresByType image/svg+xml "access plus 30 days"
+  ExpiresByType image/x-icon "access plus 30 days"
+</IfModule>
+
+# Compress text responses.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript text/javascript application/json image/svg+xml text/xml application/xml
 </IfModule>

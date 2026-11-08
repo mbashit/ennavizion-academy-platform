@@ -930,3 +930,9 @@ body.menu-open { overflow: hidden; }
 }
 .main-nav a, .footer-legal a, .site-footer li a { min-height: 24px; }
 @media (pointer: coarse) { .site-footer li a, .footer-legal a { display: inline-block; padding: 6px 0; } }
+
+/* ---- Layout stability (CLS): space is reserved for content that JavaScript adds ---- */
+/* Each page ships an empty <header class="site-header"> that main.js fills, so its height
+   is there from the first paint. */
+.site-header { min-height: var(--header-h); }
+@media (min-width: 901px) { .hero-strip { min-height: 96px; } }

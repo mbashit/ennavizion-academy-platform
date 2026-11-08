@@ -57,7 +57,7 @@
   const ICON = {
     // Club crest (cropped from the client's logo artwork). alt is empty because the
     // brand link always carries the site name as text alongside it.
-    logo: '<img class="brand-logo" src="assets/images/logo.png" alt="" width="136" height="96">',
+    logo: '<img class="brand-logo" src="assets/images/logo.webp" alt="" width="68" height="48">',
     cart: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>',
     menu: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
     close: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
@@ -72,12 +72,12 @@
 
   /* ---------- Navigation ---------- */
   // Labels are user-facing names; filenames stay as they were so existing links keep
-  // working ("Academy" is about.html, "Programs" is programs.html). Shop only appears
+  // working ("Academy" is about.html, "Programmes" is programs.html). Shop only appears
   // once there is something to buy.
   const navItems = () => [
     ["index.html", "Home"],
     ["about.html", "Academy"],
-    ["programs.html", "Programs"],
+    ["programs.html", "Programmes"],
     ["league.html", "League"],
     ["community.html", "Community"],
     ...(PRODUCTS.length ? [["shop.html", "Shop"]] : []),
@@ -91,8 +91,10 @@
 
   /* ---------- Layout: header first (no waiting on the API), the rest once content is in ---------- */
   function renderHeader() {
-    const header = document.createElement("header");
-    header.className = "site-header";
+    // Pages ship an empty <header class="site-header"> so its space is reserved from the
+    // first paint; fall back to creating one if a page doesn't have it.
+    let header = $(".site-header");
+    if (!header) { header = document.createElement("header"); header.className = "site-header"; document.body.prepend(header); }
     header.innerHTML = `
       <div class="wrap header-inner">
         <a class="brand" href="index.html">${ICON.logo}<span>${esc(SITE.name)}</span></a>
@@ -106,7 +108,6 @@
           <button class="menu-toggle" type="button" aria-controls="main-nav" aria-expanded="false" aria-label="Open menu">${ICON.menu}</button>
         </div>
       </div>`;
-    document.body.prepend(header);
     renderNav();
 
     const skip = document.createElement("a");
@@ -141,7 +142,7 @@
             <h2 class="footer-heading">Academy</h2>
             <ul>
               <li><a href="about.html">About the academy</a></li>
-              <li><a href="programs.html">Programs</a></li>
+              <li><a href="programs.html">Programmes</a></li>
               <li><a href="league.html">League</a></li>
               <li><a href="blog.html">News</a></li>
               <li><a href="gallery.html">Gallery</a></li>
@@ -379,7 +380,7 @@
   }
 
   function formsOffNotice(what) {
-    return `<div class="notice" role="note"><h3>Online ${what} isn't open yet</h3><p>Email ${emailLink()} and we'll reply to you directly.</p></div>`;
+    return `<div class="notice" role="note"><h2>Online ${what} isn't open yet</h2><p>Email ${emailLink()} and we'll reply to you directly.</p></div>`;
   }
 
   function initForms() {
@@ -418,7 +419,7 @@
 
   /* ---------- Shared bits used on several pages ---------- */
   function photo(src, label, extraClass = "") {
-    return `<div class="photo ${extraClass}">${src ? `<img src="${esc(src)}" alt="${esc(label)}" loading="lazy" decoding="async" onerror="this.remove()">` : ""}</div>`;
+    return `<div class="photo ${extraClass}">${src ? `<img src="${esc(src)}" alt="${esc(label)}" loading="lazy" decoding="async">` : ""}</div>`;
   }
 
   // Parses "Ages 6–9" / "Ages 10-18" into [6, 9]. null if the label has no numbers.
@@ -585,7 +586,7 @@
         lead.textContent = teams ? `${teams} youth teams. Fixtures and results are published here after each matchday.` : "Fixtures and results are published here as soon as the academy confirms them.";
       }
       const table = tableHTML();
-      $("#league-table").closest(".table-scroll").outerHTML = table ? `<div class="table-scroll" tabindex="0" role="region" aria-label="League table"><table class="league-table" id="league-table"><caption class="visually-hidden">League table</caption>${table}</table></div>` : empty(NO_TABLE);
+      $("#league-table-slot").innerHTML = table ? `<div class="table-scroll" tabindex="0" role="region" aria-label="League table"><table class="league-table" id="league-table"><caption class="visually-hidden">League table</caption>${table}</table></div>` : empty(NO_TABLE);
       $("#league-rules").textContent = rulesText();
       $("#fixtures").outerHTML = LEAGUE.fixtures.length ? `<ul class="match-list" id="fixtures">${LEAGUE.fixtures.map((m) => matchHTML(m)).join("")}</ul>` : empty(NO_FIXTURES);
       $("#results").outerHTML = LEAGUE.results.length ? `<ul class="match-list" id="results">${LEAGUE.results.map((m) => matchHTML(m, true)).join("")}</ul>` : empty(NO_RESULTS);
@@ -663,7 +664,7 @@
       const grid = $("#product-grid");
       if (!PRODUCTS.length) {
         $("#shop-tools")?.remove(); $("#shop-info")?.remove();
-        grid.outerHTML = `<div class="notice"><h3>The academy shop isn't open yet</h3><p>Kit and merchandise will be listed here when they're available. For kit questions, <a href="contact.html?topic=other">contact us</a>.</p></div>`;
+        grid.outerHTML = `<div class="notice"><h2>The academy shop isn't open yet</h2><p>Kit and merchandise will be listed here when they're available. For kit questions, <a href="contact.html?topic=other">contact us</a>.</p></div>`;
         return;
       }
       const tags = ["All", ...new Set(PRODUCTS.map((p) => p.tag))];
@@ -749,7 +750,7 @@
     const status = $("#enroll-status");
     if (!formsOn()) {
       form.remove(); $(".steps-bar")?.remove();
-      status.outerHTML = `<div class="notice" role="note"><h3>Online applications aren't open yet</h3><p>To apply now, email ${emailLink()} with the player's name and date of birth, the programme you're interested in, and a parent or guardian's phone number. A parent or guardian must make the application.</p></div>`;
+      status.outerHTML = `<div class="notice" role="note"><h2>Online applications aren't open yet</h2><p>To apply now, email ${emailLink()} with the player's name and date of birth, the programme you're interested in, and a parent or guardian's phone number. A parent or guardian must make the application.</p></div>`;
       return;
     }
     addHoneypot(form);
@@ -870,7 +871,7 @@
     const reference = new URLSearchParams(location.search).get("reference");
     if (!SITE.apiBase || (!SITE.donations && !reference)) {
       $("#donate-steps")?.remove();
-      form.outerHTML = `<div class="panel">${`<div class="notice" role="note"><h3>Online donations aren't open yet</h3><p>We'll open secure online giving once our payment account is set up. If you'd like to support a player now, email ${emailLink()} and we'll explain the options.</p></div>`}</div>`;
+      form.outerHTML = `<div class="panel">${`<div class="notice" role="note"><h2>Online donations aren't open yet</h2><p>We'll open secure online giving once our payment account is set up. If you'd like to support a player now, email ${emailLink()} and we'll explain the options.</p></div>`}</div>`;
       return;
     }
     addHoneypot(form);
@@ -964,10 +965,20 @@
     });
   }
 
+  // A photo that fails to load is removed so its green frame shows instead of a broken
+  // image icon. Listened for here (capture phase) rather than with inline onerror
+  // attributes, which the site's Content-Security-Policy doesn't allow.
+  document.addEventListener("error", (e) => {
+    const img = e.target;
+    if (img instanceof HTMLImageElement && img.closest(".photo, .hero-media")) img.remove();
+  }, true);
+
   /* ---------- Boot ---------- */
-  document.addEventListener("DOMContentLoaded", async () => {
-    renderHeader();
-    initChrome();
+  // The script tag sits at the end of <body>, so the page is already parsed: draw the header
+  // straight away (CSS reserves its height, so nothing shifts), then fill in content.
+  renderHeader();
+  initChrome();
+  (async () => {
     await contentReady;
     renderContentChrome();
     initCart();
@@ -975,5 +986,5 @@
     const page = document.body.dataset.page;
     if (pages[page]) pages[page]();
     initReveal();
-  });
+  })();
 })();
