@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Enrol a player | Ennavizion</title>
-  <meta name="description" content="Apply for a free trial and enrol a player at Ennavizion football academy.">
+  <title>Apply for a trial | Ennavizion</title>
+  <meta name="description" content="Apply for a trial at Ennavizion football academy: a short online application for parents and guardians.">
   <meta name="theme-color" content="#5FB93A">
-  <meta property="og:title" content="Enrol a player | Ennavizion">
-  <meta property="og:description" content="Apply for a free trial and enrol a player at Ennavizion football academy.">
+  <meta property="og:title" content="Apply for a trial | Ennavizion">
+  <meta property="og:description" content="Apply for a trial at Ennavizion football academy: a short online application for parents and guardians.">
   <meta property="og:type" content="website">
   <link rel="icon" href="assets/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -21,36 +21,34 @@
 
   <section class="page-hero on-dark">
     <div class="wrap">
-      <div class="crumbs"><a href="index.html">Home</a> / Enrol</div>
-      <h1>Enrol a player</h1>
-      <p>Three short steps. After you apply, we call within three working days to book a free trial.</p>
+      <div class="crumbs"><a href="index.html">Home</a> / Apply</div>
+      <h1>Apply for a trial</h1>
+      <p>Three short steps for a parent or guardian. The academy reviews every application and contacts you to arrange the next step.</p>
     </div>
   </section>
 
   <section class="section section-tight on-paper">
-    <div class="wrap" style="max-width:820px">
-      <h2 style="font-size:1.9rem">What happens next</h2>
-      <!-- Operational claims here (call timing, who reviews applications) need client
-           confirmation — see the note in js/data.js's file-top comment block. -->
+    <div class="wrap narrow">
+      <h2 class="section-title-sm">What happens next</h2>
       <ol class="pathway pathway-compact">
-        <li><h3>Submit</h3><p>Complete the player and parent/guardian details below.</p></li>
+        <li><h3>Apply</h3><p>Complete the player and parent or guardian details below.</p></li>
         <li><h3>Review</h3><p>The academy reviews the application.</p></li>
-        <li><h3>Contact</h3><p>A parent or guardian is contacted to confirm details.</p></li>
-        <li><h3>Trial</h3><p>A free trial session is arranged.</p></li>
+        <li><h3>Contact</h3><p>We contact the parent or guardian to confirm details.</p></li>
+        <li><h3>Trial</h3><p>If a place suits the player, a trial session is arranged.</p></li>
       </ol>
     </div>
   </section>
 
   <section class="section">
-    <div class="wrap" style="max-width:820px">
-      <ol class="steps-bar"><li>Player</li><li>Program</li><li>Parent and review</li></ol>
+    <div class="wrap narrow">
+      <ol class="steps-bar"><li>Player</li><li>Programme</li><li>Parent and review</li></ol>
       <form id="enroll-form" class="form" data-form="enroll" novalidate>
-        <p class="muted" style="margin-top:-.5rem">Fields are required unless marked <span class="hint" style="display:inline">Optional</span>.</p>
+        <p class="muted form-intro">All fields are required unless marked Optional.</p>
         <div class="form-step">
           <h2 tabindex="-1">About the player</h2>
           <div class="form-row">
-            <div class="field"><label for="e-first">First name</label><input id="e-first" name="player_first" type="text" required><p class="error-msg">Enter the player's first name.</p></div>
-            <div class="field"><label for="e-last">Last name</label><input id="e-last" name="player_last" type="text" required><p class="error-msg">Enter the player's last name.</p></div>
+            <div class="field"><label for="e-first">First name</label><input id="e-first" name="player_first" type="text" required maxlength="100" autocomplete="off"><p class="error-msg">Enter the player's first name.</p></div>
+            <div class="field"><label for="e-last">Last name</label><input id="e-last" name="player_last" type="text" required maxlength="100" autocomplete="off"><p class="error-msg">Enter the player's last name.</p></div>
           </div>
           <div class="form-row">
             <div class="field"><label for="e-dob">Date of birth</label><input id="e-dob" name="dob" type="date" required><p class="error-msg">Enter a date of birth.</p></div>
@@ -58,31 +56,28 @@
               <select id="e-pos" name="position" required><option value="">Choose a position</option><option>Goalkeeper</option><option>Defender</option><option>Midfielder</option><option>Forward</option><option>Not sure yet</option></select>
               <p class="error-msg">Choose a position, or "Not sure yet".</p></div>
           </div>
-          <div class="field"><label for="e-club">Current club or school team <span class="hint">Optional</span></label><input id="e-club" name="current_club" type="text"></div>
+          <div class="field"><label for="e-club">Current club or school team <span class="hint">Optional</span></label><input id="e-club" name="current_club" type="text" maxlength="255"></div>
           <div class="step-actions"><span></span><button class="btn btn-green" type="button" data-next>Continue</button></div>
         </div>
 
         <div class="form-step" hidden>
-          <h2 tabindex="-1">Program and centre</h2>
-          <fieldset class="field"><legend>Program</legend><div class="radio-cards" id="program-options"></div><p class="error-msg">Choose a program. Not sure? Pick the one for the player's age — coaches confirm at the trial.</p></fieldset>
-          <div class="field"><label for="centre-select">Training centre</label><select id="centre-select" name="centre" required></select><p class="error-msg">Choose a training centre.</p></div>
-          <div class="field"><label for="e-notes">Anything we should know? <span class="hint">Optional: medical needs, previous injuries, availability — shared only with coaching and welfare staff</span></label><textarea id="e-notes" name="notes"></textarea></div>
+          <h2 tabindex="-1">Programme</h2>
+          <fieldset class="field"><legend>Programme</legend><div class="radio-cards" id="program-options"></div><p class="error-msg">Choose a programme. Not sure? Pick the one for the player's age — coaches confirm at the trial.</p></fieldset>
+          <div class="field"><label for="centre-select">Training location</label><select id="centre-select" name="centre" required></select><p class="error-msg">Choose a training location.</p></div>
+          <div class="field"><label for="e-notes">Medical needs, injuries or anything coaches should know <span class="hint">Optional. Stored separately and seen only by academy staff who need it for the player's safety.</span></label><textarea id="e-notes" name="medical_notes" maxlength="2000"></textarea></div>
           <div class="step-actions"><button class="btn btn-line" type="button" data-back>Back</button><button class="btn btn-green" type="button" data-next>Continue</button></div>
         </div>
 
         <div class="form-step" hidden>
           <h2 tabindex="-1">Parent or guardian</h2>
-          <div class="field"><label for="g-name">Full name</label><input id="g-name" name="guardian_name" type="text" required autocomplete="name"><p class="error-msg">Enter the parent or guardian's name.</p></div>
+          <div class="field"><label for="g-name">Full name</label><input id="g-name" name="guardian_name" type="text" required autocomplete="name" maxlength="255"><p class="error-msg">Enter the parent or guardian's name.</p></div>
           <div class="form-row">
-            <div class="field"><label for="g-phone">Phone</label><input id="g-phone" name="guardian_phone" type="tel" required autocomplete="tel" pattern="[+0-9 ()-]{7,}"><p class="error-msg">Enter a phone number we can call.</p></div>
-            <div class="field"><label for="g-email">Email</label><input id="g-email" name="guardian_email" type="email" required autocomplete="email"><p class="error-msg">Enter an email address like name@example.com.</p></div>
+            <div class="field"><label for="g-phone">Phone</label><input id="g-phone" name="guardian_phone" type="tel" required autocomplete="tel" pattern="[+0-9 ()\-]{7,30}" maxlength="30"><p class="error-msg">Enter a phone number we can call, using digits, spaces, + or brackets.</p></div>
+            <div class="field"><label for="g-email">Email</label><input id="g-email" name="guardian_email" type="email" required autocomplete="email" maxlength="255"><p class="error-msg">Enter an email address like name@example.com.</p></div>
           </div>
           <div class="panel review"><h3>Check the details</h3><div id="review"></div></div>
-          <!-- Consent wording is neutral placeholder copy, not reviewed legal language —
-               confirm with the client/a legal advisor before launch, especially since this
-               form collects a minor's data. -->
-          <p class="muted" style="font-size:.92rem">This application collects information about a minor. Read our <a href="safeguarding.html">Safeguarding</a> commitment and <a href="privacy.html">Privacy Policy</a> before submitting.</p>
-          <div class="field check"><input id="g-consent" name="consent" type="checkbox" value="yes" required><label for="g-consent" style="font-weight:400">I'm the parent or legal guardian, I agree to Ennavizion contacting me about this application, and I have read the <a href="privacy.html">Privacy Policy</a>.</label><p class="error-msg" style="flex-basis:100%">Tick the box to confirm you're the parent or guardian.</p></div>
+          <div class="field check"><input id="g-consent" name="consent" type="checkbox" value="yes" required><label for="g-consent">I'm the player's parent or legal guardian. I agree to Ennavizion storing these details to handle this application and contacting me about it, as described in the <a href="privacy.html">privacy notice</a>.</label><p class="error-msg">Tick the box to confirm you're the parent or guardian.</p></div>
+          <p class="muted small">Applying doesn't commit you to enrol or pay anything.</p>
           <div class="step-actions"><button class="btn btn-line" type="button" data-back>Back</button><button class="btn btn-gold" type="submit">Send application</button></div>
         </div>
       </form>

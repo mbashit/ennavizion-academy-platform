@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>League | Ennavizion</title>
-  <meta name="description" content="Ennavizion League table, upcoming fixtures and latest results.">
+  <meta name="description" content="Ennavizion League fixtures, results and the league table, published by the academy.">
   <meta name="theme-color" content="#5FB93A">
   <meta property="og:title" content="League | Ennavizion">
-  <meta property="og:description" content="Ennavizion League table, upcoming fixtures and latest results.">
+  <meta property="og:description" content="Ennavizion League fixtures, results and the league table, published by the academy.">
   <meta property="og:type" content="website">
   <link rel="icon" href="assets/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -19,14 +19,11 @@
 <body data-page="league">
 <main id="main">
 
-  <!-- Season, table and fixtures below are sample data (LEAGUE in js/data.js) — replace
-       with the real season before launch. -->
   <section class="page-hero on-dark">
     <div class="wrap">
       <div class="crumbs"><a href="index.html">Home</a> / League</div>
       <h1>Ennavizion League</h1>
-      <!-- Team count reads from LEAGUE.table in js/data.js (see pages.league() in main.js). -->
-      <p><span id="season-name"></span>. <span id="team-count"></span> youth teams, fixtures every Saturday, every match filmed for player profiles.</p>
+      <p><strong id="season-name"></strong>. <span id="league-lead"></span></p>
     </div>
   </section>
 
@@ -38,12 +35,12 @@
           <button class="tab" role="tab" type="button" id="tab-fixtures" aria-controls="panel-fixtures" aria-selected="false" tabindex="-1">Fixtures</button>
           <button class="tab" role="tab" type="button" id="tab-results" aria-controls="panel-results" aria-selected="false" tabindex="-1">Results</button>
         </div>
-        <div role="tabpanel" id="panel-table" aria-labelledby="tab-table">
-          <div class="table-scroll"><table class="league-table" id="league-table"><caption class="visually-hidden">Full league table</caption></table></div>
-          <p class="muted mt-2">3 points for a win, 1 for a draw. Teams level on points are separated by goal difference, then goals scored.</p>
+        <div role="tabpanel" id="panel-table" aria-labelledby="tab-table" tabindex="0">
+          <div class="table-scroll"><table class="league-table" id="league-table"></table></div>
+          <p class="muted mt-2" id="league-rules"></p>
         </div>
-        <div role="tabpanel" id="panel-fixtures" aria-labelledby="tab-fixtures" hidden><ul class="match-list" id="fixtures"></ul></div>
-        <div role="tabpanel" id="panel-results" aria-labelledby="tab-results" hidden><ul class="match-list" id="results"></ul></div>
+        <div role="tabpanel" id="panel-fixtures" aria-labelledby="tab-fixtures" tabindex="0" hidden><ul class="match-list" id="fixtures"></ul></div>
+        <div role="tabpanel" id="panel-results" aria-labelledby="tab-results" tabindex="0" hidden><ul class="match-list" id="results"></ul></div>
       </div>
     </div>
   </section>
@@ -52,12 +49,12 @@
     <div class="wrap split">
       <div>
         <h2>Enter a team</h2>
-        <p class="lead">Registration for next season opens in June. Teams must field players in a single age group and provide a licensed coach.</p>
+        <p class="lead">Youth teams interested in joining the league can register interest. We'll share the entry requirements and timings for the next season.</p>
         <a class="btn btn-green" href="contact.html?topic=league">Register interest</a>
       </div>
       <div>
-        <h2>Watch a match</h2>
-        <p class="lead">All league matches are free to watch. Scouts and agents are asked to sign in with the match coordinator on arrival.</p>
+        <h2>Scouts and clubs</h2>
+        <p class="lead">Club representatives and scouts should contact the academy before attending a match. Information about players is only shared with a parent or guardian's consent.</p>
         <a class="btn btn-line" href="contact.html?topic=scout">Scouting requests</a>
       </div>
     </div>
