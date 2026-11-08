@@ -25,7 +25,7 @@ const test = async (name, fn) => { try { await fn(); results.push(["PASS", name]
     await page.fill("#e-first", "Net"); await page.fill("#e-last", "Lify"); await page.fill("#e-dob", isoYearsAgo(11)); await page.selectOption("#e-pos", "Defender");
     await page.click("[data-next]:visible");
     await page.locator("#prog-development").check({ force: true });
-    assert.equal(await page.locator("#centre-select").count(), 0, "placeholder centre isn't offered");
+    await page.selectOption("#centre-select", "Jos training ground");
     await page.click("[data-next]:visible");
     await page.fill("#g-name", "Guardian"); await page.fill("#g-phone", "08010001111"); await page.fill("#g-email", "g@example.com"); await page.check("#g-consent");
     await page.getByRole("button", { name: "Send application" }).click();
@@ -33,7 +33,7 @@ const test = async (name, fn) => { try { await fn(); results.push(["PASS", name]
     const p = posts.find((x) => x["form-name"] === "enrolment");
     assert.ok(p, "posted to Netlify");
     assert.match(p.reference, /^ENR-/);
-    assert.equal(p.player_first, "Net"); assert.equal(p.program, "Development");
+    assert.equal(p.player_first, "Net"); assert.equal(p.program, "Development"); assert.equal(p.centre, "Jos training ground");
     assert.ok(!("medical_notes" in p));
   });
 

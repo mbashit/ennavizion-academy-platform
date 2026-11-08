@@ -11,11 +11,9 @@ live, the admin panel values replace these.
 
 | Placeholder | Where it shows | Replace with |
 |---|---|---|
-| `[Academy phone number]` | Footer, Contact | `SITE.phone` |
-| `[Training ground address, city]` | Footer, Contact (a map appears once real) | `SITE.address` |
 | `[Office hours, …]` | Contact | `SITE.hours` |
 | WhatsApp (blank, not a placeholder) | WhatsApp button, shop orders | `SITE.whatsapp` — digits with 234. Left blank so families never message a wrong number. |
-| `[Training centre name]`, `[Pitch type…]`, `[Training days]` | Programmes → Training locations; the application form asks for a location once a real name is set | `CENTERS` |
+| `[Pitch type…]`, `[Training days]` (centre: Jos training ground) | Programmes → Training locations | `CENTERS` |
 | `[Name]`, `[Qualifications and experience]` × 7 roles | About → Coaching and academy team | `STAFF` — real people only, with consent and verified qualifications |
 | Testimonial `[…]` | Home page | `TESTIMONIALS` — real quote with written consent (and a parent's for a minor) |
 | `[Home kit]`, `[Training top]`, `[Training shorts]`, `[Academy cap]`, `[SKU]`, price | Shop ("Coming soon", can't be ordered) | `PRODUCTS` — set name, `sku`, `price`, `image` and `stock: true` to make an item orderable |

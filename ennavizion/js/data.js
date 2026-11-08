@@ -21,9 +21,9 @@ const SITE = {
   // Shown as written. [Bracketed] values are placeholders: shown as text, never as a
   // clickable phone link. WhatsApp stays blank until the real number is known, because a
   // wrong number would send families' messages to a stranger.
-  phone: "[Academy phone number]",
+  phone: "+7 906 590-93-21",
   whatsapp: "",          // digits only, with country code, e.g. "2348012345678"
-  address: "[Training ground address, city]",
+  address: "Training ground, Jos, Nigeria",
   hours: "[Office hours, e.g. Mon–Fri 9:00–17:00]",
   // Business plan 2027, section 4.
   registrationFee: 10000,  // one-time, newly admitted players
@@ -71,7 +71,7 @@ const PROGRAMS = [
 
 // Training locations: { name, pitch, days }. The plan starts with one centre.
 const CENTERS = [
-  { name: "[Training centre name]", pitch: "[Pitch type, e.g. full-size grass pitch]", days: "[Training days]" }
+  { name: "Jos training ground", pitch: "[Pitch type, e.g. full-size grass pitch]", days: "[Training days]" }
 ];
 
 // Staff roles from the 2027 business plan (section 5). Names are placeholders — never use

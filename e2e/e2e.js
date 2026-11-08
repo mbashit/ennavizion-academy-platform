@@ -59,7 +59,8 @@ const isoYearsAgo = (y, extraDays = 10) => { const d = new Date(); d.setFullYear
     await test("static: placeholders are text, never links or choices", async () => {
       await page.goto(`${base}/contact.html`, { waitUntil: "networkidle" });
       assert.equal(await page.locator('a[href^="tel:["]').count(), 0);
-      assert.equal(await page.locator("iframe.map").count(), 0, "no map for a placeholder address");
+      assert.equal(await page.locator('#contact-list a[href="tel:+79065909321"]').count(), 1, "phone link uses digits only");
+      assert.equal(await page.locator("iframe.map").count(), 1, "map shown for the real address");
       await page.goto(`${base}/programs.html`, { waitUntil: "networkidle" });
       await page.getByText("₦25,000").first().waitFor();
       await page.getByText("registration fee of ₦10,000").waitFor();

@@ -170,7 +170,7 @@
             <h2 class="footer-heading">Contact</h2>
             <ul class="footer-contact">
               <li><a href="${mailto()}">${esc(SITE.email)}</a></li>
-              ${SITE.phone ? `<li>${isPh(SITE.phone) ? esc(SITE.phone) : `<a href="tel:${esc(SITE.phone.replace(/\s/g, ""))}">${esc(SITE.phone)}</a>`}</li>` : ""}
+              ${SITE.phone ? `<li>${isPh(SITE.phone) ? esc(SITE.phone) : `<a href="tel:${esc(SITE.phone.replace(/[^\d+]/g, ""))}">${esc(SITE.phone)}</a>`}</li>` : ""}
               ${SITE.address ? `<li>${esc(SITE.address)}</li>` : ""}
             </ul>
             ${formsOn() ? `
@@ -750,7 +750,7 @@
       }
       const rows = [
         ["Email", `<a href="${mailto()}">${esc(SITE.email)}</a>`],
-        SITE.phone && ["Phone", isPh(SITE.phone) ? `<strong>${esc(SITE.phone)}</strong>` : `<a href="tel:${esc(SITE.phone.replace(/\s/g, ""))}">${esc(SITE.phone)}</a>`],
+        SITE.phone && ["Phone", isPh(SITE.phone) ? `<strong>${esc(SITE.phone)}</strong>` : `<a href="tel:${esc(SITE.phone.replace(/[^\d+]/g, ""))}">${esc(SITE.phone)}</a>`],
         SITE.whatsapp && ["WhatsApp", `<a href="https://wa.me/${esc(SITE.whatsapp)}" target="_blank" rel="noopener">Chat with us</a>`],
         SITE.address && ["Address", `<strong>${esc(SITE.address)}</strong>`],
         SITE.hours && ["Office hours", `<strong>${esc(SITE.hours)}</strong>`]
