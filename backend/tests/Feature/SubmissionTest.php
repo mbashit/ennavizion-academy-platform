@@ -133,7 +133,8 @@ class SubmissionTest extends TestCase
 
     public function test_programme_without_a_fee_is_published_as_fees_on_request(): void
     {
-        $this->assertNull(Program::where('slug', 'foundation')->value('fee'));
+        $this->assertSame(25000, (int) Program::where('slug', 'foundation')->value('fee'));
+        Program::where('slug', 'foundation')->update(['fee' => null, 'period' => null]);
         $this->getJson('/api/content')->assertJsonPath('PROGRAMS.0.fee', null);
     }
 }

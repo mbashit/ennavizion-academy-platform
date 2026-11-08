@@ -1,38 +1,44 @@
 # Information the academy needs to provide
 
-The website no longer shows anything that hasn't been confirmed. Wherever information is
-missing, visitors see an honest message ("No upcoming fixtures have been published.") or
-the section is hidden. This list is what Ennavizion needs to supply, and where it goes once
-it's real.
+Every feature is live. Where a real detail isn't known yet, the site shows a visible
+**[bracketed placeholder]** for you to replace. Placeholders are shown as plain text only:
+never as a phone link, map pin, WhatsApp button, form choice or orderable product.
 
-"Admin" means the admin panel at `api.ennavizion.com/admin` once the backend is live.
-Until then (Netlify), the same values go in `ennavizion/js/data.js`.
+## Placeholders to replace
 
-## What the 2027 business plan settles
+All in `ennavizion/js/data.js` unless noted (search for `[`). Once the Laravel backend is
+live, the admin panel values replace these.
 
-The owner's "Business Plan, Growth Strategy and Digital Operations — 2027" is itself marked
-"subject to management approval". The website uses only the parts it says can be public now:
-
-| From the plan | On the website |
-|---|---|
-| Mission, vision and six core values | About page |
-| "Support a Future Footballer" contribution programme, options and purposes | Support a player page (information always shown; checkout follows the Paystack mode) |
-| "Give talent a chance" — Support a Player / Become a Sponsor | Home page |
-| 2027 goals (250 reached, 30 supported, 4 clinics, ₦3,000,000) | Community and Support pages, headed "Our 2027 goals" and labelled as targets |
-| Paystack activation states (off / test / live, live set deliberately) | Backend `PAYSTACK_MODE` |
-
-Still **not** on the website, because the plan's approval register lists them as proposed,
-fictional or draft:
-
-| Plan item | Status in the plan | What unlocks it |
+| Placeholder | Where it shows | Replace with |
 |---|---|---|
-| Programme fees (₦25,000 / ₦35,000 / ₦50,000 / ₦30,000 per month), ₦10,000 registration fee, ₦15,000 goalkeeper add-on | Proposed | Management approval → enter fees in Admin → Programs. The registration fee and add-on need a small page addition. |
-| Sessions per week per programme | Proposed | Approval → add to programme descriptions |
-| Coaching staff names (Chinedu Okafor, Amina Bello, Tobi Adeyemi, Zainab Musa) | **Fictional examples** | Real, verified staff with consent — never these names |
-| Complimentary first trial | Proposed | Approval → the site can say "free trial" |
-| Safeguarding, privacy, enrolment/refund, media and contribution policies | Draft | Adoption + qualified review → publish on the policy pages |
-| Settlement bank and account details | To be verified | Configured in the Paystack dashboard, never on the site |
-| Online fee payments for families | Planned | Needs approved fees and an admission step; see PRODUCTION-READINESS.md |
+| `[Academy phone number]` | Footer, Contact | `SITE.phone` |
+| `[Training ground address, city]` | Footer, Contact (a map appears once real) | `SITE.address` |
+| `[Office hours, …]` | Contact | `SITE.hours` |
+| WhatsApp (blank, not a placeholder) | WhatsApp button, shop orders | `SITE.whatsapp` — digits with 234. Left blank so families never message a wrong number. |
+| `[Training centre name]`, `[Pitch type…]`, `[Training days]` | Programmes → Training locations; the application form asks for a location once a real name is set | `CENTERS` |
+| `[Name]`, `[Qualifications and experience]` × 7 roles | About → Coaching and academy team | `STAFF` — real people only, with consent and verified qualifications |
+| Testimonial `[…]` | Home page | `TESTIMONIALS` — real quote with written consent (and a parent's for a minor) |
+| `[Home kit]`, `[Training top]`, `[Training shorts]`, `[Academy cap]`, `[SKU]`, price | Shop ("Coming soon", can't be ordered) | `PRODUCTS` — set name, `sku`, `price`, `image` and `stock: true` to make an item orderable |
+| `[Safeguarding lead name]`, `[safeguarding phone number]` | Safeguarding page | `ennavizion/safeguarding.html` |
+| `[complaints phone number]` | Terms | `ennavizion/terms.html` |
+| `[retention period, …]` | Privacy notice | `ennavizion/privacy.html` (and `SUBMISSION_RETENTION_DAYS` on the backend) |
+| Paystack Payment Page link (blank) | Support a player → "Give with Paystack" button | `SITE.paystackPageUrl`, e.g. `https://paystack.com/pay/ennavizion` (create it in the Paystack dashboard → Payment Pages) |
+
+## Now live from the 2027 business plan
+
+Fees (₦25,000 / ₦35,000 / ₦50,000 / ₦30,000 per month), sessions per week, the ₦10,000
+registration fee, the ₦15,000 goalkeeper add-on, the free first trial, mission/vision/values,
+staff roles, the contribution programme and 2027 goals, and the draft safeguarding,
+enrolment/refund, media and contribution policies — labelled **Draft, pending adoption**.
+The plan's fictional coach names are not used anywhere.
+
+## Forms on Netlify
+
+Applications, contact messages and newsletter sign-ups are delivered by **Netlify Forms**:
+Netlify dashboard → the ennavizion project → **Forms**. Set up email notifications there
+(Forms → Form notifications). Each application and message carries a reference number. The
+medical-notes field is not offered on Netlify (it only exists where it can be stored
+encrypted, on the Laravel backend); families are asked to share medical needs directly.
 
 ## Needed before launch
 

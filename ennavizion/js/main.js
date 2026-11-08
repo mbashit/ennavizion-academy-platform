@@ -18,8 +18,13 @@
   const empty = (text) => `<p class="empty-state">${esc(text)}</p>`;
   const mailto = (subject) => `mailto:${SITE.email}${subject ? "?subject=" + encodeURIComponent(subject) : ""}`;
   const emailLink = () => `<a href="${mailto()}">${esc(SITE.email)}</a>`;
-  // Forms only send when there is somewhere real for them to go.
-  const formsOn = () => Boolean(SITE.apiBase || SITE.formEndpoint);
+  // Forms only send when there is somewhere real for them to go: the backend, a form
+  // service, or Netlify Forms on the Netlify site.
+  const formsOn = () => Boolean(SITE.apiBase || SITE.formEndpoint || SITE.netlifyForms);
+  const viaNetlify = () => !SITE.apiBase && !SITE.formEndpoint && Boolean(SITE.netlifyForms);
+  // "[Bracketed]" values are placeholders the academy will replace: shown as text, never
+  // turned into links, map pins or choices on a form.
+  const isPh = (v) => /\[[^\]]+\]/.test(String(v ?? ""));
 
   const store = {
     get(key, fallback, area = localStorage) { try { const v = area.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; } },
@@ -165,7 +170,7 @@
             <h2 class="footer-heading">Contact</h2>
             <ul class="footer-contact">
               <li><a href="${mailto()}">${esc(SITE.email)}</a></li>
-              ${SITE.phone ? `<li><a href="tel:${esc(SITE.phone.replace(/\s/g, ""))}">${esc(SITE.phone)}</a></li>` : ""}
+              ${SITE.phone ? `<li>${isPh(SITE.phone) ? esc(SITE.phone) : `<a href="tel:${esc(SITE.phone.replace(/\s/g, ""))}">${esc(SITE.phone)}</a>`}</li>` : ""}
               ${SITE.address ? `<li>${esc(SITE.address)}</li>` : ""}
             </ul>
             ${formsOn() ? `
@@ -194,8 +199,9 @@
     renderNav();
     renderFooter();
     $$("[data-email]").forEach((a) => { a.href = mailto(a.dataset.subject); a.textContent = SITE.email; });
-    $(".cart-btn").hidden = !PRODUCTS.length;
-    if (PRODUCTS.length) {
+    const orderable = PRODUCTS.some((p) => p.stock);
+    $(".cart-btn").hidden = !orderable;
+    if (orderable) {
       document.body.insertAdjacentHTML("beforeend", `
         <div class="drawer-backdrop" data-close-cart></div>
         <aside class="cart-drawer" id="cart-drawer" aria-label="Shopping cart" aria-hidden="true" inert>
@@ -372,6 +378,15 @@
         throw new Error(res.status === 429 ? "Too many attempts. Wait a minute and try again." : firstError || body.message || "The server couldn't accept it (" + res.status + ").");
       }
       return { ...data, reference: body.reference };
+    }
+    if (viaNetlify()) {
+      // Netlify Forms: the form names and fields are declared in netlify-forms.html.
+      const reference = type === "newsletter" ? undefined : clientRef(type === "enrolment" ? "ENR" : "MSG");
+      delete data.medical_notes; delete data.notes; // not collected without the encrypted backend
+      const body = new URLSearchParams({ "form-name": type, ...(reference ? { reference } : {}), ...data });
+      const res = await fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: body.toString() });
+      if (!res.ok) throw new Error("The form couldn't be delivered (" + res.status + ").");
+      return { ...data, reference };
     }
     if (SITE.formEndpoint) {
       const reference = type === "enrolment" ? clientRef("ENR") : undefined;
@@ -555,6 +570,15 @@
       const b = $("#home-posts"); if (b) { if (POSTS.length) b.innerHTML = POSTS.slice(0, 3).map(postCard).join(""); else dropSection(b); }
     },
 
+    about() {
+      const g = $("#staff-grid");
+      if (g) { if (typeof STAFF !== "undefined" && STAFF.length) g.innerHTML = STAFF.map((m) => `
+        <article class="staff-card">
+          <div class="staff-photo" aria-hidden="true"></div>
+          <h3>${esc(m.name)}</h3><p class="staff-role">${esc(m.role)}</p>${m.detail ? `<p class="muted small">${esc(m.detail)}</p>` : ""}
+        </article>`).join(""); else dropSection(g); }
+    },
+
     community() {
       const im = $("#community-impact"); if (im) { if (IMPACT.length) im.innerHTML = impactHTML(); else dropSection(im); }
       const g = $("#community-goals"); if (g) { const h = goalsHTML(); if (h) g.innerHTML = h; else dropSection(g); }
@@ -576,9 +600,18 @@
             </div>
           </div>
         </div>`).join("") : empty("Programme details will be published soon. Contact us to ask about places.");
+      const notes = $("#fee-notes");
+      if (notes) {
+        const items = [];
+        if (SITE.freeTrial) items.push("Every new player's first trial session is free, subject to available places.");
+        if (SITE.registrationFee) items.push(`One-time registration fee of ${money(SITE.registrationFee)} for newly admitted players.`);
+        if (SITE.goalkeeperAddOn) items.push(`Players in another programme can add specialist goalkeeper training for ${money(SITE.goalkeeperAddOn)} a month, subject to places.`);
+        items.push("Fees cover scheduled coaching, development planning, progress updates for parents and supervised academy activities. Transport, personal kit and external tournament costs aren't included.");
+        notes.innerHTML = `<ul class="check-list">${items.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>`;
+      }
       const c = $("#centers");
       if (c) c.outerHTML = CENTERS.length
-        ? `<div class="grid grid-3" id="centers">${CENTERS.map((x) => `<div class="panel"><h3>${esc(x.name)}</h3>${x.pitch ? `<p class="muted">${esc(x.pitch)}</p>` : ""}${x.days ? `<p><strong>Training days:</strong> ${esc(x.days)}</p>` : ""}<a href="contact.html?topic=visit&amp;center=${encodeURIComponent(x.name)}">Arrange a visit</a></div>`).join("")}</div>`
+        ? `<div class="grid grid-3" id="centers">${CENTERS.map((x) => `<div class="panel"><h3>${esc(x.name)}</h3>${x.pitch ? `<p class="muted">${esc(x.pitch)}</p>` : ""}${x.days ? `<p><strong>Training days:</strong> ${esc(x.days)}</p>` : ""}${isPh(x.name) ? "" : `<a href="contact.html?topic=visit&amp;center=${encodeURIComponent(x.name)}">Arrange a visit</a>`}</div>`).join("")}</div>`
         : empty("Training locations and days are confirmed with each family when we review an application.");
     },
 
@@ -682,13 +715,13 @@
             <div class="product-body">
               <div class="product-body-top">
                 <span class="tag">${esc(p.tag)}</span>
-                <span class="stock-status ${p.stock ? "in" : "out"}">${p.stock ? "Available to order" : "Currently unavailable"}</span>
+                <span class="stock-status ${p.stock ? "in" : "out"}">${p.stock ? "Available to order" : isPh(p.name) ? "Coming soon" : "Currently unavailable"}</span>
               </div>
               <h3>${esc(p.name)}</h3>
               ${p.colors ? `<p class="muted product-meta">Colour: ${esc([].concat(p.colors).join(", "))}</p>` : ""}
               ${sized(p) ? `<label class="visually-hidden" for="size-${esc(p.id)}">Size for ${esc(p.name)}</label><select id="size-${esc(p.id)}" ${p.stock ? "" : "disabled"}><option value="">Choose size</option>${["Youth S", "Youth M", "Youth L", "S", "M", "L", "XL"].map((s) => `<option>${s}</option>`).join("")}</select>` : ""}
-              <div class="price">${money(p.price)}</div>
-              <button class="btn btn-line btn-block btn-sm" type="button" data-add="${esc(p.id)}" ${p.stock ? "" : "disabled"}>${p.stock ? "Add to cart" : "Unavailable"}</button>
+              <div class="price">${p.price ? money(p.price) : SITE.currency + "[price]"}</div>
+              <button class="btn btn-line btn-block btn-sm" type="button" data-add="${esc(p.id)}" ${p.stock ? "" : "disabled"}>${p.stock ? "Add to cart" : isPh(p.name) ? "Coming soon" : "Unavailable"}</button>
             </div>
           </article>`).join("");
       };
@@ -717,13 +750,13 @@
       }
       const rows = [
         ["Email", `<a href="${mailto()}">${esc(SITE.email)}</a>`],
-        SITE.phone && ["Phone", `<a href="tel:${esc(SITE.phone.replace(/\s/g, ""))}">${esc(SITE.phone)}</a>`],
+        SITE.phone && ["Phone", isPh(SITE.phone) ? `<strong>${esc(SITE.phone)}</strong>` : `<a href="tel:${esc(SITE.phone.replace(/\s/g, ""))}">${esc(SITE.phone)}</a>`],
         SITE.whatsapp && ["WhatsApp", `<a href="https://wa.me/${esc(SITE.whatsapp)}" target="_blank" rel="noopener">Chat with us</a>`],
         SITE.address && ["Address", `<strong>${esc(SITE.address)}</strong>`],
         SITE.hours && ["Office hours", `<strong>${esc(SITE.hours)}</strong>`]
       ].filter(Boolean);
       $("#contact-list").innerHTML = rows.map(([k, v]) => `<li><span>${k}</span>${v}</li>`).join("");
-      if (SITE.address) $("#contact-list").insertAdjacentHTML("afterend", `<iframe class="map" title="Map showing ${esc(SITE.address)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=${encodeURIComponent(SITE.address)}&output=embed"></iframe>`);
+      if (SITE.address && !isPh(SITE.address)) $("#contact-list").insertAdjacentHTML("afterend", `<iframe class="map" title="Map showing ${esc(SITE.address)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=${encodeURIComponent(SITE.address)}&output=embed"></iframe>`);
     },
 
     enroll() { initEnroll(); }
@@ -764,8 +797,14 @@
       <div class="radio-card"><input type="radio" id="prog-${esc(p.id)}" name="program" value="${esc(p.name)}" ${i === 0 ? "required" : ""} ${p.id === pre ? "checked" : ""}>
       <label for="prog-${esc(p.id)}"><strong>${esc(p.name)}</strong>${esc(p.ages)}<br><small>${p.fee ? `${money(p.fee)} ${esc(p.period)}` : "Fees on request"}</small></label></div>`).join("");
     const centreField = $("#centre-select").closest(".field");
-    if (CENTERS.length) $("#centre-select").innerHTML = '<option value="">Choose a centre</option>' + CENTERS.map((c) => `<option>${esc(c.name)}</option>`).join("");
+    const centres = CENTERS.filter((c) => !isPh(c.name));
+    if (centres.length) $("#centre-select").innerHTML = '<option value="">Choose a centre</option>' + centres.map((c) => `<option>${esc(c.name)}</option>`).join("");
     else { centreField.remove(); }
+    // Medical notes are only collected where they can be stored encrypted (the backend).
+    if (viaNetlify()) {
+      const notes = $("#e-notes")?.closest(".field");
+      if (notes) notes.outerHTML = '<p class="muted small">If the player has medical needs or injuries, please tell the academy directly when we contact you, rather than in this form.</p>';
+    }
 
     // Age checks: the academy takes players across the programmes' combined age span, and
     // each programme's own band is checked once one is chosen. The server repeats both checks.
@@ -827,8 +866,8 @@
       const rows = [
         ["Player", `${d.player_first || ""} ${d.player_last || ""}`],
         ["Date of birth", d.dob ? `${fmtDate(d.dob)} (age ${ageOn(d.dob)})` : ""], ["Position", d.position], ["Current club", d.current_club || "None"],
-        ["Programme", d.program], ...(CENTERS.length ? [["Centre", d.centre]] : []),
-        ["Medical or other notes", d.medical_notes ? "Provided" : "None"],
+        ["Programme", d.program], ...(d.centre ? [["Centre", d.centre]] : []),
+        ...($("#e-notes") ? [["Medical or other notes", d.medical_notes ? "Provided" : "None"]] : []),
         ["Parent / guardian", d.guardian_name], ["Phone", d.guardian_phone], ["Email", d.guardian_email]
       ];
       $("#review").innerHTML = "<dl>" + rows.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v || "—")}</dd>`).join("") + "</dl>";
@@ -887,6 +926,11 @@
     const reference = new URLSearchParams(location.search).get("reference");
     const mode = SITE.apiBase ? (SITE.donationMode || (SITE.donations ? "live" : "off")) : "off";
 
+    if (!SITE.apiBase && SITE.paystackPageUrl && /^https:\/\/paystack\.(com|shop)\//.test(SITE.paystackPageUrl)) {
+      $("#donate-steps")?.remove();
+      form.outerHTML = `<div class="panel"><h2 class="form-title">Give online</h2><p>Contributions are taken securely on Paystack's own payment page. Choose your amount there, and add in the note what you'd like it used for, or "where it's needed most".</p><a class="btn btn-gold" href="${esc(SITE.paystackPageUrl)}" target="_blank" rel="noopener">Give with Paystack</a></div>`;
+      return;
+    }
     if (mode === "off" && !reference) {
       $("#donate-steps")?.remove();
       form.outerHTML = `<div class="panel"><div class="notice" role="note"><h2>Online contributions aren't open yet</h2><p>Secure online giving opens once the academy's payment account is verified. To support a player now, email ${emailLink()} and we'll explain the options.</p></div></div>`;

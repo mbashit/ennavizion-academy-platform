@@ -47,13 +47,22 @@ const isoYearsAgo = (y, extraDays = 10) => { const d = new Date(); d.setFullYear
       await page.getByRole("tab", { name: "Results" }).click();
       await page.getByText("Match results will appear here when available.").waitFor();
     });
-    await test("static: shop closed and not in navigation; no WhatsApp button with no number", async () => {
+    await test("static: shop listed with placeholder items that can't be ordered; no WhatsApp without a number", async () => {
       await page.goto(`${base}/index.html`, { waitUntil: "networkidle" });
-      assert.equal(await page.locator('#nav-list a[href="shop.html"]').count(), 0);
+      assert.equal(await page.locator('#nav-list a[href="shop.html"]').count(), 1);
       assert.equal(await page.locator(".wa-float").count(), 0);
-      assert.ok(!(await page.locator(".cart-btn").isVisible()));
+      assert.ok(!(await page.locator(".cart-btn").isVisible()), "no cart while nothing is orderable");
       await page.goto(`${base}/shop.html`, { waitUntil: "networkidle" });
-      await page.getByText("The academy shop isn't open yet").waitFor();
+      assert.ok(await page.locator(".product").count() > 0);
+      assert.equal(await page.locator("[data-add]:not([disabled])").count(), 0);
+    });
+    await test("static: placeholders are text, never links or choices", async () => {
+      await page.goto(`${base}/contact.html`, { waitUntil: "networkidle" });
+      assert.equal(await page.locator('a[href^="tel:["]').count(), 0);
+      assert.equal(await page.locator("iframe.map").count(), 0, "no map for a placeholder address");
+      await page.goto(`${base}/programs.html`, { waitUntil: "networkidle" });
+      await page.getByText("₦25,000").first().waitFor();
+      await page.getByText("registration fee of ₦10,000").waitFor();
     });
   } else {
     await test("navigation: every nav link opens a page that exists", async () => {

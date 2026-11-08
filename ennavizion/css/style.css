@@ -1089,3 +1089,14 @@ body.menu-open { overflow: hidden; }
 @media (max-width: 480px) { .goals-grid { grid-template-columns: 1fr; } }
 .values-6 { grid-template-columns: repeat(3, 1fr); row-gap: 32px; }
 @media (max-width: 800px) { .values-6 { grid-template-columns: 1fr; } }
+
+/* ---- Team, fee notes and policy status ---- */
+.staff-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.staff-card { padding: 20px; background: var(--paper); border: 1px solid var(--rule); border-radius: var(--radius-md); }
+.staff-photo { aspect-ratio: 1 / 1; border-radius: var(--radius-sm); margin-bottom: 12px; background: var(--tile-carpet), var(--pitch); }
+.staff-card h3 { margin: 0 0 4px; font-size: 1.4rem; }
+.staff-role { color: var(--grass); font-weight: 600; margin: 0 0 8px; }
+@media (max-width: 960px) { .staff-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .staff-grid { grid-template-columns: 1fr 1fr; gap: 8px; } .staff-card { padding: 12px; } .staff-card h3 { font-size: 1.15rem; } }
+.fee-notes { margin-top: 24px; }
+.policy-status { display: inline-block; padding: 4px 12px; border-radius: var(--radius-sm); background: #FFF8E6; border: 1px solid #E8C979; font-size: .92rem; font-weight: 600; }

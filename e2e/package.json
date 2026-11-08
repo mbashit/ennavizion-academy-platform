@@ -6,6 +6,7 @@
     "smoke": "node smoke.js http://127.0.0.2:5500 screenshots",
     "e2e:backend": "node e2e.js http://localhost:5500",
     "e2e:static": "node e2e.js http://127.0.0.2:5500 static",
+    "e2e:netlify": "node netlify.js 5500",
     "csp": "node csp.js http://127.0.0.2:5500 ../ennavizion/_headers"
   },
   "devDependencies": {

@@ -17,8 +17,10 @@ Branch `production-readiness`, 8 November 2026. Starting point and confirmed pro
 - **Two hosting modes**, chosen automatically by hostname (`apiBase` in `js/data.js`):
   - `ennavizion.com` → uses `api.ennavizion.com`. Forms submit, donations can open, content
     comes from the admin panel.
-  - anywhere else (today's Netlify site) → no backend. Forms are replaced by an email
-    route; nothing pretends to send.
+  - `*.netlify.app` → no backend; forms are delivered by **Netlify Forms** (declared in
+    `netlify-forms.html`), each with a reference number; no medical-notes field.
+  - anywhere else (a local file) → forms are replaced by an email route; nothing pretends
+    to send.
 
 ### League data model (new)
 

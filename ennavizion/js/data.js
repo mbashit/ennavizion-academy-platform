@@ -5,10 +5,10 @@
    what staff have published in the admin panel (GET /api/content). Anywhere without the
    backend (a Netlify preview, a local file) the site renders from this file alone.
 
-   RULE: only verified, academy-approved information goes in here. Anything left empty
-   renders as an honest empty state ("No upcoming fixtures have been published.") or is
-   hidden — never as a placeholder. What the academy still needs to supply is listed in
-   docs/MISSING-BUSINESS-INFO.md.
+   PLACEHOLDERS: text in [square brackets] is shown on the live site on purpose, so each
+   section is visible while the real details are gathered. Replace every [bracketed] value
+   with the confirmed detail (search this file for "["). Fees, sessions and the free first
+   trial come from the 2027 business plan. docs/MISSING-BUSINESS-INFO.md lists everything.
    ========================================================= */
 
 const SITE = {
@@ -18,12 +18,17 @@ const SITE = {
   // The academy's planned address on its own domain (see DEPLOY.md). Confirm the mailbox
   // exists before launch — every contact route on the site falls back to it.
   email: "info@ennavizion.com",
-  // Leave blank until the academy confirms them. Blank values are hidden on the site (no
-  // phone row, no WhatsApp button, shop orders go by email instead).
-  phone: "",
+  // Shown as written. [Bracketed] values are placeholders: shown as text, never as a
+  // clickable phone link. WhatsApp stays blank until the real number is known, because a
+  // wrong number would send families' messages to a stranger.
+  phone: "[Academy phone number]",
   whatsapp: "",          // digits only, with country code, e.g. "2348012345678"
-  address: "",
-  hours: "",
+  address: "[Training ground address, city]",
+  hours: "[Office hours, e.g. Mon–Fri 9:00–17:00]",
+  // Business plan 2027, section 4.
+  registrationFee: 10000,  // one-time, newly admitted players
+  goalkeeperAddOn: 15000,  // per month, for players enrolled in another programme
+  freeTrial: true,         // one complimentary introductory trial per new player
   currency: "₦",
   socials: {
     // Full profile URLs only, e.g. "https://instagram.com/ennavizion". Blank = not shown.
@@ -36,9 +41,14 @@ const SITE = {
   // donationMode: "off" (information only), "test" (labelled test checkout) or "live".
   donations: false,
   donationMode: "off",
-  // Optional: a Formspree-style endpoint for static-only hosting. Forms are disabled (with an
-  // email alternative) when neither this nor apiBase is set; they never pretend to send.
+  // Optional: a Formspree-style endpoint for static-only hosting.
   formEndpoint: "",
+  // On Netlify, forms are delivered by Netlify Forms (see netlify-forms.html): submissions
+  // appear in the Netlify dashboard → Forms, with email notifications.
+  netlifyForms: /\.netlify\.app$/.test(location.hostname),
+  // Paystack "Payment Page" link for contributions while there is no backend, e.g.
+  // "https://paystack.com/pay/ennavizion". Blank = the page shows "not open yet".
+  paystackPageUrl: "",
   // The Laravel backend's API base (see /backend). Picked by where the site is opened: the
   // live domain uses the live backend, a local copy uses `php artisan serve`, anywhere else
   // (e.g. a Netlify preview) runs on this file's content alone with forms switched off.
@@ -47,21 +57,34 @@ const SITE = {
     : ""
 };
 
-// Programme structure by age group. Names and age bands describe how the academy groups
-// players; fees stay null ("Fees on request") until the academy confirms pricing.
+// Programmes, fees and sessions from the 2027 business plan (section 4).
 const PROGRAMS = [
-  { id: "foundation", name: "Foundation", ages: "Ages 6–9", fee: null, period: "",
-    text: "Ball mastery, coordination and enjoyment of the game for younger players." },
-  { id: "development", name: "Development", ages: "Ages 10–13", fee: null, period: "",
-    text: "Positional play, small-sided games and quicker decision-making." },
-  { id: "elite", name: "Elite Pathway", ages: "Ages 14–18", fee: null, period: "",
-    text: "Advanced technical, tactical and physical work for older players aiming at competitive football." },
-  { id: "keepers", name: "Goalkeeper Unit", ages: "Ages 10–18", fee: null, period: "",
-    text: "Specialist goalkeeper coaching: handling, distribution, positioning and decision-making." }
+  { id: "foundation", name: "Foundation", ages: "Ages 6–9", fee: 25000, period: "per month",
+    text: "Ball mastery, coordination and enjoyment of the game for younger players. 2 sessions a week." },
+  { id: "development", name: "Development", ages: "Ages 10–13", fee: 35000, period: "per month",
+    text: "Technical development, small-sided games and quicker decision-making. 3 sessions a week." },
+  { id: "elite", name: "Elite Pathway", ages: "Ages 14–18", fee: 50000, period: "per month",
+    text: "Advanced coaching and competitive exposure for older players. 4 sessions a week." },
+  { id: "keepers", name: "Goalkeeper Unit", ages: "Ages 10–18", fee: 30000, period: "per month",
+    text: "Specialist goalkeeper coaching: handling, distribution, positioning and decision-making. 2 specialist sessions a week." }
 ];
 
-// Training locations: { name, pitch, days }. Empty until confirmed.
-const CENTERS = [];
+// Training locations: { name, pitch, days }. The plan starts with one centre.
+const CENTERS = [
+  { name: "[Training centre name]", pitch: "[Pitch type, e.g. full-size grass pitch]", days: "[Training days]" }
+];
+
+// Staff roles from the 2027 business plan (section 5). Names are placeholders — never use
+// a name until that person is confirmed, with their consent and verified qualifications.
+const STAFF = [
+  { name: "[Name]", role: "Technical Director / Head Coach", detail: "[Qualifications and experience]" },
+  { name: "[Name]", role: "Foundation Coach", detail: "[Qualifications and experience]" },
+  { name: "[Name]", role: "Development and Elite Coach", detail: "[Qualifications and experience]" },
+  { name: "[Name]", role: "Goalkeeper Coach", detail: "[Qualifications and experience]" },
+  { name: "[Name]", role: "Academy Operations Manager", detail: "Administration, scheduling, enrolment and parent communication" },
+  { name: "[Name]", role: "Safeguarding Lead", detail: "Safeguarding reporting, prevention and incident coordination" },
+  { name: "[Name]", role: "League Coordinator", detail: "League administration, fixtures and results" }
+];
 
 // League data. With the backend, the table arrives already calculated from published
 // results using the season's rules. Without it, main.js calculates the table from
@@ -114,14 +137,22 @@ const GOALS = {
 };
 
 // Only real quotes with written consent from the person (and a parent, for a minor).
-const TESTIMONIALS = [];
+const TESTIMONIALS = [
+  { quote: "[Parent or player testimonial, used with their written consent]", name: "[Name]", role: "[Parent of a Foundation player]" }
+];
 
 // Academy photos only — { src, category: "training" | "matches" | "events", caption }.
 // Photos of children need parental consent for publication.
 const GALLERY = [];
 
-// Shop products — { id, sku, name, price, tag, stock, colors?, image }. Empty = shop closed.
-const PRODUCTS = [];
+// Shop products — { id, sku, name, price, tag, stock, colors?, image }. Placeholder items are
+// listed but can't be ordered ("stock: false") until real names and prices are filled in.
+const PRODUCTS = [
+  { id: "item-1", sku: "[SKU]", name: "[Home kit]", price: 0, tag: "Kit", stock: false },
+  { id: "item-2", sku: "[SKU]", name: "[Training top]", price: 0, tag: "Training", stock: false },
+  { id: "item-3", sku: "[SKU]", name: "[Training shorts]", price: 0, tag: "Training", stock: false },
+  { id: "item-4", sku: "[SKU]", name: "[Academy cap]", price: 0, tag: "Merch", stock: false }
+];
 
 // News posts — { id, title, date, category, minutes, image, imageAlt, excerpt, body: [] }.
 const POSTS = [];
