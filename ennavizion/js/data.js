@@ -139,9 +139,20 @@ const GOALS = {
   ]
 };
 
-// Only real quotes with written consent from the person (and a parent, for a minor).
+// Testimonials — { quote, name, role, sample }. The five below are SAMPLES written to show the
+// section; each is labelled "Sample" on the site. Replace them with real quotes, used with
+// written consent (and a parent's consent for a minor), and remove "sample: true".
 const TESTIMONIALS = [
-  { quote: "[Parent or player testimonial, used with their written consent]", name: "[Name]", role: "[Parent of a Foundation player]" }
+  { quote: "Our daughter was nervous before her first session, but the coaches made her feel welcome straight away. Now she counts down the days to training.",
+    name: "Parent", role: "Foundation programme", sample: true },
+  { quote: "I like that the training is planned. My son comes home talking about what he worked on, not just the score at the end of the game.",
+    name: "Parent", role: "Development programme", sample: true },
+  { quote: "The coaches push us, but they also explain why. I understand my position much better than when I joined.",
+    name: "Player", role: "Elite Pathway", sample: true },
+  { quote: "In team sessions I used to just stand in goal. Here I get proper goalkeeping work every week.",
+    name: "Player", role: "Goalkeeper Unit", sample: true },
+  { quote: "We were kept informed from the application to the trial, and we always knew who to ask when we had a question.",
+    name: "Parent", role: "New family", sample: true }
 ];
 
 // Gallery — { src, category: "training" | "matches" | "events", caption }. These are

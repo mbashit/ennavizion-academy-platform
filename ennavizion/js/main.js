@@ -523,12 +523,15 @@
     return IMPACT.map((s) => `<div class="impact-stat"><strong>${esc(s.value)}</strong><span>${esc(s.label)}</span></div>`).join("");
   }
 
-  function testimonialHTML(t) {
-    return `<figure class="wrap quote">
-      ${t.image ? photo(t.image, "", "avatar") : ""}
-      <blockquote>${esc(t.quote)}</blockquote>
-      <figcaption><strong>${esc(t.name)}</strong><span>${esc(t.role)}</span></figcaption>
-    </figure>`;
+  function testimonialsHTML(list) {
+    const anySample = list.some((t) => t.sample);
+    return `<div class="section-head"><h2>What families say</h2>${anySample ? "<p>Sample testimonials, shown as examples until real feedback from academy families is collected.</p>" : ""}</div>
+      <div class="quote-grid">${list.map((t) => `
+        <figure class="quote-card">
+          ${t.sample ? '<span class="quote-badge">Sample</span>' : ""}
+          <blockquote>${esc(t.quote)}</blockquote>
+          <figcaption><strong>${esc(t.name)}</strong><span>${esc(t.role)}</span></figcaption>
+        </figure>`).join("")}</div>`;
   }
 
   function programCards() {
@@ -571,7 +574,7 @@
     if (real.length) { grid.innerHTML = real.map((m) => teamCard(m, false)).join(""); return; }
     {
       try {
-        await loadScript("js/demo-team.js?v=20261109d");
+        await loadScript("js/demo-team.js?v=20261109e");
         grid.insertAdjacentHTML("beforebegin", '<div class="notice notice-test team-demo-note" role="note"><h3>Sample profiles</h3><p>These names and stock photos are examples while the academy finalises its team. They are not Ennavizion staff and the people pictured are not connected with the academy; real profiles will replace them once appointments are confirmed.</p></div>');
         grid.innerHTML = DEMO_STAFF.map((m) => teamCard(m, true)).join("");
         return;
@@ -607,7 +610,7 @@
       if (f) f.outerHTML = LEAGUE.fixtures.length ? `<ul class="match-list">${LEAGUE.fixtures.slice(0, 3).map((m) => matchHTML(m)).join("")}</ul>` : empty(NO_FIXTURES);
 
       const im = $("#home-impact"); if (im) { if (IMPACT.length) im.innerHTML = impactHTML(); else im.remove(); }
-      const tm = $("#home-testimonial"); if (tm) { if (TESTIMONIALS.length) tm.outerHTML = testimonialHTML(TESTIMONIALS[0]); else dropSection(tm); }
+      const tm = $("#home-testimonial"); if (tm) { if (TESTIMONIALS.length) tm.innerHTML = testimonialsHTML(TESTIMONIALS); else dropSection(tm); }
       const b = $("#home-posts"); if (b) { if (POSTS.length) b.innerHTML = POSTS.slice(0, 3).map(postCard).join(""); else dropSection(b); }
     },
 

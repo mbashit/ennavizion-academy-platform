@@ -1116,3 +1116,13 @@ body.menu-open { overflow: hidden; }
 
 /* Gallery tiles fill their column (browsers indent <figure> by default). */
 .gallery figure { margin: 0; }
+
+/* ---- Testimonials (home) ---- */
+.quote-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.quote-card { position: relative; margin: 0; padding: 24px; background: rgba(255,255,255,.92); border: 1px solid rgba(20,35,28,.12); border-top: 4px solid var(--gold); border-radius: var(--radius-md); display: flex; flex-direction: column; gap: 16px; }
+.quote-card blockquote { margin: 0; font-size: 1.05rem; line-height: 1.55; color: var(--ink); }
+.quote-card blockquote::before { content: "\201C"; display: block; font-family: var(--font-display); font-size: 3rem; line-height: .8; color: var(--gold-deep); }
+.quote-card figcaption { margin-top: auto; display: flex; flex-direction: column; }
+.quote-card figcaption strong { color: var(--ink); }
+.quote-card figcaption span { color: var(--muted); font-size: .92rem; }
+.quote-badge { position: absolute; top: 12px; right: 12px; padding: 2px 8px; border-radius: var(--radius-sm); background: #FFF8E6; border: 1px solid #E8C979; font-size: .78rem; font-weight: 700; color: var(--ink); }
