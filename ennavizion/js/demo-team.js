@@ -1,8 +1,8 @@
 /* =========================================================
-   DEMONSTRATION TEAM PROFILES — NOT ENNAVIZION STAFF
-   Fictional names with illustrated avatars, used to preview the About page's team section
-   on local copies and Netlify preview/draft deploys only. main.js never loads this file on
-   the live site. Real staff go in STAFF in js/data.js, with the same fields.
+   SAMPLE TEAM PROFILES — NOT ENNAVIZION STAFF
+   Fictional names with illustrated avatars. Shown on the About page, each labelled "Demo
+   profile" under a "Sample profiles" note, until real staff are added to STAFF in
+   js/data.js (same fields, isVerified and isPublished true) — then this file stops loading.
    ========================================================= */
 const DEMO_STAFF = [
   { name: "Chinedu Okafor", role: "Technical Director / Head Coach",

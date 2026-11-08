@@ -79,8 +79,7 @@ const CENTERS = [
 // qualification checked; the person agreed to be listed). Fields:
 //   { name, role, description, image: "assets/images/team/<file>.webp", altText,
 //     isVerified: true, isPublished: true }
-// Until at least one profile qualifies, the live site says profiles will be announced soon.
-// Sample profiles for previews live separately in js/demo-team.js and never load live.
+// Until a real profile qualifies, the labelled sample profiles in js/demo-team.js are shown.
 const STAFF = [];
 
 // Roles the academy is appointing (business plan 2027, section 5) — listed while profiles
@@ -145,17 +144,28 @@ const TESTIMONIALS = [
   { quote: "[Parent or player testimonial, used with their written consent]", name: "[Name]", role: "[Parent of a Foundation player]" }
 ];
 
-// Academy photos only — { src, category: "training" | "matches" | "events", caption }.
-// Photos of children need parental consent for publication.
-const GALLERY = [];
+// Gallery — { src, category: "training" | "matches" | "events", caption }. These are
+// illustrative stock photos (Unsplash) until the academy's own are added; the gallery page
+// says so. Photos of the academy's players need parental consent for publication.
+const GALLERY = [
+  { src: "https://images.unsplash.com/photo-1786088987909-8fca31316c64?auto=format&fit=crop&w=800&h=800&q=75", category: "training", caption: "Rondo drill" },
+  { src: "https://images.unsplash.com/photo-1598880513655-d1c6d4b2dfbf?auto=format&fit=crop&w=800&h=800&q=75", category: "matches", caption: "Match day" },
+  { src: "https://images.unsplash.com/photo-1518905332052-b6cfda20ee45?auto=format&fit=crop&w=800&h=800&q=75", category: "training", caption: "Goalkeeper handling" },
+  { src: "https://images.unsplash.com/photo-1680024436315-fb06267264b2?auto=format&fit=crop&w=800&h=800&q=75", category: "events", caption: "Trial day" },
+  { src: "https://images.unsplash.com/photo-1787535849781-9d35cfde0445?auto=format&fit=crop&w=800&h=800&q=75", category: "matches", caption: "Celebrating a goal" },
+  { src: "https://images.unsplash.com/photo-1771577125789-93dc33e63f31?auto=format&fit=crop&w=800&h=800&q=75", category: "events", caption: "Team talk" },
+  { src: "https://images.unsplash.com/photo-1502904550040-7534597429ae?auto=format&fit=crop&w=800&h=800&q=75", category: "training", caption: "Strength and conditioning" },
+  { src: "https://images.unsplash.com/photo-1715277331664-a546eb85a8e8?auto=format&fit=crop&w=800&h=800&q=75", category: "matches", caption: "Penalty practice" },
+  { src: "https://images.unsplash.com/photo-1664325426906-ba7596dd1258?auto=format&fit=crop&w=800&h=800&q=75", category: "events", caption: "Watching from the touchline" }
+];
 
 // Shop products — { id, sku, name, price, tag, stock, colors?, image }. Placeholder items are
 // listed but can't be ordered ("stock: false") until real names and prices are filled in.
 const PRODUCTS = [
-  { id: "item-1", sku: "[SKU]", name: "[Home kit]", price: 0, tag: "Kit", stock: false },
-  { id: "item-2", sku: "[SKU]", name: "[Training top]", price: 0, tag: "Training", stock: false },
-  { id: "item-3", sku: "[SKU]", name: "[Training shorts]", price: 0, tag: "Training", stock: false },
-  { id: "item-4", sku: "[SKU]", name: "[Academy cap]", price: 0, tag: "Merch", stock: false }
+  { id: "item-1", sku: "[SKU]", name: "[Home kit]", price: 0, tag: "Kit", stock: false, image: "https://images.unsplash.com/photo-1602674809970-89073c530b0a?auto=format&fit=crop&w=700&h=700&q=75" },
+  { id: "item-2", sku: "[SKU]", name: "[Training top]", price: 0, tag: "Training", stock: false, image: "https://images.unsplash.com/photo-1774414489671-9f33b8dff0a9?auto=format&fit=crop&w=700&h=700&q=75" },
+  { id: "item-3", sku: "[SKU]", name: "[Training shorts]", price: 0, tag: "Training", stock: false, image: "https://images.unsplash.com/photo-1789110519888-758d7ab3908e?auto=format&fit=crop&w=700&h=700&q=75" },
+  { id: "item-4", sku: "[SKU]", name: "[Academy cap]", price: 0, tag: "Merch", stock: false, image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=700&h=700&q=75" }
 ];
 
 // News posts — { id, title, date, category, minutes, image, imageAlt, excerpt, body: [] }.

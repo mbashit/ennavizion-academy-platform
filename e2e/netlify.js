@@ -59,22 +59,29 @@ const test = async (name, fn) => { try { await fn(); results.push(["PASS", name]
     await page.getByText("Your message didn't send").waitFor();
   });
 
-  await test("live site: no demo team names; 'announced soon' with roles; demo file never loaded", async () => {
-    const p2 = await browser.newPage(); const requested = [];
-    p2.on("request", (r) => requested.push(r.url()));
+  await test("live site: sample team profiles are shown, every one labelled", async () => {
+    const p2 = await browser.newPage();
     await p2.goto(`${base}/about.html`, { waitUntil: "networkidle" });
-    await p2.getByText("Our coaching team profiles will be announced soon").waitFor();
-    assert.equal(await p2.locator(".role-chips li").count(), 7);
-    const text = await p2.locator("main").innerText();
-    for (const n of ["Chinedu", "Amina", "Tobi", "Zainab", "Emeka", "Ngozi", "Ibrahim"]) assert.ok(!text.includes(n), n + " must not appear live");
-    assert.ok(!requested.some((u) => u.includes("demo-team")), "demo-team.js not requested");
+    await p2.getByText("They are not Ennavizion staff").waitFor();
+    assert.equal(await p2.locator(".team-card").count(), 7);
+    assert.equal(await p2.locator(".team-badge", { hasText: "Demo profile" }).count(), 7);
     await p2.close();
+  });
+
+  await test("gallery and shop show pictures", async () => {
+    const p4 = await browser.newPage();
+    for (const [page, sel] of [["gallery", "#gallery-grid img"], ["shop", "#product-grid img"]]) {
+      await p4.goto(`${base}/${page}.html`, { waitUntil: "networkidle" });
+      await p4.locator(sel).first().scrollIntoViewIfNeeded();
+      assert.ok(await p4.locator(sel).count() > 0, page + " has images");
+    }
+    await p4.close();
   });
 
   await test("preview deploy: seven labelled demo profiles with loaded images and alt text", async () => {
     const p3 = await browser.newPage({ viewport: { width: 1280, height: 900 } });
     await p3.goto(`http://preview-1--ennavizion.netlify.app:${port}/about.html`, { waitUntil: "networkidle" });
-    await p3.getByText("Demonstration profiles").waitFor();
+    await p3.getByText("Sample profiles").waitFor();
     assert.equal(await p3.locator(".team-card").count(), 7);
     assert.equal(await p3.locator(".team-badge", { hasText: "Demo profile" }).count(), 7);
     const imgs = await p3.locator(".team-card img").evaluateAll((els) => els.map((e) => ({ ok: e.complete && e.naturalWidth > 0, alt: e.alt })));

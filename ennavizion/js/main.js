@@ -545,10 +545,10 @@
   const dropSection = (el) => el?.closest("section")?.remove();
 
   /* ---------- Team profiles (About page) ---------- */
-  // Live site: verified + published staff only, otherwise an "announced soon" section.
-  // Local copies and Netlify preview/draft deploys (hostnames containing "--") can preview
-  // the fictional profiles in js/demo-team.js, clearly labelled as demonstrations.
-  const isPreviewEnv = () => location.protocol === "file:" || /^(localhost|127\.\d+\.\d+\.\d+)$/.test(location.hostname) || location.hostname.includes("--");
+  // Verified + published staff (STAFF in data.js) are shown when there are any. Until then the
+  // sample profiles in js/demo-team.js are shown, each labelled "Demo profile" under a note
+  // saying they are examples, not Ennavizion staff. The "announced soon" section is the
+  // fallback if the sample file can't load.
   const loadScript = (src) => new Promise((resolve, reject) => {
     const el = document.createElement("script"); el.src = src; el.onload = resolve; el.onerror = reject; document.head.appendChild(el);
   });
@@ -569,10 +569,10 @@
     const grid = $("#staff-grid"); if (!grid) return;
     const real = (typeof STAFF !== "undefined" ? STAFF : []).filter((m) => m.isVerified && m.isPublished);
     if (real.length) { grid.innerHTML = real.map((m) => teamCard(m, false)).join(""); return; }
-    if (isPreviewEnv()) {
+    {
       try {
         await loadScript("js/demo-team.js");
-        grid.insertAdjacentHTML("beforebegin", '<div class="notice notice-test team-demo-note" role="note"><h3>Demonstration profiles</h3><p>These names and illustrations are fictional examples for previewing this section. They are not Ennavizion staff and are never shown on the live site.</p></div>');
+        grid.insertAdjacentHTML("beforebegin", '<div class="notice notice-test team-demo-note" role="note"><h3>Sample profiles</h3><p>These names and illustrations are examples while the academy finalises its team. They are not Ennavizion staff; real profiles will replace them once appointments are confirmed.</p></div>');
         grid.innerHTML = DEMO_STAFF.map((m) => teamCard(m, true)).join("");
         return;
       } catch { /* fall through to the announcement */ }
