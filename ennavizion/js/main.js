@@ -95,6 +95,9 @@
     return { "enroll.html": "programs.html", "donate.html": "community.html" }[page] || page;
   };
   const CTA_LABEL = "Apply for a trial";
+  // Parent portal (Laravel backend, /portal). Only offered where the backend exists, so the
+  // static Netlify site never links to a portal that isn't there.
+  const portalUrl = () => SITE.apiBase ? SITE.apiBase.replace(/\/api\/?$/, "") + "/portal" : "";
 
   /* ---------- Layout: header first (no waiting on the API), the rest once content is in ---------- */
   function renderHeader() {
@@ -108,9 +111,11 @@
         <nav class="main-nav" id="main-nav" aria-label="Main">
           <ul id="nav-list"></ul>
           <a class="btn btn-gold btn-block nav-cta" href="enroll.html">${CTA_LABEL}</a>
+          ${portalUrl() ? `<a class="nav-portal" href="${portalUrl()}/login">Parent login</a>` : ""}
         </nav>
         <div class="header-actions">
           <button class="cart-btn" type="button" data-open-cart aria-label="Open shopping cart" hidden>${ICON.cart}<span class="cart-count" data-count="0">0</span></button>
+          ${portalUrl() ? `<a class="support-link portal-link" href="${portalUrl()}/login">Parent login</a>` : ""}
           <a class="btn btn-gold btn-sm header-cta" href="enroll.html">${CTA_LABEL}</a>
           <button class="menu-toggle" type="button" aria-controls="main-nav" aria-expanded="false" aria-label="Open menu">${ICON.menu}</button>
         </div>
@@ -828,6 +833,9 @@
       return;
     }
     addHoneypot(form);
+    if (portalUrl()) {
+      $(".steps-bar")?.insertAdjacentHTML("beforebegin", `<div class="notice portal-invite" role="note"><h2>Track your application online</h2><p>Create a free parent account to apply, see your application's status and trial date, and get email updates. Or use the quick form below without an account.</p><p class="btn-row"><a class="btn btn-gold btn-sm" href="${portalUrl()}/register">Create a parent account</a><a class="btn btn-line btn-sm" href="${portalUrl()}/login">Parent login</a></p></div>`);
+    }
     const box = $("#program-options");
     const pre = new URLSearchParams(location.search).get("program");
     box.innerHTML = PROGRAMS.map((p, i) => `

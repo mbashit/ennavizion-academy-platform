@@ -19,6 +19,7 @@ npm run smoke        # every page at 320/375/390/768/1024/1440px: console errors
 npm run e2e:static   # forms switched off honestly, empty states, no shop/WhatsApp without data
 npm run e2e:backend  # trial application end to end (age checks, reference, double-click, error state, draft),
                      # contact form, donations closed, league from the API, mobile menu keyboard behaviour
+npm run e2e:portal   # parent portal: sign up, verify email from the mail log, add a player, apply, staff schedule, parent sees it
 npm run csp          # every page under the production Content-Security-Policy
 ```
 

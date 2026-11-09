@@ -6,7 +6,8 @@ Everything runs on one Namecheap **shared hosting** plan (any Stellar plan) with
 |---|---|---|
 | `https://ennavizion.com` | The public website | `~/public_html` |
 | `https://api.ennavizion.com` | Laravel backend (API) | `~/ennavizion-backend/public` |
-| `https://api.ennavizion.com/admin` | Admin panel | (same) |
+| `https://api.ennavizion.com/admin` | Staff admin panel | (same) |
+| `https://api.ennavizion.com/portal` | Parent portal (sign up, players, trial applications) | (same) |
 
 The backend lives **outside** `public_html`, so its code, `.env` and database password are
 never reachable from the web; only its `public` folder is served.
@@ -102,6 +103,13 @@ becomes the main address, replace it in these four files before building:
 
 - `https://api.ennavizion.com/api/content` shows a page of data (JSON).
 - `https://api.ennavizion.com/admin` lets you log in with the user from step 4.
+- Parent portal: open `https://api.ennavizion.com/portal/register`, sign up with a real
+  mailbox, click the verification email, add a player and apply for a trial. The application
+  appears in the admin panel under **Parent portal → Trial applications**; set it to
+  "Trial scheduled" with a date and place and check the parent receives the update email.
+  Mail must work for parents to verify their accounts, so test `MAIL_*` first.
+  `QUEUE_CONNECTION=sync` (already in `.env.production.example`) sends these emails
+  immediately; don't change it to `database` unless a queue worker is running.
 - `https://ennavizion.com` loads. Edit a program fee in the admin, reload the site — the
   new fee shows.
 - Send the contact form: it appears under **Submissions** in the admin, and an email

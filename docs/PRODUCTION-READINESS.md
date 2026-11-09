@@ -91,7 +91,7 @@ All results below are from runs on 8 November 2026 on Windows 11, Chromium 141 (
 
 | Suite | Result | What it covers |
 |---|---|---|
-| Backend (`php artisan test`) | **33 passed** | Submissions: reference format, medical notes encrypted at rest and absent from `data`, staff email without personal details, age span and programme-band checks, unknown programme, consent, honeypot, double-submit, contact validation, newsletter de-duplication, no submissions in the public API, retention pruning. Donations (Paystack faked, no real requests): closed when unconfigured, our reference and kobo sent, amount limits, verified payment marked paid, amount mismatch held for review, abandoned → failed, paid never downgraded, unknown references not sent to Paystack, webhook signature required and idempotent. League: table from published played matches only, configurable points and tie-breakers, registered teams with no games, current-season API output, one current season, no public write access. Admin: every screen requires login and renders for staff; medical notes only on the single-submission screen. |
+| Backend (`php artisan test`) | **46 passed** | Submissions: reference format, medical notes encrypted at rest and absent from `data`, staff email without personal details, age span and programme-band checks, unknown programme, consent, honeypot, double-submit, contact validation, newsletter de-duplication, no submissions in the public API, retention pruning. Donations (Paystack faked, no real requests): closed when unconfigured, our reference and kobo sent, amount limits, verified payment marked paid, amount mismatch held for review, abandoned → failed, paid never downgraded, unknown references not sent to Paystack, webhook signature required and idempotent. League: table from published played matches only, configurable points and tie-breakers, registered teams with no games, current-season API output, one current season, no public write access. Admin: every screen requires login and renders for staff; medical notes only on the single-submission screen. |
 | Browser smoke (`e2e/smoke.js`) | **0 problems** | 16 pages × 320/390/1440 px: no console errors, failed requests, horizontal overflow, or visible "undefined"/"NaN"/"placeholder"/"Coach Name"/"XX+". |
 | Browser end to end, backend (`e2e/e2e.js`) | **11/11** | Every nav/footer link resolves; age checks; full application with a double-click → one record and a reference; medical notes stored encrypted; server error shown as an error with answers kept; draft restore without medical notes; contact form; contributions information shown with checkout closed, and a labelled test-mode form with amount → purpose; league from the API; mobile menu (not tabbable when closed, focus moves in, page inert, Escape returns focus, closes on navigation). |
 | Browser end to end, static (`e2e/e2e.js … static`) | **5/5** | Forms replaced by email route, no fake success; old browser-stored submissions deleted; exact league empty-state wording; no shop link, cart or WhatsApp button without data. |
@@ -122,6 +122,33 @@ lab proxy.
 **Not tested:** a real Paystack test-mode transaction (needs the academy's Paystack account);
 email delivery through a real mailbox; the Namecheap deployment itself; real phones (layouts
 were checked in emulated mobile viewports); screen readers beyond automated checks.
+
+## Parent portal (`/portal` on the backend)
+
+A second Filament panel next to the staff admin panel.
+
+| Parents can | Staff can (admin → Parent portal → Trial applications) |
+|---|---|
+| Sign up (name, email, phone, password, guardian confirmation), verify their email, log in, reset their password, edit their profile | See every application with the player, parent contact and the parent's note; open medical notes (encrypted, collapsed) |
+| Add and edit their children ("My players"); medical notes stored encrypted | Set the status: Submitted, Under review, Trial scheduled, Place offered, Waiting list, Not offered a place |
+| Apply for a free trial: player, programme (age-checked), training location, note, consent; get a reference (ENR-…) | Schedule the trial (date/time and place required) and write a message to the parent |
+| Follow each application's status, trial date and messages on a dashboard; withdraw an open application | Keep internal staff notes that parents never see |
+| Get emails: application received, and every change to status, trial details or message | — |
+
+Security, enforced on the server and covered by tests (`tests/Feature/ParentPortalTest.php`,
+13 tests) and a browser run (`e2e/portal.js`, 8 steps):
+- `users.role` is `staff` or `parent`, never mass-assignable; sign-up always creates a parent
+  even if the form is tampered with. Parents get 403 at `/admin`, staff 403 at `/portal`.
+- Every parent query is scoped to `user_id = auth()->id()`; another family's player or
+  application returns 404, and applying with another family's player is rejected.
+- Email verification is required before adding applications.
+- Staff alert emails carry the reference only; parent emails go only to the parent.
+- Login/registration/password-reset rate limiting and CSRF come from Filament/Laravel.
+- Parent-portal accounts are excluded from the staff "Admin users" screen.
+
+Not built yet (good next steps): online fee payment for accepted players (reuses the Paystack
+layer), parent self-service account deletion (today: by email request, as the privacy notice
+says), and attendance/progress reports.
 
 ## Contribution programme (business plan 2027)
 

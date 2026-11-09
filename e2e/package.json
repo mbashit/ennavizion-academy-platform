@@ -7,6 +7,7 @@
     "e2e:backend": "node e2e.js http://localhost:5500",
     "e2e:static": "node e2e.js http://127.0.0.2:5500 static",
     "e2e:netlify": "node netlify.js 5500",
+    "e2e:portal": "node portal.js screenshots/portal",
     "csp": "node csp.js http://127.0.0.2:5500 ../ennavizion/_headers"
   },
   "devDependencies": {

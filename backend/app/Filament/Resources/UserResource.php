@@ -24,7 +24,8 @@ class UserResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        $query = parent::getEloquentQuery();
+        // Staff accounts only — parent-portal accounts are not admin users.
+        $query = parent::getEloquentQuery()->where('role', \App\Models\User::STAFF);
 
         return auth()->user()?->is_developer ? $query : $query->where('is_developer', false);
     }

@@ -1126,3 +1126,11 @@ body.menu-open { overflow: hidden; }
 .quote-card figcaption strong { color: var(--ink); }
 .quote-card figcaption span { color: var(--muted); font-size: .92rem; }
 .quote-badge { position: absolute; top: 12px; right: 12px; padding: 2px 8px; border-radius: var(--radius-sm); background: #FFF8E6; border: 1px solid #E8C979; font-size: .78rem; font-weight: 700; color: var(--ink); }
+
+/* ---- Parent portal links ---- */
+.portal-invite { margin-bottom: 24px; }
+.portal-invite .btn-row { margin: 12px 0 0; }
+@media (min-width: 1141px) { .main-nav .nav-portal { display: none; } }
+@media (max-width: 1140px) {
+  .main-nav .nav-portal { display: block; margin-top: 16px; padding: 12px 0; color: var(--chalk); font-weight: 600; text-align: center; border: 2px solid var(--chalk-line); border-radius: var(--radius-sm); }
+}
